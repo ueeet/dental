@@ -93,7 +93,7 @@ function DoctorCard({ doctor, onClick }: { doctor: Doctor; onClick: () => void }
       <div
         ref={cardRef}
         className={cn(
-          "relative bg-white rounded-2xl overflow-hidden border border-gray-100",
+          "relative bg-white rounded-2xl overflow-hidden border border-gray-100 h-full",
           "transition-shadow duration-300 will-change-transform",
           "hover:shadow-2xl hover:shadow-[var(--primary)]/10"
         )}

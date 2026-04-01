@@ -56,15 +56,15 @@ export default function Promotions() {
   const [active, setActive] = useState<number | null>(null);
 
   return (
-    <section id="promotions" className="py-[var(--space-section)] bg-[var(--background)]">
+    <section id="promotions" className="py-[var(--space-section)] bg-[#1c1f26]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Heading */}
         <div className="mb-14">
-          <span className="font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-muted-foreground">
+          <span className="font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-gray-400">
             Выгодные предложения
           </span>
-          <h2 className="mt-3 font-[var(--font-heading)] text-fluid-h1 text-foreground">
+          <h2 className="mt-3 font-[var(--font-heading)] text-fluid-h1 text-white">
             Акции
           </h2>
         </div>
