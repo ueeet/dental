@@ -100,3 +100,4 @@ npm run dev                  # http://localhost:3000
 
 - Backend — [@ueeet](https://github.com/ueeet)
 - Frontend — [@tagirov3322-blip](https://github.com/tagirov3322-blip)
+- Visionary — [@Ratmir123](https://github.com/Ratmir123)
