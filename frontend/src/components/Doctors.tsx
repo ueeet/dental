@@ -60,55 +60,69 @@ type Doctor = (typeof doctors)[number];
 
 function DoctorCard({ doctor, onClick }: { doctor: Doctor; onClick: () => void }) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const borderRef = useRef<HTMLDivElement>(null);
   const glareRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
+    const border = borderRef.current;
+    if (!card || !border) return;
+    const rect = border.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -12;
     const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 12;
 
     gsap.to(card, { rotationX: rotateX, rotationY: rotateY, duration: 0.4, ease: "power2.out", transformPerspective: 800 });
+
+    // Move the border gradient to follow cursor
+    border.style.background = `radial-gradient(400px circle at ${x}px ${y}px, rgba(42,50,80,0.8), rgba(42,50,80,0.15) 50%, transparent 70%)`;
+
     if (glareRef.current) {
-      gsap.to(glareRef.current, { opacity: 0.15, x: x - rect.width / 2, y: y - rect.height / 2, duration: 0.4, ease: "power2.out" });
+      gsap.to(glareRef.current, { opacity: 0.12, x: x - rect.width / 2, y: y - rect.height / 2, duration: 0.4, ease: "power2.out" });
     }
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     if (cardRef.current) gsap.to(cardRef.current, { rotationX: 0, rotationY: 0, duration: 0.6, ease: "power3.out", transformPerspective: 800 });
+    if (borderRef.current) borderRef.current.style.background = "rgba(42,50,80,0.12)";
     if (glareRef.current) gsap.to(glareRef.current, { opacity: 0, duration: 0.4 });
   }, []);
 
   return (
     <div
-      className="group cursor-pointer"
+      className="group cursor-pointer h-full"
       style={{ perspective: "800px" }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
     >
+      {/* Border wrapper — the gradient border lives here */}
       <div
-        ref={cardRef}
-        className={cn(
-          "relative bg-white rounded-2xl overflow-hidden border border-gray-100 h-full",
-          "transition-shadow duration-300 will-change-transform",
-          "hover:shadow-2xl hover:shadow-[var(--primary)]/10"
-        )}
-        style={{ transformStyle: "preserve-3d" }}
+        ref={borderRef}
+        className="rounded-2xl p-[1.5px] h-full transition-all duration-300 will-change-[background]"
+        style={{ background: "rgba(42,50,80,0.12)" }}
       >
-        <div ref={glareRef} className="pointer-events-none absolute inset-0 z-10 rounded-2xl" style={{ opacity: 0, background: "radial-gradient(300px circle at center, rgba(255,255,255,0.8), transparent 60%)" }} />
+        <div
+          ref={cardRef}
+          className={cn(
+            "relative bg-white rounded-[14px] overflow-hidden h-full",
+            "transition-shadow duration-300 will-change-transform",
+            "hover:shadow-2xl hover:shadow-[var(--primary)]/10"
+          )}
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          <div ref={glareRef} className="pointer-events-none absolute inset-0 z-10 rounded-[14px]" style={{ opacity: 0, background: "radial-gradient(300px circle at center, rgba(255,255,255,0.8), transparent 60%)" }} />
 
-        <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
-          <img src={doctor.photo} alt={doctor.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-        </div>
+          <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
+            <img src={doctor.photo} alt={doctor.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+          </div>
 
-        <div className="p-6">
-          <h3 className="font-[var(--font-heading)] text-lg font-semibold text-foreground leading-snug">{doctor.name}</h3>
-          <p className="mt-2 text-sm font-medium text-[var(--primary)]">{doctor.specialty}</p>
-          <p className="mt-2.5 font-[var(--font-mono)] text-xs uppercase tracking-[0.15em] text-muted-foreground">Опыт {doctor.experience} лет</p>
+          <div className="p-6">
+            <h3 className="font-[var(--font-heading)] text-lg font-semibold text-foreground leading-snug">{doctor.name}</h3>
+            <p className="mt-2 text-sm font-medium text-[var(--primary)]">{doctor.specialty}</p>
+            <p className="mt-2.5 font-[var(--font-mono)] text-xs uppercase tracking-[0.15em] text-muted-foreground">Опыт {doctor.experience} лет</p>
+          </div>
         </div>
       </div>
     </div>
