@@ -67,7 +67,7 @@ function ImageRow({ images, direction }: { images: string[]; direction: "left" |
   return (
     <div ref={rowRef} className="flex gap-3 will-change-transform" style={{ width: "max-content" }}>
       {images.map((src, i) => (
-        <div key={i} className="h-[180px] w-[270px] flex-shrink-0 overflow-hidden rounded-xl sm:h-[200px] sm:w-[300px]">
+        <div key={i} className="h-[28vh] w-[22vw] min-w-[200px] flex-shrink-0 overflow-hidden rounded-xl">
           <img
             src={src}
             alt=""
@@ -82,10 +82,10 @@ function ImageRow({ images, direction }: { images: string[]; direction: "left" |
 
 export default function About() {
   return (
-    <section id="about" className="relative overflow-hidden bg-gray-900" style={{ height: "100dvh", minHeight: "700px" }}>
+    <section id="about" className="relative overflow-hidden bg-gray-900 min-h-screen">
 
-      {/* Background image rows */}
-      <div className="absolute inset-0 flex flex-col justify-center gap-3 opacity-40">
+      {/* Background image rows — stretch to fill entire section */}
+      <div className="absolute inset-0 flex flex-col justify-between py-4 opacity-40">
         <ImageRow images={row1} direction="right" />
         <ImageRow images={row2} direction="left" />
         <ImageRow images={row3} direction="right" />
@@ -95,7 +95,7 @@ export default function About() {
       <div className="absolute inset-0 bg-gray-900/50" />
 
       {/* Centered text */}
-      <div className="relative z-10 flex h-full items-center justify-center px-4 sm:px-6">
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 sm:px-6">
         <div className="relative mx-auto max-w-2xl text-center">
           {/* Soft radial glow behind text — no hard edges */}
           <div className="absolute inset-0 -inset-x-20 -inset-y-12 rounded-full bg-gray-900/80 blur-3xl" />
