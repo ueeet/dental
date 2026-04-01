@@ -516,14 +516,7 @@ export default function Booking() {
 
               {/* Map */}
               <div className="overflow-hidden rounded-3xl border border-white/10">
-                <div className="relative h-52 w-full bg-white/10">
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/60">
-                    <MapPin className="h-8 w-8" />
-                    <span className="text-sm font-medium">Яндекс Карта</span>
-                    <span className="text-xs text-white/40">
-                      просп. Мира, 34, Набережные Челны
-                    </span>
-                  </div>
+                <div className="relative h-80 w-full bg-white/10">
                   <iframe
                     src="https://yandex.ru/map-widget/v1/?ll=56.044,54.735&z=16&pt=56.044,54.735,pm2blm"
                     className="absolute inset-0 h-full w-full opacity-70"
@@ -531,15 +524,6 @@ export default function Booking() {
                     title="IQ Dental на карте"
                   />
                 </div>
-              </div>
-
-              {/* Quick note */}
-              <div className="glass-card-dark rounded-3xl p-6">
-                <p className="text-fluid-small leading-relaxed text-gray-300/80">
-                  <span className="font-semibold text-white">Бесплатная консультация</span>{" "}
-                  — запишитесь на первичный осмотр и получите индивидуальный план лечения
-                  без каких-либо обязательств.
-                </p>
               </div>
             </div>
           </div>
