@@ -190,7 +190,7 @@ export default function Booking() {
 
   /* Shared input styles */
   const inputBase =
-    "w-full rounded-xl border bg-white/80 px-4 py-3.5 text-sm text-foreground outline-none transition-all duration-200 placeholder:text-muted-foreground/50 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:bg-white";
+    "w-full rounded-xl border bg-white/80 px-5 pr-10 py-3.5 text-sm text-foreground outline-none transition-all duration-200 placeholder:text-muted-foreground/50 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:bg-white";
   const inputError = "border-red-400 focus:border-red-500 focus:ring-red-500/20";
   const inputNormal = "border-slate-200/80";
 
