@@ -462,7 +462,7 @@ export default function Booking() {
           <div
             className="lg:col-span-2"
           >
-            <div className="sticky top-8 space-y-6">
+            <div className="sticky top-8 flex flex-col gap-6 h-full">
               {/* Contact info card — glass-card-dark */}
               <div className="glass-card-dark rounded-3xl p-8 sm:p-10">
                 <h3 className="font-[var(--font-heading)] text-fluid-h3 text-white">
@@ -514,9 +514,9 @@ export default function Booking() {
                 </div>
               </div>
 
-              {/* Map */}
-              <div className="overflow-hidden rounded-3xl border border-white/10">
-                <div className="relative h-80 w-full bg-white/10">
+              {/* Map — stretches to align with form bottom */}
+              <div className="overflow-hidden rounded-3xl border border-white/10 flex-1 min-h-[200px]">
+                <div className="relative h-full w-full bg-white/10">
                   <iframe
                     src="https://yandex.ru/map-widget/v1/?ll=56.044,54.735&z=16&pt=56.044,54.735,pm2blm"
                     className="absolute inset-0 h-full w-full opacity-70"
