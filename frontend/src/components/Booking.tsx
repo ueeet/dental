@@ -190,21 +190,21 @@ export default function Booking() {
 
   /* Shared input styles */
   const inputBase =
-    "w-full rounded-xl border bg-white/80 px-4 py-3.5 text-sm text-foreground outline-none transition-all duration-200 placeholder:text-muted-foreground/50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:bg-white";
+    "w-full rounded-xl border bg-white/80 px-4 py-3.5 text-sm text-foreground outline-none transition-all duration-200 placeholder:text-muted-foreground/50 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:bg-white";
   const inputError = "border-red-400 focus:border-red-500 focus:ring-red-500/20";
   const inputNormal = "border-slate-200/80";
 
   return (
     <section
       id="booking"
-      className="relative overflow-hidden bg-gradient-to-br from-[#1e2540] via-blue-500 to-blue-700 py-[var(--space-section)]"
+      className="relative overflow-hidden bg-gradient-to-br from-[#1a1f2e] via-[#2a3250] to-[#1e2540] py-[var(--space-section)]"
     >
       {/* Noise texture */}
       <div className="noise-overlay pointer-events-none absolute inset-0" />
 
       {/* Decorative blurs */}
       <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-white/5 blur-3xl" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-[400px] w-[400px] rounded-full bg-blue-400/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-40 bottom-0 h-[400px] w-[400px] rounded-full bg-white/5 blur-3xl" />
       <div className="pointer-events-none absolute left-1/2 top-0 h-px w-3/4 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -212,13 +212,13 @@ export default function Booking() {
         <div
           className="mx-auto max-w-2xl text-center mb-16"
         >
-          <span className="font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-blue-200">
+          <span className="font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-gray-400">
             Онлайн-запись
           </span>
           <h2 className="mt-3 font-[var(--font-heading)] text-fluid-h1 text-white">
             Запись на приём
           </h2>
-          <p className="mt-4 text-fluid-body text-blue-100/80">
+          <p className="mt-4 text-fluid-body text-gray-300/80">
             Оставьте заявку и мы перезвоним в течение 15 минут
           </p>
         </div>
@@ -232,7 +232,7 @@ export default function Booking() {
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="relative overflow-hidden rounded-3xl bg-white p-8 shadow-2xl shadow-blue-900/30 sm:p-10 lg:p-12 noise-overlay"
+              className="relative overflow-hidden rounded-3xl bg-white p-8 shadow-2xl shadow-black/20 sm:p-10 lg:p-12 noise-overlay"
             >
               <div className="relative z-10">
                 {/* Success message */}
@@ -396,7 +396,7 @@ export default function Booking() {
                         type="checkbox"
                         checked={consentGiven}
                         onChange={(e) => setConsentGiven(e.target.checked)}
-                        className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[var(--primary)] focus:ring-blue-500"
+                        className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[var(--primary)] focus:ring-[var(--primary)]"
                       />
                       <span className="text-sm text-muted-foreground">
                         Я даю{" "}
@@ -404,7 +404,7 @@ export default function Booking() {
                           href="/privacy"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[var(--primary)] underline underline-offset-2 hover:text-blue-700"
+                          className="text-[var(--primary)] underline underline-offset-2 hover:text-[#353d5c]"
                         >
                           согласие на обработку персональных данных
                         </a>{" "}
@@ -422,7 +422,7 @@ export default function Booking() {
                   type="submit"
                   disabled={isSubmitting}
                   className={cn(
-                    "mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-6 py-4 text-sm font-semibold text-white shadow-lg shadow-[var(--primary)]/20 transition-all duration-200 hover:bg-blue-700 hover:shadow-blue-700/30 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+                    "mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-6 py-4 text-sm font-semibold text-white shadow-lg shadow-[var(--primary)]/20 transition-all duration-200 hover:bg-[#353d5c] hover:shadow-[#353d5c]/20 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2",
                     isSubmitting && "cursor-not-allowed opacity-60"
                   )}
                 >
@@ -477,10 +477,10 @@ export default function Booking() {
                       <Phone className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-fluid-small text-blue-200/70">Телефон</p>
+                      <p className="text-fluid-small text-gray-400/70">Телефон</p>
                       <a
                         href="tel:+79061232727"
-                        className="font-[var(--font-mono)] text-lg font-semibold text-white transition-colors hover:text-blue-200"
+                        className="font-[var(--font-mono)] text-lg font-semibold text-white transition-colors hover:text-gray-400"
                       >
                         +7 (906) 123-27-27
                       </a>
@@ -492,7 +492,7 @@ export default function Booking() {
                       <MapPin className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-fluid-small text-blue-200/70">Адрес</p>
+                      <p className="text-fluid-small text-gray-400/70">Адрес</p>
                       <p className="text-base font-semibold text-white">
                         просп. Мира, 34, Набережные Челны
                       </p>
@@ -504,11 +504,11 @@ export default function Booking() {
                       <Clock className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-fluid-small text-blue-200/70">Время работы</p>
+                      <p className="text-fluid-small text-gray-400/70">Время работы</p>
                       <p className="font-[var(--font-mono)] text-base font-semibold text-white">
                         Пн-Пт: 08:00 - 20:00
                       </p>
-                      <p className="font-[var(--font-mono)] text-fluid-small text-blue-200/70">
+                      <p className="font-[var(--font-mono)] text-fluid-small text-gray-400/70">
                         Сб-Вс: 09:00 - 18:00
                       </p>
                     </div>
@@ -518,7 +518,7 @@ export default function Booking() {
 
               {/* Map */}
               <div className="overflow-hidden rounded-3xl border border-white/10">
-                <div className="relative h-52 w-full bg-blue-800/40">
+                <div className="relative h-52 w-full bg-white/10">
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/60">
                     <MapPin className="h-8 w-8" />
                     <span className="text-sm font-medium">Яндекс Карта</span>
@@ -537,7 +537,7 @@ export default function Booking() {
 
               {/* Quick note */}
               <div className="glass-card-dark rounded-3xl p-6">
-                <p className="text-fluid-small leading-relaxed text-blue-100/80">
+                <p className="text-fluid-small leading-relaxed text-gray-300/80">
                   <span className="font-semibold text-white">Бесплатная консультация</span>{" "}
                   — запишитесь на первичный осмотр и получите индивидуальный план лечения
                   без каких-либо обязательств.
