@@ -77,7 +77,7 @@ export default function Promotions() {
               onClick={() => setActive(active === i ? null : i)}
               className={cn(
                 "group relative cursor-pointer overflow-hidden rounded-2xl p-7 sm:p-8 transition-all duration-500",
-                "liquid-glass-dark",
+                "bg-[#1c1f26]",
                 "hover:scale-[1.02] hover:shadow-2xl hover:shadow-[var(--primary)]/15",
                 // Last 2 cards center on lg
                 i === 3 && "lg:col-start-1",

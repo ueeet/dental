@@ -144,7 +144,7 @@ function TestimonialsColumn({
             {testimonials.map((review) => (
               <div
                 key={`${index}-${review.id}`}
-                className="liquid-glass-light rounded-2xl p-6 max-w-xs w-full"
+                className="bg-white rounded-2xl p-6 max-w-xs w-full"
               >
                 <StarRating rating={review.rating} />
                 <p className="mt-4 text-muted-foreground text-sm leading-relaxed">
@@ -228,7 +228,7 @@ export default function Reviews() {
 
         {/* Review Submission Form */}
         <div
-          className="mx-auto mt-[var(--space-xl)] max-w-2xl liquid-glass-light rounded-2xl p-8"
+          className="mx-auto mt-[var(--space-xl)] max-w-2xl bg-white rounded-2xl p-8"
         >
           <h3 className="mb-6 text-center text-fluid-h3 font-heading text-foreground">
             Оставьте свой отзыв

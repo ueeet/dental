@@ -93,7 +93,7 @@ function DoctorCard({ doctor, onClick }: { doctor: Doctor; onClick: () => void }
       <div
         ref={cardRef}
         className={cn(
-          "relative liquid-glass-light rounded-2xl overflow-hidden border border-gray-100 h-full",
+          "relative bg-white rounded-2xl overflow-hidden border border-gray-100 h-full",
           "transition-shadow duration-300 will-change-transform",
           "hover:shadow-2xl hover:shadow-[var(--primary)]/10"
         )}
@@ -147,7 +147,7 @@ function DoctorModal({ doctor, onClose }: { doctor: Doctor; onClose: () => void 
       >
         <div
           ref={cardRef}
-          className="relative overflow-hidden rounded-3xl liquid-glass-light shadow-2xl will-change-transform"
+          className="relative overflow-hidden rounded-3xl bg-white shadow-2xl will-change-transform"
           style={{ transformStyle: "preserve-3d" }}
         >
           {/* Close button */}

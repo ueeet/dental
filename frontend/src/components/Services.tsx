@@ -98,7 +98,7 @@ export default function Services() {
         </div>
 
         {/* Price list */}
-        <div className="rounded-2xl border border-[var(--border)] liquid-glass-light overflow-hidden">
+        <div className="rounded-2xl border border-[var(--border)] bg-white overflow-hidden">
           {filtered.map((service, idx) => {
             const isExpanded = expandedId === service.id;
             const isLast = idx === filtered.length - 1;

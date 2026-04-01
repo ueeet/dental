@@ -230,7 +230,7 @@ export default function Booking() {
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="relative overflow-hidden rounded-3xl liquid-glass-light p-8 shadow-2xl shadow-black/20 sm:p-10 lg:p-12"
+              className="relative overflow-hidden rounded-3xl bg-white p-8 shadow-2xl shadow-black/20 sm:p-10 lg:p-12"
             >
               <div className="relative z-10">
                 {/* Success message */}
