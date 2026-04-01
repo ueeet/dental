@@ -23,7 +23,6 @@ export default function About() {
       gsap.from("[data-animate='about-label'], [data-animate='about-heading']", {
         autoAlpha: 0,
         y: 40,
-        filter: "blur(8px)",
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.12,
@@ -38,7 +37,6 @@ export default function About() {
       gsap.from("[data-animate='about-desc']", {
         autoAlpha: 0,
         y: 30,
-        filter: "blur(6px)",
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.15,

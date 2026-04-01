@@ -43,7 +43,6 @@ export default function Hero() {
       gsap.from("[data-hero-line]", {
         autoAlpha: 0,
         y: 60,
-        filter: "blur(8px)",
         duration: 1,
         stagger: 0.15,
         ease: "power3.out",
@@ -53,7 +52,6 @@ export default function Hero() {
       gsap.from("[data-hero-subtitle]", {
         autoAlpha: 0,
         y: 20,
-        filter: "blur(8px)",
         duration: 0.8,
         delay: 0.5,
         ease: "power3.out",
@@ -63,7 +61,6 @@ export default function Hero() {
       gsap.from("[data-hero-btn]", {
         autoAlpha: 0,
         y: 20,
-        filter: "blur(8px)",
         duration: 0.8,
         delay: 0.7,
         stagger: 0.12,
@@ -74,7 +71,6 @@ export default function Hero() {
       gsap.from("[data-hero-card]", {
         autoAlpha: 0,
         scale: 0.9,
-        filter: "blur(8px)",
         duration: 1,
         delay: 0.5,
         ease: "power3.out",
