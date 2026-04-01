@@ -196,50 +196,6 @@ export default function Services() {
     setExpandedId((prev) => (prev === id ? null : id));
   }, []);
 
-  /* ---- Entrance animations ---- */
-  useGSAP(
-    () => {
-      gsap.from("[data-animate='heading']", {
-        autoAlpha: 0,
-        y: 30,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='heading']",
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      gsap.from("[data-animate='banner']", {
-        autoAlpha: 0,
-        y: 16,
-        duration: 0.5,
-        delay: 0.15,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='banner']",
-          start: "top 85%",
-          once: true,
-        },
-      });
-
-      gsap.from("[data-animate='tabs']", {
-        autoAlpha: 0,
-        y: 16,
-        duration: 0.4,
-        delay: 0.25,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='tabs']",
-          start: "top 85%",
-          once: true,
-        },
-      });
-
-    },
-    { scope: containerRef }
-  );
 
   /* ---- Expand / collapse with GSAP height animation ---- */
   useEffect(() => {
@@ -256,7 +212,7 @@ export default function Services() {
       } else {
         gsap.to(el, {
           height: 0,
-          autoAlpha: 0,
+          opacity: 0,
           duration: 0.3,
           ease: "power2.inOut",
           onComplete: () => {
@@ -278,7 +234,7 @@ export default function Services() {
         <div
           data-animate="banner"
           className="mb-12 flex items-center justify-center gap-3 text-sm text-[var(--muted-foreground)]"
-          style={{ visibility: "hidden" }}
+          
         >
           <span className="h-px w-12 bg-[var(--border)]" />
           <Phone className="h-3.5 w-3.5 text-[var(--primary)]" />
@@ -292,7 +248,7 @@ export default function Services() {
         <div
           data-animate="heading"
           className="mx-auto max-w-2xl text-center"
-          style={{ visibility: "hidden" }}
+          
         >
           <span className="font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--muted-foreground)]">
             Услуги клиники
@@ -310,7 +266,7 @@ export default function Services() {
         <div
           data-animate="tabs"
           className="mt-10 flex flex-wrap justify-center gap-2"
-          style={{ visibility: "hidden" }}
+          
         >
           {categories.map(({ label, icon: Icon }) => (
             <button

@@ -83,7 +83,7 @@ export default function Header() {
     <header
       ref={headerRef}
       className={cn(
-        "sticky top-4 z-50 mx-auto max-w-7xl rounded-2xl border border-white/80 bg-white/80 px-4 py-3 backdrop-blur-lg transition-shadow duration-300",
+        "fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-screen-xl rounded-2xl border border-gray-200/60 bg-white/90 px-6 py-3 backdrop-blur-lg transition-shadow duration-300",
         scrolled ? "shadow-lg shadow-blue-100/40" : "shadow-none"
       )}
     >
@@ -98,7 +98,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-6">
+        <nav className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -112,7 +112,7 @@ export default function Header() {
         </nav>
 
         {/* Desktop right side */}
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-6">
           <a
             href="tel:+79061232727"
             className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors"

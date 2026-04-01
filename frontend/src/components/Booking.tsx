@@ -2,8 +2,6 @@
 
 import { useState, useRef, useEffect, FormEvent } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import {
   Phone,
   MapPin,
@@ -14,8 +12,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /* ------------------------------------------------------------------ */
 /*  Data                                                               */
@@ -98,7 +94,6 @@ export default function Booking() {
   const [successMessage, setSuccessMessage] = useState("");
   const [apiError, setApiError] = useState("");
 
-  const containerRef = useRef<HTMLElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
 
@@ -180,60 +175,16 @@ export default function Booking() {
     }
   }
 
-  /* Entrance animations */
-  useGSAP(
-    () => {
-      gsap.from("[data-animate='booking-heading']", {
-        autoAlpha: 0,
-        y: 30,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='booking-heading']",
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      gsap.from("[data-animate='booking-form']", {
-        autoAlpha: 0,
-        x: -40,
-        duration: 0.6,
-        delay: 0.1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='booking-form']",
-          start: "top 85%",
-          once: true,
-        },
-      });
-
-      gsap.from("[data-animate='booking-info']", {
-        autoAlpha: 0,
-        x: 40,
-        duration: 0.6,
-        delay: 0.2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='booking-info']",
-          start: "top 85%",
-          once: true,
-        },
-      });
-    },
-    { scope: containerRef }
-  );
-
   /* Animate success / error messages when they appear */
   useEffect(() => {
     if (successMessage && successRef.current) {
-      gsap.from(successRef.current, { autoAlpha: 0, y: -10, duration: 0.3 });
+      gsap.from(successRef.current, { opacity: 0, y: -10, duration: 0.3 });
     }
   }, [successMessage]);
 
   useEffect(() => {
     if (apiError && errorRef.current) {
-      gsap.from(errorRef.current, { autoAlpha: 0, y: -10, duration: 0.3 });
+      gsap.from(errorRef.current, { opacity: 0, y: -10, duration: 0.3 });
     }
   }, [apiError]);
 
@@ -246,7 +197,6 @@ export default function Booking() {
   return (
     <section
       id="booking"
-      ref={containerRef}
       className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-500 to-blue-700 py-[var(--space-section)]"
     >
       {/* Noise texture */}
@@ -260,9 +210,7 @@ export default function Booking() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Heading */}
         <div
-          data-animate="booking-heading"
           className="mx-auto max-w-2xl text-center mb-16"
-          style={{ visibility: "hidden" }}
         >
           <span className="font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-blue-200">
             Онлайн-запись
@@ -279,9 +227,7 @@ export default function Booking() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
           {/* Form */}
           <div
-            data-animate="booking-form"
             className="lg:col-span-3"
-            style={{ visibility: "hidden" }}
           >
             <form
               onSubmit={handleSubmit}
@@ -516,9 +462,7 @@ export default function Booking() {
 
           {/* Info card */}
           <div
-            data-animate="booking-info"
             className="lg:col-span-2"
-            style={{ visibility: "hidden" }}
           >
             <div className="sticky top-8 space-y-6">
               {/* Contact info card — glass-card-dark */}

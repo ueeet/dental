@@ -2,12 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const faqItems = [
   {
@@ -49,43 +45,12 @@ const faqItems = [
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const containerRef = useRef<HTMLElement>(null);
   const answerRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const chevronRefs = useRef<Map<number, HTMLSpanElement>>(new Map());
 
   const toggle = useCallback((index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
   }, []);
-
-  useGSAP(
-    () => {
-      gsap.from("[data-animate='faq-heading']", {
-        autoAlpha: 0,
-        y: 30,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='faq-heading']",
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      gsap.from("[data-animate='faq-item']", {
-        autoAlpha: 0,
-        y: 20,
-        duration: 0.4,
-        stagger: 0.06,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='faq-item']",
-          start: "top 85%",
-          once: true,
-        },
-      });
-    },
-    { scope: containerRef }
-  );
 
   /* Accordion expand/collapse with GSAP */
   useEffect(() => {
@@ -102,7 +67,7 @@ export default function FAQ() {
       } else {
         gsap.to(el, {
           height: 0,
-          autoAlpha: 0,
+          opacity: 0,
           duration: 0.35,
           ease: "power2.inOut",
           onComplete: () => {
@@ -126,15 +91,12 @@ export default function FAQ() {
   return (
     <section
       id="faq"
-      ref={containerRef}
       className="bg-[var(--background)] py-[var(--space-section)]"
     >
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Section label + heading */}
         <div
-          data-animate="faq-heading"
           className="mb-16"
-          style={{ visibility: "hidden" }}
         >
           <span className="font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-muted-foreground">
             FAQ
@@ -157,8 +119,6 @@ export default function FAQ() {
             return (
               <div
                 key={index}
-                data-animate="faq-item"
-                style={{ visibility: "hidden" }}
               >
                 <button
                   type="button"

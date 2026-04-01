@@ -2,12 +2,11 @@
 
 import React, { useState, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP);
 
 interface Review {
   id: number;
@@ -176,56 +175,6 @@ export default function Reviews() {
   const [formText, setFormText] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  useGSAP(
-    () => {
-      gsap.from("[data-animate='rev-label']", {
-        autoAlpha: 0,
-        y: 20,
-        duration: 0.5,
-        scrollTrigger: {
-          trigger: "[data-animate='rev-label']",
-          start: "top 85%",
-          once: true,
-        },
-      });
-
-      gsap.from("[data-animate='rev-heading']", {
-        autoAlpha: 0,
-        y: 30,
-        duration: 0.6,
-        delay: 0.1,
-        scrollTrigger: {
-          trigger: "[data-animate='rev-heading']",
-          start: "top 85%",
-          once: true,
-        },
-      });
-
-      gsap.from("[data-animate='rev-columns']", {
-        autoAlpha: 0,
-        y: 40,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: "[data-animate='rev-columns']",
-          start: "top 85%",
-          once: true,
-        },
-      });
-
-      gsap.from("[data-animate='rev-form']", {
-        autoAlpha: 0,
-        y: 40,
-        duration: 0.7,
-        scrollTrigger: {
-          trigger: "[data-animate='rev-form']",
-          start: "top 88%",
-          once: true,
-        },
-      });
-    },
-    { scope: containerRef }
-  );
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formName || !formRating || !formText) return;
@@ -241,9 +190,7 @@ export default function Reviews() {
       <div ref={containerRef} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section label */}
         <div
-          data-animate="rev-label"
           className="mb-3"
-          style={{ visibility: "hidden" }}
         >
           <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/40">
             Отзывы
@@ -252,9 +199,7 @@ export default function Reviews() {
 
         {/* Heading */}
         <div
-          data-animate="rev-heading"
           className="mb-[var(--space-lg)]"
-          style={{ visibility: "hidden" }}
         >
           <h2 className="text-fluid-h1 font-heading text-white">
             Что говорят пациенты
@@ -266,9 +211,7 @@ export default function Reviews() {
 
         {/* Testimonials Columns */}
         <div
-          data-animate="rev-columns"
           className="flex justify-center gap-6 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden"
-          style={{ visibility: "hidden" }}
         >
           <TestimonialsColumn testimonials={firstColumn} duration={15} />
           <TestimonialsColumn
@@ -285,9 +228,7 @@ export default function Reviews() {
 
         {/* Review Submission Form */}
         <div
-          data-animate="rev-form"
           className="mx-auto mt-[var(--space-xl)] max-w-2xl glass-card-dark rounded-2xl p-8"
-          style={{ visibility: "hidden" }}
         >
           <h3 className="mb-6 text-center text-fluid-h3 font-heading text-white">
             Оставьте свой отзыв

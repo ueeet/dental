@@ -62,35 +62,6 @@ const promotions = [
 export default function Promotions() {
   const containerRef = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      gsap.from("[data-animate='promo-heading']", {
-        autoAlpha: 0,
-        y: 30,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='promo-heading']",
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      gsap.from("[data-animate='promo-card']", {
-        autoAlpha: 0,
-        y: 30,
-        duration: 0.5,
-        stagger: 0.1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='promo-card']",
-          start: "top 85%",
-          once: true,
-        },
-      });
-    },
-    { scope: containerRef }
-  );
 
   return (
     <section
@@ -103,7 +74,7 @@ export default function Promotions() {
         <div
           data-animate="promo-heading"
           className="mb-16"
-          style={{ visibility: "hidden" }}
+          
         >
           <span className="font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-muted-foreground">
             Выгодные предложения
@@ -136,7 +107,7 @@ export default function Promotions() {
                     : "bg-[#f0f4ff]",
                   "hover:shadow-lg"
                 )}
-                style={{ visibility: "hidden" }}
+                
               >
                 {/* Hit badge */}
                 {promo.isHit && (

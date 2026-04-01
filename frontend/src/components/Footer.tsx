@@ -1,14 +1,8 @@
 "use client";
 
-import { useRef } from "react";
 import Link from "next/link";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import { MapPin, Phone, Clock, Mail, Navigation } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const navLinks = [
   { label: "О клинике", href: "#about" },
@@ -155,83 +149,17 @@ function InstagramIcon({ className }: { className?: string }) {
    ======================================== */
 
 export default function Footer() {
-  const containerRef = useRef<HTMLElement>(null);
-  const footerRef = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      gsap.from("[data-animate='contacts-heading']", {
-        autoAlpha: 0,
-        y: 30,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='contacts-heading']",
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      gsap.from("[data-animate='contact-item']", {
-        autoAlpha: 0,
-        y: 20,
-        duration: 0.5,
-        stagger: 0.1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='contact-item']",
-          start: "top 85%",
-          once: true,
-        },
-      });
-
-      gsap.from("[data-animate='contact-map']", {
-        autoAlpha: 0,
-        scale: 0.97,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: "[data-animate='contact-map']",
-          start: "top 85%",
-          once: true,
-        },
-      });
-    },
-    { scope: containerRef }
-  );
-
-  useGSAP(
-    () => {
-      gsap.from("[data-animate='footer-col']", {
-        autoAlpha: 0,
-        y: 20,
-        duration: 0.4,
-        stagger: 0.1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: footerRef.current,
-          start: "top 90%",
-          once: true,
-        },
-      });
-    },
-    { scope: footerRef }
-  );
-
   return (
     <>
       {/* ---------- Contacts Section ---------- */}
       <section
         id="contacts"
-        ref={containerRef}
         className="bg-[#0a0f1a] py-[var(--space-section)]"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Heading */}
           <div
-            data-animate="contacts-heading"
             className="mb-16"
-            style={{ visibility: "hidden" }}
           >
             <span className="font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-slate-500">
               Связаться с нами
@@ -247,9 +175,7 @@ export default function Footer() {
               {contactItems.map((item) => (
                 <div
                   key={item.title}
-                  data-animate="contact-item"
                   className="flex items-start gap-5"
-                  style={{ visibility: "hidden" }}
                 >
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/5 text-slate-400">
                     <item.icon className="h-5 w-5" />
@@ -266,9 +192,7 @@ export default function Footer() {
 
             {/* Right column — Map */}
             <div
-              data-animate="contact-map"
               className="overflow-hidden rounded-2xl border border-white/5 min-h-[420px] bg-slate-900 flex flex-col"
-              style={{ visibility: "hidden" }}
             >
               <iframe
                 src="https://yandex.ru/map-widget/v1/?um=constructor%3A&source=constructor"
@@ -295,14 +219,12 @@ export default function Footer() {
       </section>
 
       {/* ---------- Footer ---------- */}
-      <footer ref={footerRef} className="bg-[#0a0f1a] border-t border-white/5">
+      <footer className="bg-[#0a0f1a] border-t border-white/5">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
             {/* Col 1 — Logo + description */}
             <div
-              data-animate="footer-col"
               className="space-y-5"
-              style={{ visibility: "hidden" }}
             >
               <Link href="/" className="flex items-center gap-3">
                 <ToothIcon className="h-9 w-9 text-blue-400" />
@@ -318,10 +240,7 @@ export default function Footer() {
             </div>
 
             {/* Col 2 — Navigation */}
-            <div
-              data-animate="footer-col"
-              style={{ visibility: "hidden" }}
-            >
+            <div>
               <h3 className="mb-5 font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-slate-500">
                 Навигация
               </h3>
@@ -341,10 +260,7 @@ export default function Footer() {
             </div>
 
             {/* Col 3 — Socials */}
-            <div
-              data-animate="footer-col"
-              style={{ visibility: "hidden" }}
-            >
+            <div>
               <h3 className="mb-5 font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-slate-500">
                 Мы в соцсетях
               </h3>
@@ -393,10 +309,7 @@ export default function Footer() {
             </div>
 
             {/* Col 4 — Contact shortcut */}
-            <div
-              data-animate="footer-col"
-              style={{ visibility: "hidden" }}
-            >
+            <div>
               <h3 className="mb-5 font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-slate-500">
                 Контакты
               </h3>

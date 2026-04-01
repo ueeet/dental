@@ -1,9 +1,5 @@
 "use client";
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import {
   Award,
   Users,
@@ -13,8 +9,6 @@ import {
   Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const stats = [
   { icon: Award, value: "15+", label: "лет опыта" },
@@ -34,94 +28,10 @@ const trustItems = [
 ];
 
 export default function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const marqueeRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      // Heading lines — split-line stagger
-      gsap.from("[data-hero-line]", {
-        autoAlpha: 0,
-        y: 60,
-        filter: "blur(8px)",
-        duration: 1,
-        stagger: 0.15,
-        ease: "power3.out",
-      });
-
-      // Subtitle
-      gsap.from("[data-hero-subtitle]", {
-        autoAlpha: 0,
-        y: 20,
-        filter: "blur(8px)",
-        duration: 0.8,
-        delay: 0.5,
-        ease: "power3.out",
-      });
-
-      // Buttons staggered
-      gsap.from("[data-hero-btn]", {
-        autoAlpha: 0,
-        y: 20,
-        filter: "blur(8px)",
-        duration: 0.8,
-        delay: 0.7,
-        stagger: 0.12,
-        ease: "power3.out",
-      });
-
-      // Glassmorphism card
-      gsap.from("[data-hero-card]", {
-        autoAlpha: 0,
-        scale: 0.9,
-        filter: "blur(8px)",
-        duration: 1,
-        delay: 0.5,
-        ease: "power3.out",
-      });
-
-      // Divider line
-      gsap.from("[data-hero-divider]", {
-        autoAlpha: 0,
-        scaleX: 0,
-        duration: 0.8,
-        delay: 1.0,
-        ease: "power3.out",
-      });
-
-      // Marquee fade in
-      gsap.from("[data-hero-marquee]", {
-        autoAlpha: 0,
-        y: 10,
-        duration: 0.8,
-        delay: 1.2,
-        ease: "power3.out",
-      });
-
-      // Marquee infinite scroll
-      const marqueeInner = marqueeRef.current;
-      if (marqueeInner) {
-        const halfWidth = marqueeInner.scrollWidth / 2;
-        gsap.to(marqueeInner, {
-          x: -halfWidth,
-          duration: 30,
-          ease: "none",
-          repeat: -1,
-        });
-      }
-    },
-    { scope: containerRef }
-  );
-
   return (
     <section
-      ref={containerRef}
       className="relative min-h-screen overflow-hidden bg-white"
     >
-      {/* Bold accent element — single oversized soft circle */}
-      <div
-        className="pointer-events-none absolute -right-[15vw] -top-[10vh] h-[80vh] w-[80vh] rounded-full bg-[var(--primary,#2563eb)] opacity-[0.06]"
-      />
 
       {/* Content wrapper */}
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1400px] flex-col px-6 sm:px-10 lg:px-16">
@@ -131,8 +41,6 @@ export default function Hero() {
           <div className="flex flex-col justify-center lg:w-[60%]">
             {/* Mono badge */}
             <div
-              data-hero-line
-              style={{ visibility: "hidden" }}
               className="mb-8"
             >
               <span className="inline-flex items-center gap-2 font-[var(--font-mono)] text-[11px] uppercase tracking-[0.2em] text-neutral-400">
@@ -141,18 +49,14 @@ export default function Hero() {
               </span>
             </div>
 
-            {/* Heading — two lines, split-animated */}
+            {/* Heading — two lines */}
             <h1 className="text-fluid-display font-[var(--font-heading)] font-bold leading-[0.95] tracking-tight text-neutral-900">
               <span
-                data-hero-line
-                style={{ visibility: "hidden" }}
                 className="block"
               >
                 Ваша улыбка —
               </span>
               <span
-                data-hero-line
-                style={{ visibility: "hidden" }}
                 className="block text-[var(--primary,#2563eb)]"
               >
                 наша забота
@@ -161,8 +65,6 @@ export default function Hero() {
 
             {/* Subtitle */}
             <p
-              data-hero-subtitle
-              style={{ visibility: "hidden" }}
               className="mt-8 max-w-md text-lg leading-relaxed text-neutral-900/60"
             >
               Мы переехали! Встречаем вас по новому адресу на{" "}
@@ -176,8 +78,6 @@ export default function Hero() {
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <a
                 href="#booking"
-                data-hero-btn
-                style={{ visibility: "hidden" }}
                 className={cn(
                   "group inline-flex h-14 items-center gap-2.5 rounded-full bg-[var(--primary,#2563eb)] px-8",
                   "text-base font-semibold text-white transition-all duration-300",
@@ -193,8 +93,6 @@ export default function Hero() {
 
               <a
                 href="#about"
-                data-hero-btn
-                style={{ visibility: "hidden" }}
                 className={cn(
                   "inline-flex h-14 items-center rounded-full border border-neutral-200 px-8",
                   "text-base font-semibold text-neutral-700 transition-all duration-300",
@@ -210,8 +108,6 @@ export default function Hero() {
           {/* RIGHT 40% — floating glassmorphism card */}
           <div className="flex justify-center lg:w-[40%] lg:justify-end">
             <div
-              data-hero-card
-              style={{ visibility: "hidden" }}
               className={cn(
                 "glass-card w-full max-w-sm rounded-3xl p-8",
                 "border border-white/60 bg-white/40 shadow-2xl shadow-neutral-900/5 backdrop-blur-xl",
@@ -246,22 +142,18 @@ export default function Hero() {
         <div className="pb-8">
           {/* Thin line separator */}
           <div
-            data-hero-divider
-            style={{ visibility: "hidden" }}
             className="section-line mb-6 h-px w-full origin-left bg-neutral-200"
           />
 
           {/* Trust marquee */}
           <div
-            data-hero-marquee
-            style={{ visibility: "hidden" }}
             className="relative overflow-hidden"
           >
             {/* Fade edges */}
             <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-white to-transparent" />
             <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-white to-transparent" />
 
-            <div ref={marqueeRef} className="flex w-max items-center gap-8">
+            <div className="flex w-max items-center gap-8">
               {[...trustItems, ...trustItems].map((item, i) => (
                 <span
                   key={`${item}-${i}`}
