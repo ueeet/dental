@@ -6,33 +6,27 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// 3 rows of images, each row scrolls in opposite direction
+// Fewer photos per row, more breathing room
 const row1 = [
-  "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&h=350&fit=crop",
+  "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=600&h=400&fit=crop",
 ];
 const row2 = [
-  "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1606265752439-1f18756aa5fc?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1629909615850-0a8a2a026e39?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&h=350&fit=crop",
+  "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1606265752439-1f18756aa5fc?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1629909615850-0a8a2a026e39?w=600&h=400&fit=crop",
 ];
 const row3 = [
-  "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1571772996211-2f02c9727629?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1571772996211-2f02c9727629?w=500&h=350&fit=crop",
+  "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1571772996211-2f02c9727629?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=600&h=400&fit=crop",
 ];
 
 function ImageRow({ images, direction }: { images: string[]; direction: "left" | "right" }) {
@@ -42,7 +36,7 @@ function ImageRow({ images, direction }: { images: string[]; direction: "left" |
     const el = rowRef.current;
     if (!el) return;
 
-    const distance = direction === "right" ? 300 : -300;
+    const distance = direction === "right" ? 250 : -250;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -65,9 +59,9 @@ function ImageRow({ images, direction }: { images: string[]; direction: "left" |
   }, [direction]);
 
   return (
-    <div ref={rowRef} className="flex gap-3 will-change-transform" style={{ width: "max-content" }}>
+    <div ref={rowRef} className="flex gap-5 will-change-transform" style={{ width: "max-content" }}>
       {images.map((src, i) => (
-        <div key={i} className="h-[180px] w-[270px] flex-shrink-0 overflow-hidden rounded-xl sm:h-[200px] sm:w-[300px]">
+        <div key={i} className="h-[200px] w-[320px] flex-shrink-0 overflow-hidden rounded-2xl sm:h-[220px] sm:w-[350px]">
           <img
             src={src}
             alt=""
@@ -82,28 +76,28 @@ function ImageRow({ images, direction }: { images: string[]; direction: "left" |
 
 export default function About() {
   return (
-    <section id="about" className="relative overflow-hidden bg-gray-900 py-40 sm:py-48 md:py-56 -mt-20">
+    <section id="about" className="relative overflow-hidden bg-gray-900 py-40 sm:py-48 md:py-56">
 
-      {/* Gradient fade top — white to dark */}
-      <div className="absolute top-0 left-0 right-0 h-32 sm:h-40 z-20 bg-gradient-to-b from-white via-white/60 to-transparent pointer-events-none" />
-      {/* Gradient fade bottom — dark to white */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 z-20 bg-gradient-to-t from-[var(--muted)] via-[var(--muted)]/60 to-transparent pointer-events-none" />
+      {/* Short clean transition top */}
+      <div className="absolute top-0 left-0 right-0 h-16 z-20 bg-gradient-to-b from-white to-transparent pointer-events-none" />
+      {/* Short clean transition bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-16 z-20 bg-gradient-to-t from-[var(--muted)] to-transparent pointer-events-none" />
 
-      {/* Background image rows — stretch to fill entire section */}
-      <div className="absolute inset-0 flex flex-col justify-center gap-3 opacity-40">
+      {/* Background image rows */}
+      <div className="absolute inset-0 flex flex-col justify-center gap-5 opacity-50">
         <ImageRow images={row1} direction="right" />
         <ImageRow images={row2} direction="left" />
         <ImageRow images={row3} direction="right" />
       </div>
 
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-gray-900/50" />
+      {/* Subtle dark overlay */}
+      <div className="absolute inset-0 bg-gray-900/40" />
 
       {/* Centered text */}
       <div className="relative z-10 flex items-center justify-center px-4 sm:px-6">
         <div className="relative mx-auto max-w-2xl text-center">
-          {/* Soft radial glow behind text — no hard edges */}
-          <div className="absolute inset-0 -inset-x-20 -inset-y-12 rounded-full bg-gray-900/80 blur-3xl" />
+          {/* Soft radial glow behind text */}
+          <div className="absolute -inset-x-24 -inset-y-16 rounded-full bg-gray-900/70 blur-3xl" />
           <div className="relative px-8 py-12 sm:px-14 sm:py-16">
             <p className="font-[var(--font-mono)] text-xs font-semibold uppercase tracking-widest text-blue-400">
               О клинике
