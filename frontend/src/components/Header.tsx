@@ -1,8 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Menu, Phone, X } from "lucide-react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(useGSAP);
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -54,6 +58,18 @@ function handleSmoothScroll(
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    if (headerRef.current) {
+      gsap.from(headerRef.current, {
+        y: -100,
+        autoAlpha: 0,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+    }
+  });
 
   useEffect(() => {
     function onScroll() {
@@ -65,6 +81,7 @@ export default function Header() {
 
   return (
     <header
+      ref={headerRef}
       className={cn(
         "sticky top-4 z-50 mx-auto max-w-7xl rounded-2xl border border-white/80 bg-white/80 px-4 py-3 backdrop-blur-lg transition-shadow duration-300",
         scrolled ? "shadow-lg shadow-blue-100/40" : "shadow-none"

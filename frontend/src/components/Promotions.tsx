@@ -1,8 +1,13 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { Gift, Percent, Star, Users, CreditCard, Clock, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const promotions = [
   {
@@ -53,15 +58,44 @@ const promotions = [
 ];
 
 export default function Promotions() {
+  const containerRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      gsap.from("[data-animate='heading']", {
+        autoAlpha: 0,
+        y: 20,
+        duration: 0.5,
+        scrollTrigger: {
+          trigger: "[data-animate='heading']",
+          start: "top 80%",
+          once: true,
+        },
+      });
+
+      ScrollTrigger.batch("[data-animate='promo-card']", {
+        onEnter: (batch) => {
+          gsap.from(batch, {
+            autoAlpha: 0,
+            y: 30,
+            duration: 0.4,
+            stagger: 0.1,
+          });
+        },
+        start: "top 85%",
+        once: true,
+      });
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <section id="promotions" className="py-20 bg-white">
+    <section id="promotions" ref={containerRef} className="py-20 bg-white">
       <div className="container mx-auto px-4 max-w-6xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+        <div
+          data-animate="heading"
           className="text-center mb-14"
+          style={{ visibility: "hidden" }}
         >
           <span className="inline-block text-sm font-semibold tracking-wider uppercase text-blue-600 mb-3">
             Выгодные предложения
@@ -73,25 +107,23 @@ export default function Promotions() {
             Качественная стоматология может быть доступной. Воспользуйтесь
             нашими актуальными акциями и сэкономьте на заботе о здоровье.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {promotions.map((promo, index) => {
             const Icon = promo.icon;
 
             return (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
+                data-animate="promo-card"
                 className={cn(
                   "relative group flex flex-col rounded-2xl border bg-white p-6 transition-shadow duration-300 hover:shadow-xl",
                   promo.isHit
                     ? "border-blue-200 ring-1 ring-blue-100"
                     : "border-gray-100"
                 )}
+                style={{ visibility: "hidden" }}
               >
                 {promo.isHit && (
                   <span className="absolute -top-3 right-5 inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold text-white shadow">
@@ -149,7 +181,7 @@ export default function Promotions() {
                 >
                   Записаться
                 </a>
-              </motion.div>
+              </div>
             );
           })}
         </div>

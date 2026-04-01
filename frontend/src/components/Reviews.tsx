@@ -1,14 +1,17 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion } from "motion/react";
-import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useState, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 interface Review {
   id: number;
   name: string;
-  date: string;
   rating: number;
   text: string;
 }
@@ -17,46 +20,62 @@ const reviews: Review[] = [
   {
     id: 1,
     name: "Анна Соколова",
-    date: "12 марта 2026",
     rating: 5,
     text: "Прекрасная клиника! Делала виниры в IQ Dental — результат превзошёл все ожидания. Врачи внимательные, всё объясняют на каждом этапе. Теперь улыбаюсь без стеснения!",
   },
   {
     id: 2,
     name: "Дмитрий Кузнецов",
-    date: "28 февраля 2026",
     rating: 4,
     text: "Обратился с острой болью — приняли в тот же день. Лечение прошло быстро и безболезненно. Очень доволен сервисом и профессионализмом персонала IQ Dental.",
   },
   {
     id: 3,
     name: "Елена Васильева",
-    date: "15 февраля 2026",
     rating: 5,
     text: "Проходила профессиональную чистку и отбеливание. Эффект потрясающий — зубы стали на несколько тонов светлее. Рекомендую IQ Dental всем знакомым!",
   },
   {
     id: 4,
     name: "Михаил Петров",
-    date: "3 февраля 2026",
     rating: 4,
     text: "Ставил имплант в IQ Dental. Процедура прошла комфортно, хотя я очень боялся. Врач подробно рассказал план лечения и поддерживал на каждом этапе. Спасибо!",
   },
   {
     id: 5,
     name: "Ольга Новикова",
-    date: "20 января 2026",
     rating: 5,
     text: "Лечим всей семьёй зубы только в IQ Dental. Детский стоматолог — просто волшебница, ребёнок идёт на приём с удовольствием. Современное оборудование и уютная атмосфера.",
   },
   {
     id: 6,
     name: "Артём Лебедев",
-    date: "10 января 2026",
     rating: 4,
     text: "Исправлял прикус с помощью элайнеров. За полгода зубы встали ровно, как и обещали. Клиника IQ Dental оправдывает своё название — действительно умный подход к стоматологии.",
   },
+  {
+    id: 7,
+    name: "Марина Козлова",
+    rating: 5,
+    text: "Очень боялась удалять зуб мудрости, но в IQ Dental всё прошло идеально. Никакой боли, быстрое восстановление. Благодарна врачам за профессионализм и заботу!",
+  },
+  {
+    id: 8,
+    name: "Сергей Волков",
+    rating: 4,
+    text: "Делал протезирование в IQ Dental. Качество работы на высшем уровне — коронки выглядят как родные зубы. Отдельное спасибо за терпение и внимание к деталям.",
+  },
+  {
+    id: 9,
+    name: "Наталья Орлова",
+    rating: 5,
+    text: "Хожу в IQ Dental уже третий год на профилактические осмотры. Всегда приятная атмосфера, вежливый персонал и никаких очередей. Лучшая стоматология в городе!",
+  },
 ];
+
+const firstColumn = reviews.slice(0, 3);
+const secondColumn = reviews.slice(3, 6);
+const thirdColumn = reviews.slice(6, 9);
 
 function StarRating({
   rating,
@@ -86,21 +105,94 @@ function StarRating({
   );
 }
 
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+}
+
+function TestimonialsColumn({
+  testimonials,
+  className,
+  duration = 10,
+}: {
+  testimonials: Review[];
+  className?: string;
+  duration?: number;
+}) {
+  const columnRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (!columnRef.current) return;
+      gsap.to(columnRef.current, {
+        y: "-50%",
+        duration,
+        repeat: -1,
+        ease: "none",
+      });
+    },
+    { scope: columnRef }
+  );
+
+  return (
+    <div className={cn("overflow-hidden", className)}>
+      <div ref={columnRef} className="flex flex-col gap-6 pb-6">
+        {[...new Array(2)].map((_, index) => (
+          <React.Fragment key={index}>
+            {testimonials.map((review) => (
+              <div
+                key={`${index}-${review.id}`}
+                className="rounded-3xl border border-gray-200 bg-white p-6 shadow-lg shadow-blue-600/5 max-w-xs w-full"
+              >
+                <StarRating rating={review.rating} />
+                <p className="mt-4 text-gray-700 leading-relaxed">
+                  {review.text}
+                </p>
+                <div className="mt-5 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-600">
+                    {getInitials(review.name)}
+                  </div>
+                  <div className="font-medium tracking-tight text-gray-900">
+                    {review.name}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Reviews() {
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+
   const [formName, setFormName] = useState("");
   const [formRating, setFormRating] = useState(0);
   const [formText, setFormText] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const scroll = (direction: "left" | "right") => {
-    if (!carouselRef.current) return;
-    const scrollAmount = 380;
-    carouselRef.current.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
-    });
-  };
+  useGSAP(
+    () => {
+      if (!headingRef.current) return;
+      gsap.from(headingRef.current, {
+        opacity: 0,
+        y: 30,
+        duration: 0.6,
+        scrollTrigger: {
+          trigger: headingRef.current,
+          start: "top 85%",
+          once: true,
+        },
+      });
+    },
+    { scope: containerRef }
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,83 +206,34 @@ export default function Reviews() {
 
   return (
     <section id="reviews" className="bg-blue-50 py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div ref={containerRef} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="mb-12 text-center"
-        >
+        <div ref={headingRef} className="mb-12 text-center">
           <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
             Отзывы наших пациентов
           </h2>
           <p className="mt-3 text-lg text-blue-600 font-medium">
             Рейтинг 4.0 на ПроДокторов
           </p>
-        </motion.div>
+        </div>
 
-        {/* Carousel */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative"
-        >
-          {/* Navigation Arrows */}
-          <button
-            onClick={() => scroll("left")}
-            className="absolute -left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2 shadow-md transition-colors hover:bg-blue-100"
-            aria-label="Прокрутить влево"
-          >
-            <ChevronLeft className="h-6 w-6 text-blue-600" />
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className="absolute -right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2 shadow-md transition-colors hover:bg-blue-100"
-            aria-label="Прокрутить вправо"
-          >
-            <ChevronRight className="h-6 w-6 text-blue-600" />
-          </button>
-
-          {/* Cards Container */}
-          <div
-            ref={carouselRef}
-            className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 scrollbar-hide"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {reviews.map((review, index) => (
-              <motion.div
-                key={review.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="min-w-[350px] max-w-[350px] flex-shrink-0 snap-center rounded-2xl bg-white p-6 shadow"
-              >
-                <StarRating rating={review.rating} />
-                <p className="mt-4 text-gray-700 leading-relaxed">
-                  {review.text}
-                </p>
-                <div className="mt-6 border-t border-gray-100 pt-4">
-                  <p className="font-semibold text-gray-900">{review.name}</p>
-                  <p className="text-sm text-gray-400">{review.date}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+        {/* Testimonials Columns */}
+        <div className="flex justify-center gap-6 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
+          <TestimonialsColumn testimonials={firstColumn} duration={15} />
+          <TestimonialsColumn
+            testimonials={secondColumn}
+            className="hidden md:block"
+            duration={19}
+          />
+          <TestimonialsColumn
+            testimonials={thirdColumn}
+            className="hidden lg:block"
+            duration={17}
+          />
+        </div>
 
         {/* Review Submission Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mx-auto mt-16 max-w-2xl rounded-2xl bg-white p-8 shadow"
-        >
+        <div className="mx-auto mt-16 max-w-2xl rounded-2xl bg-white p-8 shadow">
           <h3 className="mb-6 text-center text-2xl font-bold text-gray-900">
             Оставьте свой отзыв
           </h3>
@@ -256,7 +299,7 @@ export default function Reviews() {
               Отправить отзыв
             </button>
           </form>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

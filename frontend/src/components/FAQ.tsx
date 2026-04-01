@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { ChevronDown, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const faqItems = [
   {
@@ -45,13 +49,53 @@ const faqItems = [
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const answerRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const chevronRefs = useRef<Map<number, HTMLSpanElement>>(new Map());
 
-  const toggle = (index: number) => {
+  const toggle = useCallback((index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
-  };
+  }, []);
+
+  useGSAP(
+    () => {
+      /* No scroll-based entrance animations needed for FAQ heading since
+         the original didn't have them either — just the accordion behavior */
+    },
+    { scope: containerRef }
+  );
+
+  /* Accordion expand/collapse with GSAP */
+  useEffect(() => {
+    answerRefs.current.forEach((el, index) => {
+      if (!el) return;
+      if (openIndex === index) {
+        gsap.set(el, { display: "block" });
+        gsap.to(el, { height: "auto", autoAlpha: 1, duration: 0.3, ease: "power1.inOut" });
+      } else {
+        gsap.to(el, {
+          height: 0,
+          autoAlpha: 0,
+          duration: 0.3,
+          ease: "power1.inOut",
+          onComplete: () => { gsap.set(el, { display: "none" }); },
+        });
+      }
+    });
+
+    /* Chevron rotation */
+    chevronRefs.current.forEach((el, index) => {
+      if (!el) return;
+      gsap.to(el, {
+        rotation: openIndex === index ? 180 : 0,
+        duration: 0.3,
+        ease: "power1.inOut",
+      });
+    });
+  }, [openIndex]);
 
   return (
-    <section id="faq" className="bg-white py-20">
+    <section id="faq" ref={containerRef} className="bg-white py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         {/* Heading */}
         <div className="mb-12 text-center">
@@ -81,9 +125,10 @@ export default function FAQ() {
                   <span className="text-base font-medium sm:text-lg">
                     {item.question}
                   </span>
-                  <motion.span
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  <span
+                    ref={(el) => {
+                      if (el) chevronRefs.current.set(index, el);
+                    }}
                     className="flex-shrink-0"
                   >
                     <ChevronDown
@@ -92,25 +137,20 @@ export default function FAQ() {
                         isOpen ? "text-blue-600" : "text-gray-400"
                       )}
                     />
-                  </motion.span>
+                  </span>
                 </button>
 
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      key="answer"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden"
-                    >
-                      <p className="pb-5 text-base leading-relaxed text-gray-600">
-                        {item.answer}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div
+                  ref={(el) => {
+                    if (el) answerRefs.current.set(index, el);
+                  }}
+                  className="overflow-hidden"
+                  style={{ height: 0, visibility: "hidden", display: "none" }}
+                >
+                  <p className="pb-5 text-base leading-relaxed text-gray-600">
+                    {item.answer}
+                  </p>
+                </div>
               </div>
             );
           })}

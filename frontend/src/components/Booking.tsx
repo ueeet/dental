@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, FormEvent } from "react";
-import { motion } from "motion/react";
+import { useState, useRef, useEffect, FormEvent } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import {
   Phone,
   MapPin,
@@ -12,6 +14,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /* ------------------------------------------------------------------ */
 /*  Data                                                               */
@@ -94,6 +98,10 @@ export default function Booking() {
   const [successMessage, setSuccessMessage] = useState("");
   const [apiError, setApiError] = useState("");
 
+  const containerRef = useRef<HTMLElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
+
   function validate(): FormErrors {
     const errs: FormErrors = {};
 
@@ -172,6 +180,60 @@ export default function Booking() {
     }
   }
 
+  /* Entrance animations */
+  useGSAP(
+    () => {
+      gsap.from("[data-animate='heading']", {
+        autoAlpha: 0,
+        y: 24,
+        duration: 0.5,
+        scrollTrigger: {
+          trigger: "[data-animate='heading']",
+          start: "top 80%",
+          once: true,
+        },
+      });
+
+      gsap.from("[data-animate='form']", {
+        autoAlpha: 0,
+        x: -30,
+        duration: 0.5,
+        delay: 0.1,
+        scrollTrigger: {
+          trigger: "[data-animate='form']",
+          start: "top 85%",
+          once: true,
+        },
+      });
+
+      gsap.from("[data-animate='info']", {
+        autoAlpha: 0,
+        x: 30,
+        duration: 0.5,
+        delay: 0.2,
+        scrollTrigger: {
+          trigger: "[data-animate='info']",
+          start: "top 85%",
+          once: true,
+        },
+      });
+    },
+    { scope: containerRef }
+  );
+
+  /* Animate success / error messages when they appear */
+  useEffect(() => {
+    if (successMessage && successRef.current) {
+      gsap.from(successRef.current, { autoAlpha: 0, y: -10, duration: 0.3 });
+    }
+  }, [successMessage]);
+
+  useEffect(() => {
+    if (apiError && errorRef.current) {
+      gsap.from(errorRef.current, { autoAlpha: 0, y: -10, duration: 0.3 });
+    }
+  }, [apiError]);
+
   /* Shared input styles */
   const inputBase =
     "w-full rounded-xl border bg-white px-4 py-3 text-sm text-foreground outline-none transition-all duration-200 placeholder:text-muted-foreground/60 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
@@ -181,6 +243,7 @@ export default function Booking() {
   return (
     <section
       id="booking"
+      ref={containerRef}
       className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-500 to-blue-700 py-20 md:py-28"
     >
       {/* Decorative elements */}
@@ -190,12 +253,10 @@ export default function Booking() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5 }}
+        <div
+          data-animate="heading"
           className="mx-auto max-w-2xl text-center"
+          style={{ visibility: "hidden" }}
         >
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Запись на приём
@@ -203,17 +264,15 @@ export default function Booking() {
           <p className="mt-4 text-lg text-blue-100">
             Оставьте заявку и мы перезвоним в течение 15 минут
           </p>
-        </motion.div>
+        </div>
 
         {/* Content: form + info card */}
         <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-5">
           {/* Form */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+          <div
+            data-animate="form"
             className="lg:col-span-3"
+            style={{ visibility: "hidden" }}
           >
             <form
               onSubmit={handleSubmit}
@@ -222,26 +281,24 @@ export default function Booking() {
             >
               {/* Success message */}
               {successMessage && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                <div
+                  ref={successRef}
                   className="mb-6 flex items-center gap-3 rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-sm font-medium text-green-700"
                 >
                   <CheckCircle className="h-5 w-5 shrink-0 text-green-500" />
                   {successMessage}
-                </motion.div>
+                </div>
               )}
 
               {/* API error */}
               {apiError && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                <div
+                  ref={errorRef}
                   className="mb-6 flex items-center gap-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm font-medium text-red-700"
                 >
                   <AlertCircle className="h-5 w-5 shrink-0 text-red-500" />
                   {apiError}
-                </motion.div>
+                </div>
               )}
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -444,15 +501,13 @@ export default function Booking() {
                 )}
               </button>
             </form>
-          </motion.div>
+          </div>
 
           {/* Info card */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+          <div
+            data-animate="info"
             className="lg:col-span-2"
+            style={{ visibility: "hidden" }}
           >
             <div className="sticky top-8 space-y-6">
               {/* Contact info card */}
@@ -530,7 +585,7 @@ export default function Booking() {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

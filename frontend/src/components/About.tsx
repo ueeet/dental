@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { motion } from "motion/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import {
   Shield,
   Clock,
@@ -11,6 +13,9 @@ import {
   Heart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import XScroll from "@/components/ui/x-scroll";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const photos = [
   "Фото клиники 1",
@@ -59,46 +64,83 @@ const advantages = [
   },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, delay: i * 0.1 },
-  }),
-};
-
 export default function About() {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      // Heading animation
+      gsap.from("[data-animate='heading']", {
+        autoAlpha: 0,
+        y: 30,
+        duration: 0.6,
+        scrollTrigger: {
+          trigger: "[data-animate='heading']",
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      // Description animation
+      gsap.from("[data-animate='description']", {
+        autoAlpha: 0,
+        y: 30,
+        duration: 0.6,
+        delay: 0.15,
+        scrollTrigger: {
+          trigger: "[data-animate='description']",
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      // Gallery animation
+      gsap.from("[data-animate='gallery']", {
+        autoAlpha: 0,
+        y: 30,
+        duration: 0.6,
+        scrollTrigger: {
+          trigger: "[data-animate='gallery']",
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      // Advantages grid — batch animation
+      ScrollTrigger.batch("[data-animate='advantage']", {
+        onEnter: (elements) => {
+          gsap.from(elements, {
+            autoAlpha: 0,
+            y: 30,
+            stagger: 0.15,
+            duration: 0.5,
+          });
+        },
+        start: "top 90%",
+        once: true,
+      });
+    },
+    { scope: containerRef }
+  );
 
   return (
-    <section id="about" className="bg-white py-20 md:py-28">
+    <section id="about" className="bg-white py-20 md:py-28" ref={containerRef}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeUp}
-          custom={0}
-          className="text-center"
-        >
+        <div data-animate="heading" className="text-center" style={{ visibility: "hidden" }}>
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             О клинике
           </h2>
           <p className="mt-3 text-lg text-blue-600">
             Современная стоматология в Набережных Челнах
           </p>
-        </motion.div>
+        </div>
 
         {/* Description */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeUp}
-          custom={1}
+        <div
+          data-animate="description"
           className="mx-auto mt-10 max-w-3xl text-center text-gray-600 leading-relaxed"
+          style={{ visibility: "hidden" }}
         >
           <p>
             Клиника <span className="font-semibold text-gray-900">IQ Dental</span>{" "}
@@ -109,54 +151,43 @@ export default function About() {
             и эффективным. Наша команда профессионалов заботится о здоровье вашей
             улыбки, используя только проверенные материалы и новейшие технологии.
           </p>
-        </motion.div>
+        </div>
 
         {/* Photo gallery — horizontal scroll */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={fadeUp}
-          custom={2}
-          className="mt-14"
-        >
-          <div
-            ref={scrollRef}
-            className="flex gap-4 overflow-x-auto scroll-smooth pb-4 snap-x snap-mandatory scrollbar-none"
-          >
-            {photos.map((label, idx) => (
-              <div
-                key={idx}
-                className={cn(
-                  "flex-shrink-0 snap-center",
-                  "h-56 w-72 sm:h-64 sm:w-80 md:h-72 md:w-96",
-                  "flex items-center justify-center rounded-2xl",
-                  "bg-gray-100 border border-gray-200",
-                  "text-gray-400 text-sm font-medium select-none"
-                )}
-              >
-                {label}
-              </div>
-            ))}
-          </div>
-        </motion.div>
+        <div data-animate="gallery" className="mt-14" style={{ visibility: "hidden" }}>
+          <XScroll>
+            <div className="flex gap-4 p-4">
+              {photos.map((label, idx) => (
+                <div
+                  key={idx}
+                  className={cn(
+                    "flex-shrink-0",
+                    "h-56 w-72 sm:h-64 sm:w-80 md:h-72 md:w-96",
+                    "flex items-center justify-center rounded-2xl",
+                    "bg-gray-100 border border-gray-200",
+                    "text-gray-400 text-sm font-medium select-none"
+                  )}
+                >
+                  {label}
+                </div>
+              ))}
+            </div>
+          </XScroll>
+        </div>
 
         {/* Advantages grid */}
         <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {advantages.map((item, idx) => {
             const Icon = item.icon;
             return (
-              <motion.div
+              <div
                 key={idx}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
-                variants={fadeUp}
-                custom={idx}
+                data-animate="advantage"
                 className={cn(
                   "flex items-start gap-4 rounded-2xl border border-gray-100",
                   "bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
                 )}
+                style={{ visibility: "hidden" }}
               >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
                   <Icon className="h-6 w-6" />
@@ -167,7 +198,7 @@ export default function About() {
                     {item.description}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

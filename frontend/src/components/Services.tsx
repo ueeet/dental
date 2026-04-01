@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import {
   Heart,
   Scissors,
@@ -14,6 +16,8 @@ import {
   Phone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -175,31 +179,105 @@ const services: Service[] = [
 export default function Services() {
   const [activeCategory, setActiveCategory] = useState<Category>("Все");
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const detailsRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
   const filtered =
     activeCategory === "Все"
       ? services
       : services.filter((s) => s.category === activeCategory);
 
-  const toggleExpand = (id: number) => {
+  const toggleExpand = useCallback((id: number) => {
     setExpandedId((prev) => (prev === id ? null : id));
-  };
+  }, []);
+
+  /* Entrance animations */
+  useGSAP(
+    () => {
+      gsap.from("[data-animate='heading']", {
+        autoAlpha: 0,
+        y: 24,
+        duration: 0.5,
+        scrollTrigger: {
+          trigger: "[data-animate='heading']",
+          start: "top 80%",
+          once: true,
+        },
+      });
+
+      gsap.from("[data-animate='banner']", {
+        autoAlpha: 0,
+        y: 20,
+        duration: 0.5,
+        delay: 0.1,
+        scrollTrigger: {
+          trigger: "[data-animate='banner']",
+          start: "top 80%",
+          once: true,
+        },
+      });
+
+      gsap.from("[data-animate='tabs']", {
+        autoAlpha: 0,
+        y: 16,
+        duration: 0.4,
+        delay: 0.2,
+        scrollTrigger: {
+          trigger: "[data-animate='tabs']",
+          start: "top 85%",
+          once: true,
+        },
+      });
+
+      ScrollTrigger.batch("[data-animate='card']", {
+        onEnter: (batch) => {
+          gsap.from(batch, {
+            autoAlpha: 0,
+            y: 30,
+            scale: 0.95,
+            duration: 0.4,
+            stagger: 0.08,
+          });
+        },
+        start: "top 85%",
+        once: true,
+      });
+    },
+    { scope: containerRef, dependencies: [filtered] }
+  );
+
+  /* Expand / collapse with GSAP height animation */
+  useEffect(() => {
+    detailsRefs.current.forEach((el, id) => {
+      if (!el) return;
+      if (expandedId === id) {
+        gsap.set(el, { display: "block" });
+        gsap.to(el, { height: "auto", autoAlpha: 1, duration: 0.25, ease: "power1.inOut" });
+      } else {
+        gsap.to(el, {
+          height: 0,
+          autoAlpha: 0,
+          duration: 0.25,
+          ease: "power1.inOut",
+          onComplete: () => { gsap.set(el, { display: "none" }); },
+        });
+      }
+    });
+  }, [expandedId]);
 
   return (
-    <section id="services" className="relative overflow-hidden bg-slate-50 py-20 md:py-28">
+    <section
+      id="services"
+      ref={containerRef}
+      className="relative overflow-hidden bg-slate-50 py-20 md:py-28"
+    >
       {/* Decorative blobs */}
       <div className="pointer-events-none absolute -left-40 -top-40 h-80 w-80 rounded-full bg-blue-100/40 blur-3xl" />
       <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-blue-50/60 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5 }}
-          className="mx-auto max-w-2xl text-center"
-        >
+        <div data-animate="heading" className="mx-auto max-w-2xl text-center" style={{ visibility: "hidden" }}>
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Наши услуги
           </h2>
@@ -207,16 +285,10 @@ export default function Services() {
             Полный спектр стоматологических услуг с использованием передовых
             технологий и материалов премиум-класса
           </p>
-        </motion.div>
+        </div>
 
         {/* Free consultation banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mx-auto mt-10 max-w-3xl"
-        >
+        <div data-animate="banner" className="mx-auto mt-10 max-w-3xl" style={{ visibility: "hidden" }}>
           <div className="relative overflow-hidden rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-600 to-blue-500 p-6 text-white shadow-lg shadow-blue-200/40 sm:p-8">
             <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
             <div className="relative flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -242,16 +314,10 @@ export default function Services() {
               </a>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Category filter tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          className="mt-10 flex flex-wrap justify-center gap-2"
-        >
+        <div data-animate="tabs" className="mt-10 flex flex-wrap justify-center gap-2" style={{ visibility: "hidden" }}>
           {categories.map(({ label, icon: Icon }) => (
             <button
               key={label}
@@ -270,94 +336,79 @@ export default function Services() {
               {label}
             </button>
           ))}
-        </motion.div>
+        </div>
 
         {/* Service cards grid */}
-        <motion.div
-          layout
-          className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          <AnimatePresence mode="popLayout">
-            {filtered.map((service) => {
-              const isExpanded = expandedId === service.id;
-              const CatIcon =
-                categories.find((c) => c.label === service.category)?.icon ??
-                Sparkles;
+        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((service) => {
+            const isExpanded = expandedId === service.id;
+            const CatIcon =
+              categories.find((c) => c.label === service.category)?.icon ??
+              Sparkles;
 
-              return (
-                <motion.div
-                  key={service.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.3 }}
-                  className={cn(
-                    "group flex flex-col rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-shadow duration-300 hover:shadow-md hover:shadow-blue-100/30",
-                    isExpanded && "ring-1 ring-blue-200"
-                  )}
+            return (
+              <div
+                key={service.id}
+                data-animate="card"
+                className={cn(
+                  "group flex flex-col rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-shadow duration-300 hover:shadow-md hover:shadow-blue-100/30",
+                  isExpanded && "ring-1 ring-blue-200"
+                )}
+              >
+                {/* Category badge */}
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
+                    <CatIcon className="h-3 w-3" />
+                    {service.category}
+                  </span>
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Clock className="h-3 w-3" />
+                    {service.duration}
+                  </span>
+                </div>
+
+                {/* Name & description */}
+                <h3 className="mt-3 text-lg font-semibold text-foreground group-hover:text-blue-600 transition-colors">
+                  {service.name}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  {service.description}
+                </p>
+
+                {/* Price */}
+                <div className="mt-4 text-xl font-bold text-blue-600">
+                  {service.price}
+                </div>
+
+                {/* Expand / collapse */}
+                <button
+                  onClick={() => toggleExpand(service.id)}
+                  className="mt-3 inline-flex items-center gap-1 self-start text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
                 >
-                  {/* Category badge */}
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
-                      <CatIcon className="h-3 w-3" />
-                      {service.category}
-                    </span>
-                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Clock className="h-3 w-3" />
-                      {service.duration}
-                    </span>
-                  </div>
-
-                  {/* Name & description */}
-                  <h3 className="mt-3 text-lg font-semibold text-foreground group-hover:text-blue-600 transition-colors">
-                    {service.name}
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    {service.description}
-                  </p>
-
-                  {/* Price */}
-                  <div className="mt-4 text-xl font-bold text-blue-600">
-                    {service.price}
-                  </div>
-
-                  {/* Expand / collapse */}
-                  <button
-                    onClick={() => toggleExpand(service.id)}
-                    className="mt-3 inline-flex items-center gap-1 self-start text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
-                  >
-                    {isExpanded ? "Скрыть" : "Подробнее"}
-                    <ChevronDown
-                      className={cn(
-                        "h-4 w-4 transition-transform duration-200",
-                        isExpanded && "rotate-180"
-                      )}
-                    />
-                  </button>
-
-                  <AnimatePresence initial={false}>
-                    {isExpanded && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                      >
-                        <p className="mt-3 border-t border-slate-100 pt-3 text-sm leading-relaxed text-muted-foreground">
-                          {service.details}
-                        </p>
-                      </motion.div>
+                  {isExpanded ? "Скрыть" : "Подробнее"}
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform duration-200",
+                      isExpanded && "rotate-180"
                     )}
-                  </AnimatePresence>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </motion.div>
+                  />
+                </button>
+
+                <div
+                  ref={(el) => {
+                    if (el) detailsRefs.current.set(service.id, el);
+                  }}
+                  className="overflow-hidden"
+                  style={{ height: 0, visibility: "hidden", display: "none" }}
+                >
+                  <p className="mt-3 border-t border-slate-100 pt-3 text-sm leading-relaxed text-muted-foreground">
+                    {service.details}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

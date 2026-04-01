@@ -1,8 +1,13 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { Stethoscope, Award, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const doctors = [
   {
@@ -71,16 +76,45 @@ const doctors = [
 ];
 
 export default function Doctors() {
+  const containerRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      gsap.from("[data-animate='heading']", {
+        autoAlpha: 0,
+        y: 30,
+        duration: 0.6,
+        scrollTrigger: {
+          trigger: "[data-animate='heading']",
+          start: "top 80%",
+          once: true,
+        },
+      });
+
+      ScrollTrigger.batch("[data-animate='doctor-card']", {
+        onEnter: (batch) => {
+          gsap.from(batch, {
+            autoAlpha: 0,
+            y: 40,
+            duration: 0.5,
+            stagger: 0.1,
+          });
+        },
+        start: "top 85%",
+        once: true,
+      });
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <section id="doctors" className="py-24 bg-white">
+    <section id="doctors" ref={containerRef} className="py-24 bg-white">
       <div className="container mx-auto px-4">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
+        <div
+          data-animate="heading"
           className="text-center mb-16"
+          style={{ visibility: "hidden" }}
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Наши специалисты
@@ -88,18 +122,16 @@ export default function Doctors() {
           <p className="text-lg text-gray-500 max-w-2xl mx-auto">
             Команда профессионалов с многолетним опытом
           </p>
-        </motion.div>
+        </div>
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {doctors.map((doctor, index) => (
-            <motion.div
+          {doctors.map((doctor) => (
+            <div
               key={doctor.name}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              data-animate="doctor-card"
               className="group [perspective:1000px]"
+              style={{ visibility: "hidden" }}
             >
               <div
                 className={cn(
@@ -186,7 +218,7 @@ export default function Doctors() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
