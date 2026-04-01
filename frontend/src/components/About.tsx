@@ -59,7 +59,7 @@ function ImageRow({ images, direction, duration = 40 }: { images: string[]; dire
 
 export default function About() {
   return (
-    <section id="about" className="relative overflow-hidden bg-gray-900 py-52 sm:py-60 md:py-72">
+    <section id="about" className="relative overflow-hidden bg-[#1c1f26] py-52 sm:py-60 md:py-72">
 
       {/* Background image rows */}
       <div className="absolute inset-0 flex flex-col justify-center gap-3 opacity-50">
@@ -69,13 +69,13 @@ export default function About() {
       </div>
 
       {/* Subtle dark overlay */}
-      <div className="absolute inset-0 bg-gray-900/40" />
+      <div className="absolute inset-0 bg-[#1c1f26]/40" />
 
       {/* Centered text */}
       <div className="relative z-10 flex items-center justify-center px-4 sm:px-6">
         <div className="relative mx-auto max-w-2xl text-center">
           {/* Soft radial glow behind text */}
-          <div className="absolute -inset-x-24 -inset-y-16 rounded-full bg-gray-900/70 blur-3xl" />
+          <div className="absolute -inset-x-24 -inset-y-16 rounded-full bg-[#1c1f26]/70 blur-3xl" />
           <div className="relative px-8 py-12 sm:px-14 sm:py-16">
             <p className="font-[var(--font-mono)] text-xs font-semibold uppercase tracking-widest text-gray-400">
               О клинике
