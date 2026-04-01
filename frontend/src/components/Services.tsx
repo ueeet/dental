@@ -237,18 +237,6 @@ export default function Services() {
         },
       });
 
-      gsap.from("[data-animate='card']", {
-        autoAlpha: 0,
-        y: 30,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 60%",
-          once: true,
-        },
-      });
     },
     { scope: containerRef }
   );
@@ -355,8 +343,6 @@ export default function Services() {
             return (
               <div
                 key={service.id}
-                data-animate="card"
-                style={{ visibility: "hidden" }}
                 className={cn(
                   "group/card flex flex-col rounded-2xl border border-[var(--border)] bg-white p-8 transition-all duration-300",
                   "hover:-translate-y-1 hover:border-l-4 hover:border-l-[var(--primary)]",
