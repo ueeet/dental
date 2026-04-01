@@ -7,39 +7,39 @@ import { cn } from "@/lib/utils";
 const doctors = [
   {
     name: "Нигматуллин Марат Хамзаевич",
-    initials: "НМ",
     specialty: "Стоматолог-ортопед, директор",
     experience: 12,
+    photo: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=500&fit=crop&crop=face",
   },
   {
     name: "Шайхелисламов Раушан Рафисович",
-    initials: "ШР",
     specialty: "Хирург-имплантолог",
     experience: 15,
+    photo: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=500&fit=crop&crop=face",
   },
   {
     name: "Гумеров Артур Рафаэлевич",
-    initials: "ГА",
     specialty: "Стоматолог-ортопед",
     experience: 19,
+    photo: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&h=500&fit=crop&crop=face",
   },
   {
     name: "Нигматуллина Лилия Марселевна",
-    initials: "НЛ",
     specialty: "Стоматолог-терапевт",
     experience: 12,
+    photo: "https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=400&h=500&fit=crop&crop=face",
   },
   {
     name: "Ногманов Фарид Флюрович",
-    initials: "НФ",
     specialty: "Хирург-имплантолог",
     experience: 11,
+    photo: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=500&fit=crop&crop=face",
   },
   {
     name: "Гараев Альберт Радикович",
-    initials: "ГА",
     specialty: "Хирург-имплантолог",
     experience: 9,
+    photo: "https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=400&h=500&fit=crop&crop=face",
   },
 ];
 
@@ -119,20 +119,14 @@ function DoctorCard({ doctor }: { doctor: (typeof doctors)[number] }) {
           }}
         />
 
-        {/* Photo placeholder */}
+        {/* Photo */}
         <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
-          <div
-            className={cn(
-              "absolute inset-0 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700",
-              "flex items-center justify-center",
-              "transition-transform duration-700 ease-out",
-              "group-hover:scale-110"
-            )}
-          >
-            <span className="text-4xl sm:text-5xl font-bold text-white/80 select-none tracking-wider">
-              {doctor.initials}
-            </span>
-          </div>
+          <img
+            src={doctor.photo}
+            alt={doctor.name}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+          />
         </div>
 
         {/* Info */}

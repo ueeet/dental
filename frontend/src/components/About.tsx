@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// 3 rows of images, each row scrolls in opposite direction
+// Fewer photos per row, more breathing room
 const row1 = [
   "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=500&h=350&fit=crop",
   "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&h=350&fit=crop",
@@ -42,7 +42,7 @@ function ImageRow({ images, direction }: { images: string[]; direction: "left" |
     const el = rowRef.current;
     if (!el) return;
 
-    const distance = direction === "right" ? 300 : -300;
+    const distance = direction === "right" ? 250 : -250;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -82,28 +82,23 @@ function ImageRow({ images, direction }: { images: string[]; direction: "left" |
 
 export default function About() {
   return (
-    <section id="about" className="relative overflow-hidden bg-gray-900 py-40 sm:py-48 md:py-56 -mt-20">
+    <section id="about" className="relative overflow-hidden bg-gray-900 py-52 sm:py-60 md:py-72">
 
-      {/* Gradient fade top — white to dark */}
-      <div className="absolute top-0 left-0 right-0 h-32 sm:h-40 z-20 bg-gradient-to-b from-white via-white/60 to-transparent pointer-events-none" />
-      {/* Gradient fade bottom — dark to white */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 z-20 bg-gradient-to-t from-[var(--muted)] via-[var(--muted)]/60 to-transparent pointer-events-none" />
-
-      {/* Background image rows — stretch to fill entire section */}
-      <div className="absolute inset-0 flex flex-col justify-center gap-3 opacity-40">
+      {/* Background image rows */}
+      <div className="absolute inset-0 flex flex-col justify-center gap-5 opacity-50">
         <ImageRow images={row1} direction="right" />
         <ImageRow images={row2} direction="left" />
         <ImageRow images={row3} direction="right" />
       </div>
 
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-gray-900/50" />
+      {/* Subtle dark overlay */}
+      <div className="absolute inset-0 bg-gray-900/40" />
 
       {/* Centered text */}
       <div className="relative z-10 flex items-center justify-center px-4 sm:px-6">
         <div className="relative mx-auto max-w-2xl text-center">
-          {/* Soft radial glow behind text — no hard edges */}
-          <div className="absolute inset-0 -inset-x-20 -inset-y-12 rounded-full bg-gray-900/80 blur-3xl" />
+          {/* Soft radial glow behind text */}
+          <div className="absolute -inset-x-24 -inset-y-16 rounded-full bg-gray-900/70 blur-3xl" />
           <div className="relative px-8 py-12 sm:px-14 sm:py-16">
             <p className="font-[var(--font-mono)] text-xs font-semibold uppercase tracking-widest text-blue-400">
               О клинике
