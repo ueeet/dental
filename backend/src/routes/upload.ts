@@ -15,6 +15,7 @@ router.post("/", requireAdmin, upload.single("file"), async (req: Request, res: 
   }
 
   const fileName = `${Date.now()}-${file.originalname}`;
+  const supabase = getSupabase();
   const { error } = await supabase.storage
     .from("photos")
     .upload(fileName, file.buffer, { contentType: file.mimetype });
