@@ -70,7 +70,7 @@ export default function Footer() {
   return (
     <footer
       id="contacts"
-      className="relative w-full border-t border-white/10 bg-[#0a0f1a] bg-[radial-gradient(35%_128px_at_50%_0%,rgba(255,255,255,0.06),transparent)] px-6 py-12 lg:py-16"
+      className="relative w-full rounded-t-[2.5rem] md:rounded-t-[3.5rem] border-t border-white/10 bg-[#0a0f1a] bg-[radial-gradient(35%_128px_at_50%_0%,rgba(255,255,255,0.06),transparent)] px-6 py-12 lg:py-16"
     >
       {/* Top glow line */}
       <div className="absolute top-0 right-1/2 left-1/2 h-px w-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/20 blur-sm" />
