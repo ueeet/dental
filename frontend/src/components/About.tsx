@@ -82,7 +82,7 @@ function ImageRow({ images, direction }: { images: string[]; direction: "left" |
 
 export default function About() {
   return (
-    <section id="about" className="relative overflow-hidden bg-gray-900" style={{ minHeight: "100vh" }}>
+    <section id="about" className="relative overflow-hidden bg-gray-900 h-screen">
 
       {/* Background image rows */}
       <div className="absolute inset-0 flex flex-col justify-center gap-3 opacity-40">
@@ -95,7 +95,7 @@ export default function About() {
       <div className="absolute inset-0 bg-gray-900/50" />
 
       {/* Centered text */}
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 sm:px-6">
+      <div className="relative z-10 flex h-full items-center justify-center px-4 sm:px-6">
         <div className="relative mx-auto max-w-2xl text-center">
           {/* Soft radial glow behind text — no hard edges */}
           <div className="absolute inset-0 -inset-x-20 -inset-y-12 rounded-full bg-gray-900/80 blur-3xl" />
