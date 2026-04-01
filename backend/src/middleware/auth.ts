@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 function getSecret(): string {
-  return process.env.getSecret()!;
+  return process.env.JWT_SECRET!;
 }
 
 export interface JwtPayload {
