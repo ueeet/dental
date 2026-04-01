@@ -96,13 +96,19 @@ export default function About() {
       cards.forEach((card, i) => {
         const s = scatteredState[i];
         // Set initial scattered state
-        gsap.set(card, { x: s.x, y: s.y, rotation: s.r, scale: 0.8 });
+        gsap.set(card, {
+          x: s.x, y: s.y, rotation: s.r, scale: 0.75,
+          rotateX: s.r * 1.5, rotateY: s.x * 0.05,
+          transformPerspective: 800,
+        });
 
         // Animate to assembled (0,0) — long scrub range for smooth feel
         gsap.to(card, {
           x: 0,
           y: 0,
           rotation: 0,
+          rotateX: 0,
+          rotateY: 0,
           scale: 1,
           ease: "none",
           scrollTrigger: {
@@ -121,7 +127,9 @@ export default function About() {
           x: -s.x * 0.8,
           y: s.y * 0.9,
           rotation: -s.r * 0.7,
-          scale: 0.8,
+          rotateX: -s.r * 1.2,
+          rotateY: -s.x * 0.04,
+          scale: 0.75,
           ease: "none",
           scrollTrigger: {
             trigger: section,
@@ -140,8 +148,8 @@ export default function About() {
     <section id="about" ref={sectionRef} className="bg-white py-32 md:py-44 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-        {/* Text */}
-        <div className="mx-auto max-w-2xl text-center mb-20 lg:mb-28">
+        {/* Text — above cards layer */}
+        <div className="relative z-10 mx-auto max-w-2xl text-center mb-20 lg:mb-28">
           <p className="font-[var(--font-mono)] text-xs font-semibold uppercase tracking-widest text-blue-600">
             О клинике
           </p>
@@ -163,11 +171,12 @@ export default function About() {
         </div>
 
         {/* 3D Grid with mouse tilt + scroll scatter/assemble */}
+        <div className="relative overflow-hidden rounded-3xl py-16 sm:py-20">
         <div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           className="relative mx-auto max-w-6xl"
-          style={{ perspective: "1000px" }}
+          style={{ perspective: "1200px" }}
         >
           <div
             ref={gridRef}
@@ -207,6 +216,7 @@ export default function About() {
               </div>
             ))}
           </div>
+        </div>
         </div>
       </div>
     </section>
