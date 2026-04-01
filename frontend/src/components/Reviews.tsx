@@ -92,11 +92,11 @@ function StarRating({
         <Star
           key={star}
           className={cn(
-            "h-5 w-5 transition-colors",
+            "h-4 w-4 transition-colors",
             star <= rating
               ? "fill-yellow-400 text-yellow-400"
-              : "fill-gray-200 text-gray-200",
-            interactive && "cursor-pointer hover:text-yellow-400"
+              : "fill-white/20 text-white/20",
+            interactive && "cursor-pointer hover:text-yellow-400 h-5 w-5"
           )}
           onClick={() => interactive && onRate?.(star)}
         />
@@ -145,17 +145,17 @@ function TestimonialsColumn({
             {testimonials.map((review) => (
               <div
                 key={`${index}-${review.id}`}
-                className="rounded-3xl border border-gray-200 bg-white p-6 shadow-lg shadow-blue-600/5 max-w-xs w-full"
+                className="glass-card-dark rounded-2xl p-6 max-w-xs w-full"
               >
                 <StarRating rating={review.rating} />
-                <p className="mt-4 text-gray-700 leading-relaxed">
+                <p className="mt-4 text-white/70 text-sm leading-relaxed">
                   {review.text}
                 </p>
                 <div className="mt-5 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-600">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-xs font-semibold text-white">
                     {getInitials(review.name)}
                   </div>
-                  <div className="font-medium tracking-tight text-gray-900">
+                  <div className="text-sm font-medium tracking-tight text-white">
                     {review.name}
                   </div>
                 </div>
@@ -170,7 +170,6 @@ function TestimonialsColumn({
 
 export default function Reviews() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
 
   const [formName, setFormName] = useState("");
   const [formRating, setFormRating] = useState(0);
@@ -179,14 +178,47 @@ export default function Reviews() {
 
   useGSAP(
     () => {
-      if (!headingRef.current) return;
-      gsap.from(headingRef.current, {
-        opacity: 0,
+      gsap.from("[data-animate='rev-label']", {
+        autoAlpha: 0,
+        y: 20,
+        duration: 0.5,
+        scrollTrigger: {
+          trigger: "[data-animate='rev-label']",
+          start: "top 85%",
+          once: true,
+        },
+      });
+
+      gsap.from("[data-animate='rev-heading']", {
+        autoAlpha: 0,
         y: 30,
         duration: 0.6,
+        delay: 0.1,
         scrollTrigger: {
-          trigger: headingRef.current,
+          trigger: "[data-animate='rev-heading']",
           start: "top 85%",
+          once: true,
+        },
+      });
+
+      gsap.from("[data-animate='rev-columns']", {
+        autoAlpha: 0,
+        y: 40,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: "[data-animate='rev-columns']",
+          start: "top 85%",
+          once: true,
+        },
+      });
+
+      gsap.from("[data-animate='rev-form']", {
+        autoAlpha: 0,
+        y: 40,
+        duration: 0.7,
+        scrollTrigger: {
+          trigger: "[data-animate='rev-form']",
+          start: "top 88%",
           once: true,
         },
       });
@@ -205,20 +237,39 @@ export default function Reviews() {
   };
 
   return (
-    <section id="reviews" className="bg-blue-50 py-20">
+    <section id="reviews" className="bg-[#0a0f1a] text-white py-[var(--space-section)]">
       <div ref={containerRef} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Section label */}
+        <div
+          data-animate="rev-label"
+          className="mb-3"
+          style={{ visibility: "hidden" }}
+        >
+          <span className="font-mono text-xs uppercase tracking-[0.2em] text-white/40">
+            Отзывы
+          </span>
+        </div>
+
         {/* Heading */}
-        <div ref={headingRef} className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-            Отзывы наших пациентов
+        <div
+          data-animate="rev-heading"
+          className="mb-[var(--space-lg)]"
+          style={{ visibility: "hidden" }}
+        >
+          <h2 className="text-fluid-h1 font-heading text-white">
+            Что говорят пациенты
           </h2>
-          <p className="mt-3 text-lg text-blue-600 font-medium">
+          <p className="mt-4 text-fluid-body text-white/50 max-w-xl">
             Рейтинг 4.0 на ПроДокторов
           </p>
         </div>
 
         {/* Testimonials Columns */}
-        <div className="flex justify-center gap-6 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
+        <div
+          data-animate="rev-columns"
+          className="flex justify-center gap-6 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden"
+          style={{ visibility: "hidden" }}
+        >
           <TestimonialsColumn testimonials={firstColumn} duration={15} />
           <TestimonialsColumn
             testimonials={secondColumn}
@@ -233,13 +284,17 @@ export default function Reviews() {
         </div>
 
         {/* Review Submission Form */}
-        <div className="mx-auto mt-16 max-w-2xl rounded-2xl bg-white p-8 shadow">
-          <h3 className="mb-6 text-center text-2xl font-bold text-gray-900">
+        <div
+          data-animate="rev-form"
+          className="mx-auto mt-[var(--space-xl)] max-w-2xl glass-card-dark rounded-2xl p-8"
+          style={{ visibility: "hidden" }}
+        >
+          <h3 className="mb-6 text-center text-fluid-h3 font-heading text-white">
             Оставьте свой отзыв
           </h3>
 
           {submitted && (
-            <div className="mb-6 rounded-lg bg-green-50 p-4 text-center text-green-700">
+            <div className="mb-6 rounded-xl bg-green-500/10 border border-green-500/20 p-4 text-center text-green-400 text-sm">
               Спасибо за ваш отзыв!
             </div>
           )}
@@ -248,7 +303,7 @@ export default function Reviews() {
             <div>
               <label
                 htmlFor="review-name"
-                className="mb-1 block text-sm font-medium text-gray-700"
+                className="mb-2 block text-sm font-medium text-white/60"
               >
                 Ваше имя
               </label>
@@ -258,13 +313,13 @@ export default function Reviews() {
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
                 placeholder="Иван Иванов"
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full rounded-xl border border-white/10 bg-transparent px-4 py-3 text-white placeholder-white/30 transition-colors focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/10"
                 required
               />
             </div>
 
             <div>
-              <span className="mb-2 block text-sm font-medium text-gray-700">
+              <span className="mb-2 block text-sm font-medium text-white/60">
                 Ваша оценка
               </span>
               <StarRating
@@ -277,7 +332,7 @@ export default function Reviews() {
             <div>
               <label
                 htmlFor="review-text"
-                className="mb-1 block text-sm font-medium text-gray-700"
+                className="mb-2 block text-sm font-medium text-white/60"
               >
                 Текст отзыва
               </label>
@@ -287,14 +342,14 @@ export default function Reviews() {
                 onChange={(e) => setFormText(e.target.value)}
                 placeholder="Расскажите о вашем опыте..."
                 rows={4}
-                className="w-full resize-none rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full resize-none rounded-xl border border-white/10 bg-transparent px-4 py-3 text-white placeholder-white/30 transition-colors focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/10"
                 required
               />
             </div>
 
             <button
               type="submit"
-              className="w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="w-full rounded-xl bg-white px-6 py-3.5 font-semibold text-[#0a0f1a] transition-all duration-300 hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/20"
             >
               Отправить отзыв
             </button>

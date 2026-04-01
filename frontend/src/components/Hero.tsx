@@ -5,33 +5,32 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import {
-  Calendar,
-  Users,
   Award,
+  Users,
   HeartPulse,
-  Star,
+  Calendar,
   ArrowRight,
+  Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const stats = [
-  { icon: Award, label: "15+ лет опыта", value: "15+" },
-  { icon: Users, label: "7 специалистов", value: "7" },
-  { icon: HeartPulse, label: "10 000+ пациентов", value: "10K+" },
-  { icon: Calendar, label: "Бесплатная консультация", value: "0\u20BD" },
+  { icon: Award, value: "15+", label: "лет опыта" },
+  { icon: Users, value: "7", label: "врачей" },
+  { icon: HeartPulse, value: "10K+", label: "пациентов" },
+  { icon: Calendar, value: "0₽", label: "консультация" },
 ];
 
-const trustedBrands = [
-  "Straumann",
-  "Nobel Biocare",
-  "Invisalign",
-  "3M",
-  "Dentsply Sirona",
-  "Ivoclar",
-  "GC Corporation",
-  "VITA",
+const trustItems = [
+  "Лицензия",
+  "ДМС",
+  "Рассрочка 0%",
+  "Гарантия 5 лет",
+  "Импланты премиум-класса",
+  "3D-диагностика",
+  "С 2019 года",
 ];
 
 export default function Hero() {
@@ -40,68 +39,72 @@ export default function Hero() {
 
   useGSAP(
     () => {
-      // Entrance animations with stagger
-      gsap.from("[data-hero-badge]", {
+      // Heading lines — split-line stagger
+      gsap.from("[data-hero-line]", {
         autoAlpha: 0,
-        y: 30,
-        duration: 0.7,
-        ease: "power2.out",
+        y: 60,
+        filter: "blur(8px)",
+        duration: 1,
+        stagger: 0.15,
+        ease: "power3.out",
       });
 
-      gsap.from("[data-hero-heading]", {
-        autoAlpha: 0,
-        y: 40,
-        duration: 0.8,
-        delay: 0.15,
-        ease: "power2.out",
-      });
-
+      // Subtitle
       gsap.from("[data-hero-subtitle]", {
         autoAlpha: 0,
-        y: 40,
+        y: 20,
+        filter: "blur(8px)",
         duration: 0.8,
-        delay: 0.3,
-        ease: "power2.out",
+        delay: 0.5,
+        ease: "power3.out",
       });
 
-      gsap.from("[data-hero-buttons]", {
+      // Buttons staggered
+      gsap.from("[data-hero-btn]", {
         autoAlpha: 0,
-        y: 40,
+        y: 20,
+        filter: "blur(8px)",
         duration: 0.8,
-        delay: 0.45,
-        ease: "power2.out",
+        delay: 0.7,
+        stagger: 0.12,
+        ease: "power3.out",
       });
 
-      gsap.from("[data-hero-stat]", {
+      // Glassmorphism card
+      gsap.from("[data-hero-card]", {
         autoAlpha: 0,
-        y: 30,
-        duration: 0.6,
-        delay: 0.6,
-        stagger: 0.1,
-        ease: "power2.out",
+        scale: 0.9,
+        filter: "blur(8px)",
+        duration: 1,
+        delay: 0.5,
+        ease: "power3.out",
       });
 
-      gsap.from("[data-hero-trust]", {
+      // Divider line
+      gsap.from("[data-hero-divider]", {
         autoAlpha: 0,
+        scaleX: 0,
         duration: 0.8,
         delay: 1.0,
-        ease: "power2.out",
+        ease: "power3.out",
       });
 
+      // Marquee fade in
       gsap.from("[data-hero-marquee]", {
         autoAlpha: 0,
+        y: 10,
         duration: 0.8,
         delay: 1.2,
-        ease: "power2.out",
+        ease: "power3.out",
       });
 
-      // Marquee infinite scroll animation
+      // Marquee infinite scroll
       const marqueeInner = marqueeRef.current;
       if (marqueeInner) {
-        const marqueeWidth = marqueeInner.scrollWidth / 2;
+        const halfWidth = marqueeInner.scrollWidth / 2;
         gsap.to(marqueeInner, {
-          x: -marqueeWidth,
-          duration: 25,
+          x: -halfWidth,
+          duration: 30,
           ease: "none",
           repeat: -1,
         });
@@ -113,159 +116,161 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-zinc-950"
+      className="relative min-h-screen overflow-hidden bg-white"
     >
-      {/* Background gradient */}
+      {/* Bold accent element — single oversized soft circle */}
       <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(37,99,235,0.15) 0%, rgba(37,99,235,0.05) 40%, transparent 70%)",
-        }}
+        className="pointer-events-none absolute -right-[15vw] -top-[10vh] h-[80vh] w-[80vh] rounded-full bg-[var(--primary,#2563eb)] opacity-[0.06]"
       />
 
-      {/* Decorative blurred circles */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-blue-600/10 blur-3xl" />
-        <div className="absolute -bottom-32 -left-32 h-[450px] w-[450px] rounded-full bg-blue-500/8 blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[300px] rounded-full bg-blue-400/5 blur-3xl" />
-        {/* Subtle dot pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, rgba(96,165,250,0.8) 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-      </div>
-
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center text-center">
-          {/* Badge */}
-          <div data-hero-badge style={{ visibility: "hidden" }}>
-            <span className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-white/5 px-5 py-2 text-sm font-medium text-blue-300 shadow-sm backdrop-blur-md">
-              <Star className="h-3.5 w-3.5 fill-blue-400 text-blue-400" />
-              Стоматология нового поколения
-            </span>
-          </div>
-
-          {/* Heading */}
-          <h1
-            data-hero-heading
-            style={{ visibility: "hidden" }}
-            className="font-heading mt-8 text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
-          >
-            Ваша улыбка —{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-              наша забота
-            </span>
-          </h1>
-
-          {/* Subtitle */}
-          <p
-            data-hero-subtitle
-            style={{ visibility: "hidden" }}
-            className="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400 sm:text-xl"
-          >
-            Мы переехали! Встречаем вас по новому адресу на{" "}
-            <span className="font-semibold text-white">
-              проспекте Мира, 34
-            </span>
-          </p>
-
-          {/* Buttons */}
-          <div
-            data-hero-buttons
-            style={{ visibility: "hidden" }}
-            className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
-          >
-            <a
-              href="#booking"
-              className={cn(
-                "group inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-semibold transition-all duration-300",
-                "bg-blue-600 text-white shadow-lg shadow-blue-600/25",
-                "hover:scale-105 hover:bg-blue-500 hover:shadow-xl hover:shadow-blue-500/30",
-                "active:scale-[0.98]"
-              )}
+      {/* Content wrapper */}
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1400px] flex-col px-6 sm:px-10 lg:px-16">
+        {/* Two-column asymmetric */}
+        <div className="flex flex-1 flex-col gap-12 pt-32 pb-12 lg:flex-row lg:items-center lg:gap-12 lg:pt-0 lg:pb-0">
+          {/* LEFT 60% — text */}
+          <div className="flex flex-col justify-center lg:w-[60%]">
+            {/* Mono badge */}
+            <div
+              data-hero-line
+              style={{ visibility: "hidden" }}
+              className="mb-8"
             >
-              <Calendar className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
-              Записаться на приём
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-            </a>
-            <a
-              href="#about"
-              className={cn(
-                "inline-flex h-14 items-center justify-center rounded-full px-8 text-base font-semibold transition-all duration-300",
-                "border border-white/10 bg-white/5 text-white backdrop-blur-md",
-                "hover:border-blue-500/30 hover:bg-white/10 hover:shadow-md",
-                "active:scale-[0.98]"
-              )}
-            >
-              Узнать больше
-            </a>
-          </div>
+              <span className="inline-flex items-center gap-2 font-[var(--font-mono)] text-[11px] uppercase tracking-[0.2em] text-neutral-400">
+                <Star className="h-3 w-3 fill-current" />
+                Стоматология нового поколения
+              </span>
+            </div>
 
-          {/* Stats row — glassmorphism cards */}
-          <div className="mt-16 grid w-full max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6">
-            {stats.map((stat) => (
-              <div
-                key={stat.label}
-                data-hero-stat
+            {/* Heading — two lines, split-animated */}
+            <h1 className="text-fluid-display font-[var(--font-heading)] font-bold leading-[0.95] tracking-tight text-neutral-900">
+              <span
+                data-hero-line
+                style={{ visibility: "hidden" }}
+                className="block"
+              >
+                Ваша улыбка —
+              </span>
+              <span
+                data-hero-line
+                style={{ visibility: "hidden" }}
+                className="block text-[var(--primary,#2563eb)]"
+              >
+                наша забота
+              </span>
+            </h1>
+
+            {/* Subtitle */}
+            <p
+              data-hero-subtitle
+              style={{ visibility: "hidden" }}
+              className="mt-8 max-w-md text-lg leading-relaxed text-neutral-900/60"
+            >
+              Мы переехали! Встречаем вас по новому адресу на{" "}
+              <span className="font-medium text-neutral-900">
+                проспекте Мира, 34
+              </span>
+              . Современное оборудование и уютная атмосфера.
+            </p>
+
+            {/* Buttons */}
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <a
+                href="#booking"
+                data-hero-btn
                 style={{ visibility: "hidden" }}
                 className={cn(
-                  "flex flex-col items-center gap-2 rounded-2xl p-5 transition-all duration-300",
-                  "border border-white/10 bg-white/5 backdrop-blur-md",
-                  "hover:border-blue-500/20 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/5"
+                  "group inline-flex h-14 items-center gap-2.5 rounded-full bg-[var(--primary,#2563eb)] px-8",
+                  "text-base font-semibold text-white transition-all duration-300",
+                  "shadow-lg shadow-blue-600/20",
+                  "hover:scale-[1.03] hover:shadow-xl hover:shadow-blue-600/30",
+                  "active:scale-[0.98]"
                 )}
               >
-                <stat.icon className="h-6 w-6 text-blue-400" />
-                <span className="text-center text-sm font-medium text-zinc-200">
-                  {stat.label}
-                </span>
+                <Calendar className="h-5 w-5" />
+                Записаться на приём
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </a>
+
+              <a
+                href="#about"
+                data-hero-btn
+                style={{ visibility: "hidden" }}
+                className={cn(
+                  "inline-flex h-14 items-center rounded-full border border-neutral-200 px-8",
+                  "text-base font-semibold text-neutral-700 transition-all duration-300",
+                  "hover:border-neutral-300 hover:bg-neutral-50",
+                  "active:scale-[0.98]"
+                )}
+              >
+                Узнать больше
+              </a>
+            </div>
+          </div>
+
+          {/* RIGHT 40% — floating glassmorphism card */}
+          <div className="flex justify-center lg:w-[40%] lg:justify-end">
+            <div
+              data-hero-card
+              style={{ visibility: "hidden" }}
+              className={cn(
+                "glass-card w-full max-w-sm rounded-3xl p-8",
+                "border border-white/60 bg-white/40 shadow-2xl shadow-neutral-900/5 backdrop-blur-xl",
+                "lg:rotate-1"
+              )}
+            >
+              <p className="mb-6 font-[var(--font-mono)] text-[11px] uppercase tracking-[0.15em] text-neutral-400">
+                В цифрах
+              </p>
+
+              <div className="grid grid-cols-2 gap-6">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="flex flex-col gap-1.5">
+                    <stat.icon className="h-5 w-5 text-[var(--primary,#2563eb)]" />
+                    <span className="font-[var(--font-mono)] text-3xl font-bold leading-none text-neutral-900">
+                      {stat.value}
+                    </span>
+                    <span className="text-sm text-neutral-500">
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {/* Trust indicators */}
+              {/* Decorative corner accent */}
+              <div className="pointer-events-none absolute -bottom-3 -right-3 h-24 w-24 rounded-full bg-[var(--primary,#2563eb)] opacity-[0.08] blur-2xl" />
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom area — divider + marquee */}
+        <div className="pb-8">
+          {/* Thin line separator */}
           <div
-            data-hero-trust
+            data-hero-divider
             style={{ visibility: "hidden" }}
-            className="mt-10 flex flex-col items-center gap-2 text-xs text-zinc-500 sm:flex-row sm:gap-4"
-          >
-            <span className="inline-flex items-center gap-1.5">
-              <Award className="h-3.5 w-3.5" />
-              Лицензия ЛО-77-01-020835
-            </span>
-            <span className="hidden sm:inline text-zinc-700">|</span>
-            <span>Работаем с 2019 года</span>
-          </div>
+            className="section-line mb-6 h-px w-full origin-left bg-neutral-200"
+          />
 
-          {/* Marquee — trusted brands */}
+          {/* Trust marquee */}
           <div
             data-hero-marquee
             style={{ visibility: "hidden" }}
-            className="mt-12 w-full max-w-3xl overflow-hidden"
+            className="relative overflow-hidden"
           >
-            <p className="mb-4 text-xs font-medium uppercase tracking-widest text-zinc-600">
-              Работаем с ведущими производителями
-            </p>
-            <div className="relative">
-              {/* Fade edges */}
-              <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-zinc-950 to-transparent" />
-              <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-zinc-950 to-transparent" />
+            {/* Fade edges */}
+            <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-white to-transparent" />
+            <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-white to-transparent" />
 
-              <div ref={marqueeRef} className="flex w-max gap-8">
-                {/* Duplicate items for seamless loop */}
-                {[...trustedBrands, ...trustedBrands].map((brand, i) => (
-                  <span
-                    key={`${brand}-${i}`}
-                    className="flex-shrink-0 rounded-lg border border-white/5 bg-white/5 px-5 py-2 text-sm text-zinc-400 backdrop-blur-sm"
-                  >
-                    {brand}
-                  </span>
-                ))}
-              </div>
+            <div ref={marqueeRef} className="flex w-max items-center gap-8">
+              {[...trustItems, ...trustItems].map((item, i) => (
+                <span
+                  key={`${item}-${i}`}
+                  className="flex shrink-0 items-center gap-2 font-[var(--font-mono)] text-xs uppercase tracking-[0.1em] text-neutral-400"
+                >
+                  <span className="h-1 w-1 rounded-full bg-neutral-300" />
+                  {item}
+                </span>
+              ))}
             </div>
           </div>
         </div>

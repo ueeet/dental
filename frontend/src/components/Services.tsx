@@ -12,7 +12,6 @@ import {
   Droplets,
   ChevronDown,
   Clock,
-  Gift,
   Phone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,7 +22,13 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */
 
-type Category = "Все" | "Терапия" | "Хирургия" | "Ортопедия" | "Гигиена" | "Эстетика";
+type Category =
+  | "Все"
+  | "Терапия"
+  | "Хирургия"
+  | "Ортопедия"
+  | "Гигиена"
+  | "Эстетика";
 
 interface Service {
   id: number;
@@ -191,13 +196,14 @@ export default function Services() {
     setExpandedId((prev) => (prev === id ? null : id));
   }, []);
 
-  /* Entrance animations */
+  /* ---- Entrance animations ---- */
   useGSAP(
     () => {
       gsap.from("[data-animate='heading']", {
         autoAlpha: 0,
-        y: 24,
-        duration: 0.5,
+        y: 30,
+        duration: 0.6,
+        ease: "power2.out",
         scrollTrigger: {
           trigger: "[data-animate='heading']",
           start: "top 80%",
@@ -207,12 +213,13 @@ export default function Services() {
 
       gsap.from("[data-animate='banner']", {
         autoAlpha: 0,
-        y: 20,
+        y: 16,
         duration: 0.5,
-        delay: 0.1,
+        delay: 0.15,
+        ease: "power2.out",
         scrollTrigger: {
           trigger: "[data-animate='banner']",
-          start: "top 80%",
+          start: "top 85%",
           once: true,
         },
       });
@@ -221,7 +228,8 @@ export default function Services() {
         autoAlpha: 0,
         y: 16,
         duration: 0.4,
-        delay: 0.2,
+        delay: 0.25,
+        ease: "power2.out",
         scrollTrigger: {
           trigger: "[data-animate='tabs']",
           start: "top 85%",
@@ -233,33 +241,40 @@ export default function Services() {
         onEnter: (batch) => {
           gsap.from(batch, {
             autoAlpha: 0,
-            y: 30,
-            scale: 0.95,
-            duration: 0.4,
-            stagger: 0.08,
+            y: 40,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: "power2.out",
           });
         },
-        start: "top 85%",
+        start: "top 88%",
         once: true,
       });
     },
     { scope: containerRef, dependencies: [filtered] }
   );
 
-  /* Expand / collapse with GSAP height animation */
+  /* ---- Expand / collapse with GSAP height animation ---- */
   useEffect(() => {
     detailsRefs.current.forEach((el, id) => {
       if (!el) return;
       if (expandedId === id) {
         gsap.set(el, { display: "block" });
-        gsap.to(el, { height: "auto", autoAlpha: 1, duration: 0.25, ease: "power1.inOut" });
+        gsap.to(el, {
+          height: "auto",
+          autoAlpha: 1,
+          duration: 0.35,
+          ease: "power2.inOut",
+        });
       } else {
         gsap.to(el, {
           height: 0,
           autoAlpha: 0,
-          duration: 0.25,
-          ease: "power1.inOut",
-          onComplete: () => { gsap.set(el, { display: "none" }); },
+          duration: 0.3,
+          ease: "power2.inOut",
+          onComplete: () => {
+            gsap.set(el, { display: "none" });
+          },
         });
       }
     });
@@ -269,55 +284,47 @@ export default function Services() {
     <section
       id="services"
       ref={containerRef}
-      className="relative overflow-hidden bg-slate-50 py-20 md:py-28"
+      className="relative bg-[var(--muted)] py-[var(--space-section)]"
     >
-      {/* Decorative blobs */}
-      <div className="pointer-events-none absolute -left-40 -top-40 h-80 w-80 rounded-full bg-blue-100/40 blur-3xl" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-blue-50/60 blur-3xl" />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* ---- Free consultation line ---- */}
+        <div
+          data-animate="banner"
+          className="mb-12 flex items-center justify-center gap-3 text-sm text-[var(--muted-foreground)]"
+          style={{ visibility: "hidden" }}
+        >
+          <span className="h-px w-12 bg-[var(--border)]" />
+          <Phone className="h-3.5 w-3.5 text-[var(--primary)]" />
+          <span className="font-[var(--font-mono)] uppercase tracking-wider">
+            Консультация — бесплатно
+          </span>
+          <span className="h-px w-12 bg-[var(--border)]" />
+        </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Heading */}
-        <div data-animate="heading" className="mx-auto max-w-2xl text-center" style={{ visibility: "hidden" }}>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Наши услуги
+        {/* ---- Heading ---- */}
+        <div
+          data-animate="heading"
+          className="mx-auto max-w-2xl text-center"
+          style={{ visibility: "hidden" }}
+        >
+          <span className="font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--muted-foreground)]">
+            Услуги клиники
+          </span>
+          <h2 className="text-fluid-h2 mt-3 text-[var(--foreground)]">
+            Полный спектр стоматологии
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Полный спектр стоматологических услуг с использованием передовых
-            технологий и материалов премиум-класса
+          <p className="text-fluid-body mt-4 text-[var(--muted-foreground)]">
+            Передовые технологии и материалы премиум-класса
+            для здоровья и красоты вашей улыбки
           </p>
         </div>
 
-        {/* Free consultation banner */}
-        <div data-animate="banner" className="mx-auto mt-10 max-w-3xl" style={{ visibility: "hidden" }}>
-          <div className="relative overflow-hidden rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-600 to-blue-500 p-6 text-white shadow-lg shadow-blue-200/40 sm:p-8">
-            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
-            <div className="relative flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
-                  <Gift className="h-6 w-6" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold sm:text-xl">
-                    Бесплатная консультация
-                  </h3>
-                  <p className="mt-1 text-sm text-blue-100">
-                    Запишитесь на бесплатный осмотр и составление плана лечения
-                  </p>
-                </div>
-              </div>
-              <a
-                href="tel:+79061232727"
-                className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-blue-600 shadow-sm transition-colors hover:bg-blue-50"
-              >
-                <Phone className="h-4 w-4" />
-                Записаться
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Category filter tabs */}
-        <div data-animate="tabs" className="mt-10 flex flex-wrap justify-center gap-2" style={{ visibility: "hidden" }}>
+        {/* ---- Category tabs ---- */}
+        <div
+          data-animate="tabs"
+          className="mt-10 flex flex-wrap justify-center gap-2"
+          style={{ visibility: "hidden" }}
+        >
           {categories.map(({ label, icon: Icon }) => (
             <button
               key={label}
@@ -326,20 +333,20 @@ export default function Services() {
                 setExpandedId(null);
               }}
               className={cn(
-                "inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200",
+                "inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200",
                 activeCategory === label
-                  ? "border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-200/50"
-                  : "border-slate-200 bg-white text-muted-foreground hover:border-blue-300 hover:text-blue-600"
+                  ? "bg-[var(--primary)] text-white"
+                  : "bg-white text-[var(--muted-foreground)] hover:text-[var(--primary)]"
               )}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className="h-3.5 w-3.5" />
               {label}
             </button>
           ))}
         </div>
 
-        {/* Service cards grid */}
-        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* ---- Service cards grid ---- */}
+        <div className="group-hover-dim mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((service) => {
             const isExpanded = expandedId === service.id;
             const CatIcon =
@@ -350,50 +357,55 @@ export default function Services() {
               <div
                 key={service.id}
                 data-animate="card"
+                style={{ visibility: "hidden" }}
                 className={cn(
-                  "group flex flex-col rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-shadow duration-300 hover:shadow-md hover:shadow-blue-100/30",
-                  isExpanded && "ring-1 ring-blue-200"
+                  "group/card flex flex-col rounded-2xl border border-[var(--border)] bg-white p-8 transition-all duration-300",
+                  "hover:-translate-y-1 hover:border-l-4 hover:border-l-[var(--primary)]",
+                  isExpanded && "border-l-4 border-l-[var(--primary)]"
                 )}
               >
-                {/* Category badge */}
+                {/* Category + duration */}
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
-                    <CatIcon className="h-3 w-3" />
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-[var(--muted-foreground)]">
+                    <CatIcon className="h-3.5 w-3.5" />
                     {service.category}
                   </span>
-                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center gap-1 text-xs text-[var(--muted-foreground)]">
                     <Clock className="h-3 w-3" />
                     {service.duration}
                   </span>
                 </div>
 
-                {/* Name & description */}
-                <h3 className="mt-3 text-lg font-semibold text-foreground group-hover:text-blue-600 transition-colors">
+                {/* Name */}
+                <h3 className="mt-4 text-lg font-semibold text-[var(--foreground)] transition-colors duration-200 group-hover/card:text-[var(--primary)]">
                   {service.name}
                 </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+
+                {/* Description */}
+                <p className="mt-2 text-sm leading-relaxed text-[var(--muted-foreground)]">
                   {service.description}
                 </p>
 
                 {/* Price */}
-                <div className="mt-4 text-xl font-bold text-blue-600">
+                <div className="mt-5 font-[var(--font-mono)] text-2xl font-bold text-[var(--foreground)]">
                   {service.price}
                 </div>
 
-                {/* Expand / collapse */}
+                {/* Expand toggle */}
                 <button
                   onClick={() => toggleExpand(service.id)}
-                  className="mt-3 inline-flex items-center gap-1 self-start text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
+                  className="mt-4 inline-flex items-center gap-1 self-start text-sm font-medium text-[var(--primary)] transition-colors hover:text-[var(--primary)]/80"
                 >
                   {isExpanded ? "Скрыть" : "Подробнее"}
                   <ChevronDown
                     className={cn(
-                      "h-4 w-4 transition-transform duration-200",
+                      "h-4 w-4 transition-transform duration-300",
                       isExpanded && "rotate-180"
                     )}
                   />
                 </button>
 
+                {/* Expandable detail */}
                 <div
                   ref={(el) => {
                     if (el) detailsRefs.current.set(service.id, el);
@@ -401,7 +413,7 @@ export default function Services() {
                   className="overflow-hidden"
                   style={{ height: 0, visibility: "hidden", display: "none" }}
                 >
-                  <p className="mt-3 border-t border-slate-100 pt-3 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-4 border-t border-[var(--border)] pt-4 text-sm leading-relaxed text-[var(--muted-foreground)]">
                     {service.details}
                   </p>
                 </div>

@@ -30,18 +30,20 @@ const promotions = [
   },
   {
     icon: Star,
-    title: "Имплантация под ключ от 35 000 ₽",
+    title: "Имплантация под ключ",
     description:
       "Полный цикл имплантации: установка импланта, формирователь десны и металлокерамическая коронка по фиксированной цене.",
+    price: "от 35 000 ₽",
     conditions: "Имплант + коронка в одну стоимость",
     deadline: "31.05.2026",
     isHit: false,
   },
   {
     icon: Users,
-    title: "Семейная скидка 10%",
+    title: "Семейная скидка",
     description:
       "Приходите всей семьёй и получайте скидку 10% на все виды лечения при одновременном обращении от двух членов семьи.",
+    price: "10%",
     conditions: "От 2 членов семьи",
     deadline: null,
     isHit: false,
@@ -62,12 +64,13 @@ export default function Promotions() {
 
   useGSAP(
     () => {
-      gsap.from("[data-animate='heading']", {
+      gsap.from("[data-animate='promo-heading']", {
         autoAlpha: 0,
-        y: 20,
-        duration: 0.5,
+        y: 30,
+        duration: 0.6,
+        ease: "power2.out",
         scrollTrigger: {
-          trigger: "[data-animate='heading']",
+          trigger: "[data-animate='promo-heading']",
           start: "top 80%",
           once: true,
         },
@@ -77,12 +80,13 @@ export default function Promotions() {
         onEnter: (batch) => {
           gsap.from(batch, {
             autoAlpha: 0,
-            y: 30,
-            duration: 0.4,
-            stagger: 0.1,
+            y: 40,
+            duration: 0.5,
+            stagger: 0.12,
+            ease: "power2.out",
           });
         },
-        start: "top 85%",
+        start: "top 88%",
         once: true,
       });
     },
@@ -90,97 +94,104 @@ export default function Promotions() {
   );
 
   return (
-    <section id="promotions" ref={containerRef} className="py-20 bg-white">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <section
+      id="promotions"
+      ref={containerRef}
+      className="py-[var(--space-section)] bg-[var(--background)]"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Section label + heading */}
         <div
-          data-animate="heading"
-          className="text-center mb-14"
+          data-animate="promo-heading"
+          className="mb-16"
           style={{ visibility: "hidden" }}
         >
-          <span className="inline-block text-sm font-semibold tracking-wider uppercase text-blue-600 mb-3">
+          <span className="font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-muted-foreground">
             Выгодные предложения
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Акции и специальные предложения
+          <h2 className="mt-3 font-[var(--font-heading)] text-fluid-h1 text-foreground">
+            Акции и специальные
+            <br />
+            предложения
           </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto text-lg">
+          <p className="mt-4 max-w-xl text-fluid-body text-muted-foreground">
             Качественная стоматология может быть доступной. Воспользуйтесь
-            нашими актуальными акциями и сэкономьте на заботе о здоровье.
+            нашими актуальными акциями.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Promo cards — full-width horizontal layout */}
+        <div className="group-hover-dim flex flex-col gap-4">
           {promotions.map((promo, index) => {
             const Icon = promo.icon;
+            const isEven = index % 2 === 0;
 
             return (
               <div
                 key={index}
                 data-animate="promo-card"
                 className={cn(
-                  "relative group flex flex-col rounded-2xl border bg-white p-6 transition-shadow duration-300 hover:shadow-xl",
-                  promo.isHit
-                    ? "border-blue-200 ring-1 ring-blue-100"
-                    : "border-gray-100"
+                  "relative flex flex-col gap-6 rounded-2xl p-6 sm:p-8 transition-all duration-300 md:flex-row md:items-center md:justify-between",
+                  isEven
+                    ? "bg-white"
+                    : "bg-[#f0f4ff]",
+                  "hover:shadow-lg"
                 )}
                 style={{ visibility: "hidden" }}
               >
+                {/* Hit badge */}
                 {promo.isHit && (
-                  <span className="absolute -top-3 right-5 inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold text-white shadow">
+                  <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
                     <Tag className="h-3 w-3" />
                     Хит
                   </span>
                 )}
 
-                <div className="mb-4 flex items-center gap-4">
-                  <div
-                    className={cn(
-                      "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl",
-                      promo.isHit
-                        ? "bg-blue-600 text-white"
-                        : "bg-blue-50 text-blue-600"
-                    )}
-                  >
+                {/* Left side: icon + text */}
+                <div className="flex items-start gap-5 md:flex-1">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 leading-snug">
-                    {promo.title}
-                  </h3>
+                  <div className="min-w-0">
+                    <h3 className="font-[var(--font-heading)] text-fluid-h3 text-foreground">
+                      {promo.title}
+                      {"price" in promo && promo.price && (
+                        <span className="ml-2 font-[var(--font-mono)] text-primary">
+                          {promo.price}
+                        </span>
+                      )}
+                    </h3>
+                    <p className="mt-1.5 max-w-lg text-fluid-small text-muted-foreground leading-relaxed">
+                      {promo.description}
+                    </p>
+                  </div>
                 </div>
 
-                <p className="text-sm text-gray-500 leading-relaxed mb-4 flex-1">
-                  {promo.description}
-                </p>
-
-                <div className="mb-5 flex flex-wrap items-center gap-2 text-xs">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 font-medium text-gray-600">
+                {/* Right side: conditions + deadline + CTA */}
+                <div className="flex flex-wrap items-center gap-3 md:flex-shrink-0 md:gap-4">
+                  <span className="inline-flex items-center rounded-full bg-foreground/5 px-4 py-1.5 text-fluid-small font-medium text-foreground/70">
                     {promo.conditions}
                   </span>
 
                   {promo.deadline ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-3 py-1 font-medium text-red-600">
-                      <Clock className="h-3 w-3" />
-                      до {promo.deadline}
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-4 py-1.5 text-fluid-small font-medium text-red-600">
+                      <Clock className="h-3.5 w-3.5" />
+                      <span className="font-[var(--font-mono)]">до {promo.deadline}</span>
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 font-medium text-green-600">
-                      <Clock className="h-3 w-3" />
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-4 py-1.5 text-fluid-small font-medium text-green-600">
+                      <Clock className="h-3.5 w-3.5" />
                       Бессрочно
                     </span>
                   )}
-                </div>
 
-                <a
-                  href="#contacts"
-                  className={cn(
-                    "inline-flex w-full items-center justify-center rounded-xl py-2.5 text-sm font-semibold transition-colors duration-200",
-                    promo.isHit
-                      ? "bg-blue-600 text-white hover:bg-blue-700"
-                      : "bg-blue-50 text-blue-600 hover:bg-blue-100"
-                  )}
-                >
-                  Записаться
-                </a>
+                  <a
+                    href="#booking"
+                    className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary/90"
+                  >
+                    Записаться
+                  </a>
+                </div>
               </div>
             );
           })}

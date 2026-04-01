@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -59,8 +59,31 @@ export default function FAQ() {
 
   useGSAP(
     () => {
-      /* No scroll-based entrance animations needed for FAQ heading since
-         the original didn't have them either — just the accordion behavior */
+      gsap.from("[data-animate='faq-heading']", {
+        autoAlpha: 0,
+        y: 30,
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: "[data-animate='faq-heading']",
+          start: "top 80%",
+          once: true,
+        },
+      });
+
+      ScrollTrigger.batch("[data-animate='faq-item']", {
+        onEnter: (batch) => {
+          gsap.from(batch, {
+            autoAlpha: 0,
+            y: 20,
+            duration: 0.4,
+            stagger: 0.06,
+            ease: "power2.out",
+          });
+        },
+        start: "top 88%",
+        once: true,
+      });
     },
     { scope: containerRef }
   );
@@ -71,14 +94,21 @@ export default function FAQ() {
       if (!el) return;
       if (openIndex === index) {
         gsap.set(el, { display: "block" });
-        gsap.to(el, { height: "auto", autoAlpha: 1, duration: 0.3, ease: "power1.inOut" });
+        gsap.to(el, {
+          height: "auto",
+          autoAlpha: 1,
+          duration: 0.4,
+          ease: "power2.inOut",
+        });
       } else {
         gsap.to(el, {
           height: 0,
           autoAlpha: 0,
-          duration: 0.3,
-          ease: "power1.inOut",
-          onComplete: () => { gsap.set(el, { display: "none" }); },
+          duration: 0.35,
+          ease: "power2.inOut",
+          onComplete: () => {
+            gsap.set(el, { display: "none" });
+          },
         });
       }
     });
@@ -88,53 +118,72 @@ export default function FAQ() {
       if (!el) return;
       gsap.to(el, {
         rotation: openIndex === index ? 180 : 0,
-        duration: 0.3,
-        ease: "power1.inOut",
+        duration: 0.35,
+        ease: "power2.inOut",
       });
     });
   }, [openIndex]);
 
   return (
-    <section id="faq" ref={containerRef} className="bg-white py-20">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        {/* Heading */}
-        <div className="mb-12 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-50">
-            <HelpCircle className="h-7 w-7 text-blue-600" />
-          </div>
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Часто задаваемые вопросы
+    <section
+      id="faq"
+      ref={containerRef}
+      className="bg-[var(--background)] py-[var(--space-section)]"
+    >
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        {/* Section label + heading */}
+        <div
+          data-animate="faq-heading"
+          className="mb-16"
+          style={{ visibility: "hidden" }}
+        >
+          <span className="font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-muted-foreground">
+            FAQ
+          </span>
+          <h2 className="mt-3 font-[var(--font-heading)] text-fluid-h1 text-foreground">
+            Часто задаваемые
+            <br />
+            вопросы
           </h2>
         </div>
 
-        {/* Accordion */}
-        <div className="divide-y divide-gray-200 border-t border-b border-gray-200">
+        {/* Accordion — editorial lines only, no card borders */}
+        <div>
+          {/* Top line */}
+          <div className="section-line" />
+
           {faqItems.map((item, index) => {
             const isOpen = openIndex === index;
 
             return (
-              <div key={index}>
+              <div
+                key={index}
+                data-animate="faq-item"
+                style={{ visibility: "hidden" }}
+              >
                 <button
                   type="button"
                   onClick={() => toggle(index)}
                   className={cn(
-                    "flex w-full items-center justify-between gap-4 py-5 text-left transition-colors duration-200",
-                    isOpen ? "text-blue-600" : "text-gray-900 hover:text-blue-600"
+                    "flex w-full items-center justify-between gap-6 py-6 sm:py-7 text-left transition-colors duration-200",
+                    isOpen
+                      ? "text-primary"
+                      : "text-foreground hover:text-primary"
                   )}
                 >
-                  <span className="text-base font-medium sm:text-lg">
+                  <span className="text-lg font-medium sm:text-xl leading-snug">
                     {item.question}
                   </span>
                   <span
                     ref={(el) => {
                       if (el) chevronRefs.current.set(index, el);
                     }}
-                    className="flex-shrink-0"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted transition-colors duration-200"
                   >
                     <ChevronDown
                       className={cn(
                         "h-5 w-5 transition-colors duration-200",
-                        isOpen ? "text-blue-600" : "text-gray-400"
+                        isOpen ? "text-primary" : "text-muted-foreground"
                       )}
                     />
                   </span>
@@ -147,10 +196,13 @@ export default function FAQ() {
                   className="overflow-hidden"
                   style={{ height: 0, visibility: "hidden", display: "none" }}
                 >
-                  <p className="pb-5 text-base leading-relaxed text-gray-600">
+                  <p className="pb-7 text-fluid-body leading-relaxed text-muted-foreground max-w-2xl">
                     {item.answer}
                   </p>
                 </div>
+
+                {/* Separator line */}
+                <div className="section-line" />
               </div>
             );
           })}
