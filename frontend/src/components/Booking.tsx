@@ -199,8 +199,6 @@ export default function Booking() {
       id="booking"
       className="relative overflow-hidden bg-gradient-to-br from-[#1a1f2e] via-[#2a3250] to-[#1e2540] py-[var(--space-section)]"
     >
-      {/* Noise texture */}
-      <div className="noise-overlay pointer-events-none absolute inset-0" />
 
       {/* Decorative blurs */}
       <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-white/5 blur-3xl" />
@@ -232,7 +230,7 @@ export default function Booking() {
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="relative overflow-hidden rounded-3xl bg-white p-8 shadow-2xl shadow-black/20 sm:p-10 lg:p-12 noise-overlay"
+              className="relative overflow-hidden rounded-3xl bg-white p-8 shadow-2xl shadow-black/20 sm:p-10 lg:p-12"
             >
               <div className="relative z-10">
                 {/* Success message */}
