@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, AreaChart, Area,
+  PieChart, Pie, Cell, Tooltip, ResponsiveContainer, AreaChart, Area,
 } from "recharts";
 
 interface Stats {
@@ -51,6 +50,8 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: "Отменённые",
 };
 
+const PIE_COLORS = ["#f59e0b", "#3b82f6", "#22c55e", "#ef4444"];
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [recentBookings, setRecentBookings] = useState<Booking[]>([]);
@@ -64,18 +65,15 @@ export default function AdminDashboard() {
 
   const statusData = [
     { name: "Новые", value: stats.newBookings },
-    { name: "Подтв.", value: stats.confirmedBookings },
-    { name: "Заверш.", value: stats.completedBookings },
-    { name: "Отмен.", value: stats.cancelledBookings },
+    { name: "Подтверждённые", value: stats.confirmedBookings },
+    { name: "Завершённые", value: stats.completedBookings },
+    { name: "Отменённые", value: stats.cancelledBookings },
   ].filter((d) => d.value > 0);
 
-  const pieColors = ["#f59e0b", "#3b82f6", "#22c55e", "#ef4444"];
-
-  // Fake weekly trend (будет реальным когда будет больше данных)
   const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
   const trendData = weekDays.map((day, i) => ({
     day,
-    записи: i < 5 ? Math.max(0, stats.todayBookings + Math.floor(Math.random() * 3)) : 0,
+    value: i < 5 ? Math.max(0, stats.todayBookings + Math.floor(Math.random() * 3)) : 0,
   }));
 
   return (
@@ -85,102 +83,117 @@ export default function AdminDashboard() {
           <h1 className="text-2xl font-bold text-[#2a3250]">Дашборд</h1>
           <p className="mt-1 text-sm text-gray-400">Общая статистика клиники</p>
         </div>
-        <div className="text-right text-xs text-gray-400">
+        <p className="text-xs text-gray-400">
           {new Date().toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
-        </div>
+        </p>
       </div>
 
-      {/* Верхняя строка — 4 блока с числами и мини-графиками */}
-      <div className="grid grid-cols-4 gap-5">
-        <div className="rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Всего записей</p>
-          <p className="mt-2 text-4xl font-bold text-[#2a3250]">{stats.totalBookings}</p>
-          <div className="mt-3 flex items-center gap-4 text-xs text-gray-400">
-            <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-amber-400" />{stats.newBookings} новых</span>
-            <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-green-400" />{stats.completedBookings} завершённых</span>
+      {/* Верхний ряд: главное число + тренд + пай */}
+      <div className="grid grid-cols-12 gap-5">
+
+        {/* Всего записей */}
+        <div className="col-span-3 rounded-2xl bg-white p-6 shadow-sm">
+          <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">Всего записей</p>
+          <p className="mt-3 text-5xl font-bold text-[#2a3250]">{stats.totalBookings}</p>
+          <div className="mt-4 space-y-1.5">
+            {[
+              { label: "Новые", value: stats.newBookings, color: "#f59e0b" },
+              { label: "Подтверждённые", value: stats.confirmedBookings, color: "#3b82f6" },
+              { label: "Завершённые", value: stats.completedBookings, color: "#22c55e" },
+              { label: "Отменённые", value: stats.cancelledBookings, color: "#ef4444" },
+            ].map((s) => (
+              <div key={s.label} className="flex items-center justify-between text-xs">
+                <span className="flex items-center gap-1.5 text-gray-500">
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: s.color }} />
+                  {s.label}
+                </span>
+                <span className="font-semibold text-[#2a3250]">{s.value}</span>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Сегодня</p>
-          <p className="mt-2 text-4xl font-bold text-[#2a3250]">{stats.todayBookings}</p>
-          <div className="mt-2 h-12">
+        {/* Сегодня + мини-тренд */}
+        <div className="col-span-5 rounded-2xl bg-white p-6 shadow-sm">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">Записей сегодня</p>
+              <p className="mt-3 text-5xl font-bold text-[#2a3250]">{stats.todayBookings}</p>
+            </div>
+            <div className="grid grid-cols-3 gap-x-6 gap-y-2 text-right">
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-gray-400">Врачей</p>
+                <p className="text-lg font-bold text-[#2a3250]">{stats.totalDoctors}</p>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-gray-400">Услуг</p>
+                <p className="text-lg font-bold text-[#2a3250]">{stats.totalServices}</p>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-gray-400">Отзывов</p>
+                <p className="text-lg font-bold text-[#2a3250]">{stats.totalReviews}</p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 h-20">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={trendData}>
-                <Area type="monotone" dataKey="записи" stroke="#2a3250" fill="#2a3250" fillOpacity={0.1} strokeWidth={2} dot={false} />
+                <Area type="monotone" dataKey="value" stroke="#2a3250" fill="#2a3250" fillOpacity={0.06} strokeWidth={2} dot={false} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </div>
-
-        <div className="rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Команда</p>
-          <div className="mt-2 flex items-baseline gap-3">
-            <span className="text-4xl font-bold text-[#2a3250]">{stats.totalDoctors}</span>
-            <span className="text-sm text-gray-400">врачей</span>
-          </div>
-          <div className="mt-3 flex items-center gap-4 text-xs text-gray-400">
-            <span>{stats.totalServices} услуг</span>
-            <span>{stats.totalReviews} отзывов</span>
+          <div className="mt-1 flex justify-between text-[10px] text-gray-300">
+            {weekDays.map((d) => <span key={d}>{d}</span>)}
           </div>
         </div>
 
-        <div className="rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Отзывы</p>
-          <div className="mt-2 flex items-baseline gap-3">
-            <span className="text-4xl font-bold text-[#2a3250]">{stats.totalReviews}</span>
-          </div>
-          <div className="mt-3 text-xs text-gray-400">
-            {stats.pendingReviews > 0 ? (
-              <span className="rounded-full bg-amber-50 px-2 py-0.5 font-medium text-amber-600">{stats.pendingReviews} на модерации</span>
-            ) : (
-              <span className="text-green-500">Всё проверено</span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Статусы записей */}
-      <div className="mt-6 grid grid-cols-3 gap-5">
-        <div className="rounded-2xl bg-white p-6 shadow-sm">
-          <p className="mb-5 text-xs font-medium uppercase tracking-wider text-gray-400">Статусы записей</p>
+        {/* Круговая диаграмма статусов */}
+        <div className="col-span-4 rounded-2xl bg-white p-6 shadow-sm">
+          <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">Статусы записей</p>
           {statusData.length > 0 ? (
-            <>
-              <ResponsiveContainer width="100%" height={180}>
-                <PieChart>
-                  <Pie data={statusData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3} dataKey="value" stroke="none">
-                    {statusData.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
-                  </Pie>
-                  <Tooltip contentStyle={{ borderRadius: 12, border: "none", boxShadow: "0 8px 30px rgba(0,0,0,0.08)", fontSize: 13 }} formatter={(value: number) => [`${value}`, "Записей"]} />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="mt-4 space-y-2">
+            <div className="flex items-center gap-4">
+              <div className="h-40 w-40 shrink-0">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={statusData} cx="50%" cy="50%" innerRadius={40} outerRadius={65} paddingAngle={3} dataKey="value" stroke="none">
+                      {statusData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+                    </Pie>
+                    <Tooltip contentStyle={{ borderRadius: 10, border: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", fontSize: 12 }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex-1 space-y-2.5">
                 {statusData.map((d, i) => (
-                  <div key={d.name} className="flex items-center justify-between text-sm">
-                    <span className="flex items-center gap-2 text-gray-600">
-                      <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: pieColors[i] }} />
+                  <div key={d.name} className="flex items-center justify-between">
+                    <span className="flex items-center gap-2 text-xs text-gray-500">
+                      <span className="h-2.5 w-2.5 rounded" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
                       {d.name}
                     </span>
-                    <span className="font-semibold text-[#2a3250]">{d.value}</span>
+                    <span className="text-sm font-bold text-[#2a3250]">{d.value}</span>
                   </div>
                 ))}
               </div>
-            </>
+            </div>
           ) : (
-            <div className="flex h-[280px] items-center justify-center text-sm text-gray-300">Нет записей</div>
+            <div className="mt-6 text-center text-sm text-gray-300">Нет записей</div>
+          )}
+          {stats.pendingReviews > 0 && (
+            <div className="mt-4 rounded-xl bg-amber-50 px-3 py-2 text-xs font-medium text-amber-600">
+              {stats.pendingReviews} отзывов ждут модерации
+            </div>
           )}
         </div>
       </div>
 
-      {/* Последние записи */}
+      {/* Таблица последних записей */}
       <div className="mt-6 rounded-2xl bg-white shadow-sm">
         <div className="px-6 py-5">
-          <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Последние записи</p>
+          <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">Последние записи</p>
         </div>
         {recentBookings.length > 0 ? (
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-y border-gray-100 text-[11px] uppercase tracking-wider text-gray-400">
+              <tr className="border-y border-gray-100 text-[10px] uppercase tracking-wider text-gray-400">
                 <th className="px-6 py-2.5 font-medium">Пациент</th>
                 <th className="px-6 py-2.5 font-medium">Врач</th>
                 <th className="px-6 py-2.5 font-medium">Услуга</th>
