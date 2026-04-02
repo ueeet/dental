@@ -65,7 +65,6 @@ export default function SSEToast() {
           style={{
             minWidth: 420,
             animation: t.leaving ? "toast-out 0.5s ease forwards" : "toast-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
-            borderLeft: `4px solid ${t.color}`,
           }}
         >
           <div className="relative shrink-0">
