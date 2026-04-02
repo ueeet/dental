@@ -54,15 +54,15 @@ export default function AdminPromotions() {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#2a3250]">Акции</h1>
+    <div ref={containerRef}>
+      <div className="page-controls flex items-center justify-between">
+        <h1 className="page-title text-2xl font-bold text-[#2a3250]">Акции</h1>
         <button onClick={() => setEditing({ title: "", description: "", isActive: true })} className="rounded-xl bg-[#2a3250] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#353d5c]">
           Добавить
         </button>
       </div>
 
-      <div className="mt-6 space-y-4">
+      <div className="page-content mt-6 space-y-4">
         {promos.map((p) => (
           <div key={p.id} className="rounded-2xl bg-white p-5 shadow-sm">
             <div className="flex items-start justify-between">
