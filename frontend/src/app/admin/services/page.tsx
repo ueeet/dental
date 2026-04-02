@@ -25,9 +25,8 @@ export default function AdminServices() {
   useGSAP(() => {
     gsap.from(".page-title", { y: -20, opacity: 0, duration: 0.5, ease: "power2.out" });
     gsap.from(".page-controls", { y: 20, opacity: 0, duration: 0.5, delay: 0.1, ease: "power2.out" });
-    gsap.from(".service-category", { y: 20, opacity: 0, duration: 0.5, stagger: 0.1, delay: 0.2, ease: "power3.out" });
-    gsap.from(".service-row", { x: -15, opacity: 0, duration: 0.35, stagger: 0.04, delay: 0.4, ease: "power2.out" });
-  }, { scope: containerRef, dependencies: [services] });
+    gsap.from(".page-content", { y: 30, opacity: 0, duration: 0.6, delay: 0.2, ease: "power3.out" });
+  }, { scope: containerRef });
 
   const load = () => api.get<Service[]>("/services?active=false").then(setServices);
   useEffect(() => { load(); }, []);
