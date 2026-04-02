@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { api } from "@/lib/api";
 
 interface Booking {
@@ -42,6 +42,7 @@ export default function AdminBookings() {
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const loadRef = useRef<() => void>(() => {});
 
   const load = useCallback(() => {
     const params = new URLSearchParams();
@@ -52,27 +53,40 @@ export default function AdminBookings() {
     api.get<BookingsResponse>(`/bookings?${params}`).then(setData).catch(console.error);
   }, [filter, search, page]);
 
+  loadRef.current = load;
+
   useEffect(() => { load(); }, [load]);
 
-  // SSE — realtime обновления
+  // SSE — один раз, не зависит от фильтров
   useEffect(() => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
-    const es = new EventSource(`${apiUrl.replace("/api", "")}/api/events`);
-    es.addEventListener("new_booking", () => load());
-    es.addEventListener("booking_updated", () => load());
-    es.addEventListener("booking_deleted", () => load());
+    const url = apiUrl.replace(/\/api$/, "") + "/api/events";
+    const es = new EventSource(url);
+
+    es.addEventListener("new_booking", () => {
+      console.log("SSE: new_booking");
+      loadRef.current();
+    });
+    es.addEventListener("booking_updated", () => {
+      console.log("SSE: booking_updated");
+      loadRef.current();
+    });
+    es.addEventListener("booking_deleted", () => {
+      console.log("SSE: booking_deleted");
+      loadRef.current();
+    });
+    es.onerror = () => console.log("SSE: reconnecting...");
+
     return () => es.close();
-  }, [load]);
+  }, []);
 
   const changeStatus = async (id: number, status: string) => {
     await api.put(`/bookings/${id}`, { status });
-    load();
   };
 
   const deleteBooking = async (id: number) => {
     if (!confirm("Удалить запись?")) return;
     await api.delete(`/bookings/${id}`);
-    load();
   };
 
   return (
@@ -115,7 +129,7 @@ export default function AdminBookings() {
           </thead>
           <tbody>
             {data?.bookings.map((b) => (
-              <tr key={b.id} className="border-b border-gray-50 hover:bg-gray-50/50">
+              <tr key={b.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                 <td className="px-5 py-3 font-medium text-gray-900">{b.patientName}</td>
                 <td className="px-5 py-3 text-gray-600">{b.phone}</td>
                 <td className="px-5 py-3 text-gray-600">{b.doctor.name.split(" ").slice(0, 2).join(" ")}</td>
