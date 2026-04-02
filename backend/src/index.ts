@@ -37,7 +37,7 @@ app.use(express.json({ limit: "1mb" }));
 const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
 app.use("/api/auth/login", loginLimiter);
 
-const bookingLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 3 });
+const bookingLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 10 });
 app.post("/api/bookings", bookingLimiter);
 
 const generalLimiter = rateLimit({ windowMs: 60 * 1000, max: 100 });
