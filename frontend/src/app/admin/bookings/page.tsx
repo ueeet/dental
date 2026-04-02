@@ -100,7 +100,7 @@ export default function AdminBookings() {
           <button
             key={s}
             onClick={() => { setFilter(s); setPage(1); }}
-            className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
+            className={`filter-btn rounded-xl px-4 py-2 text-sm font-medium transition ${
               filter === s ? "bg-[#2a3250] text-white" : "bg-white text-gray-600 hover:bg-gray-50"
             }`}
           >
