@@ -3,8 +3,20 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import {
-  PieChart, Pie, Cell, Tooltip, ResponsiveContainer, AreaChart, Area,
+  PieChart, Pie, Cell, Tooltip, ResponsiveContainer, AreaChart, Area, Sector,
 } from "recharts";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function renderActiveShape(props: any) {
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, payload, value } = props;
+  return (
+    <g>
+      <Sector cx={cx} cy={cy} innerRadius={innerRadius - 3} outerRadius={outerRadius + 8} startAngle={startAngle} endAngle={endAngle} fill={fill} style={{ transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)", filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.15))" }} />
+      <text x={cx} y={cy - 6} textAnchor="middle" fill="#2a3250" fontSize={20} fontWeight={700}>{value}</text>
+      <text x={cx} y={cy + 12} textAnchor="middle" fill="#9ca3af" fontSize={10}>{payload.name}</text>
+    </g>
+  );
+}
 
 interface Stats {
   totalBookings: number;
