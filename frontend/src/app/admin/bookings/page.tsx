@@ -58,27 +58,9 @@ export default function AdminBookings() {
 
   useEffect(() => { load(); }, [load]);
 
-  // SSE — один раз, не зависит от фильтров
+  // SSE — realtime
   useEffect(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
-    const url = apiUrl.replace(/\/api$/, "") + "/api/events";
-    const es = new EventSource(url);
-
-    es.addEventListener("new_booking", () => {
-      console.log("SSE: new_booking");
-      loadRef.current();
-    });
-    es.addEventListener("booking_updated", () => {
-      console.log("SSE: booking_updated");
-      loadRef.current();
-    });
-    es.addEventListener("booking_deleted", () => {
-      console.log("SSE: booking_deleted");
-      loadRef.current();
-    });
-    es.onerror = () => console.log("SSE: reconnecting...");
-
-    return () => es.close();
+    return onSSE("*", () => loadRef.current());
   }, []);
 
   const changeStatus = async (id: number, status: string) => {
