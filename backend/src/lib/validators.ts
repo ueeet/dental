@@ -32,7 +32,7 @@ export const createDoctorSchema = z.object({
   name: z.string().min(2).max(100),
   specialty: z.string().min(2).max(100),
   experience: z.number().int().min(0).optional(),
-  photo: z.string().url().optional(),
+  photo: z.string().optional().nullable(),
   description: z.string().max(2000).optional(),
   isActive: z.boolean().optional(),
   schedule: z.record(z.string(), z.object({
