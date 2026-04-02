@@ -34,9 +34,9 @@ export default function AdminReviews() {
 
   useGSAP(() => {
     gsap.from(".page-title", { y: -20, opacity: 0, duration: 0.5, ease: "power2.out" });
-    gsap.from(".page-controls", { y: 20, opacity: 0, duration: 0.5, delay: 0.1, ease: "power2.out" });
-    gsap.from(".page-content", { y: 30, opacity: 0, duration: 0.6, delay: 0.2, ease: "power3.out" });
-  }, { scope: containerRef });
+    gsap.from(".filter-btn", { y: 15, opacity: 0, scale: 0.9, duration: 0.4, stagger: 0.05, delay: 0.1, ease: "back.out(1.4)" });
+    gsap.from(".review-card", { y: 20, opacity: 0, scale: 0.97, duration: 0.5, stagger: 0.08, delay: 0.3, ease: "power3.out" });
+  }, { scope: containerRef, dependencies: [data] });
 
   const load = useCallback(() => {
     const params = new URLSearchParams();
