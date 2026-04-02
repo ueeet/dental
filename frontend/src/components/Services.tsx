@@ -6,20 +6,23 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronDown, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { api } from "@/lib/api";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-type Category =
-  | "Все"
-  | "Терапия"
-  | "Хирургия"
-  | "Ортопедия"
-  | "Гигиена"
-  | "Эстетика";
+interface ApiService {
+  id: number;
+  name: string;
+  description: string | null;
+  price: number;
+  duration: number;
+  category: string | null;
+  isActive: boolean;
+}
 
 interface Service {
   id: number;
-  category: Exclude<Category, "Все">;
+  category: string;
   name: string;
   description: string;
   price: string;
@@ -27,16 +30,7 @@ interface Service {
   details: string;
 }
 
-const categoryTabs: Category[] = [
-  "Все",
-  "Терапия",
-  "Хирургия",
-  "Ортопедия",
-  "Гигиена",
-  "Эстетика",
-];
-
-const services: Service[] = [
+const FALLBACK_SERVICES: Service[] = [
   {
     id: 1,
     category: "Терапия",
