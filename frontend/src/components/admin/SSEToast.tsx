@@ -47,7 +47,7 @@ export default function SSEToast() {
       setTimeout(() => {
         setToasts((prev) => prev.filter((t) => t.id !== id));
       }, 500);
-    }, 4000);
+    }, 6000);
   }, []);
 
   useEffect(() => {
