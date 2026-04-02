@@ -32,8 +32,7 @@ const doctors = [
     name: "Гумеров Артур Рафаэлевич",
     specialty: "Стоматолог-ортопед",
     experience: 19,
-    photo:
-      "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&h=500&fit=crop&crop=face",
+    photo: "/doctors/gumerov.png",
     description:
       "Один из самых опытных специалистов клиники. Мастер эстетического протезирования и сложных ортопедических конструкций.",
     schedule: "Пн–Пт: 9:00–18:00",
