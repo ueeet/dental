@@ -292,7 +292,7 @@ export default function Booking() {
               <div className="min-h-[200px] flex-1 overflow-hidden rounded-3xl border border-white/10">
                 <div className="relative h-full w-full bg-white/10">
                   <iframe
-                    src="https://yandex.ru/map-widget/v1/?ll=56.044,54.735&z=16&pt=56.044,54.735,pm2blm"
+                    src="https://yandex.ru/map-widget/v1/?ll=52.390714,55.727186&z=16&pt=52.390714,55.727186,pm2blm"
                     className="absolute inset-0 h-full w-full opacity-70"
                     allowFullScreen
                     title="IQ Dental на карте"
