@@ -21,13 +21,19 @@ export default function AdminPromotions() {
 
   const save = async () => {
     if (!editing) return;
-    if (editing.id) {
-      await api.put(`/promotions/${editing.id}`, editing);
-    } else {
-      await api.post("/promotions", editing);
+    const { id, ...rest } = editing as Promotion & Record<string, unknown>;
+    const body = { title: rest.title, description: rest.description, isActive: rest.isActive, startDate: rest.startDate, endDate: rest.endDate };
+    try {
+      if (id) {
+        await api.put(`/promotions/${id}`, body);
+      } else {
+        await api.post("/promotions", body);
+      }
+      setEditing(null);
+      load();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Ошибка сохранения");
     }
-    setEditing(null);
-    load();
   };
 
   const remove = async (id: number) => {
