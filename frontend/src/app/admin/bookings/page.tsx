@@ -4,9 +4,6 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { api } from "@/lib/api";
 import { onSSE } from "@/lib/sse";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-
-gsap.registerPlugin(useGSAP);
 
 interface Booking {
   id: number;
@@ -42,21 +39,63 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: "Отменена",
 };
 
+function Skeleton() {
+  return (
+    <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+      <div className="border-b border-gray-100 px-5 py-3">
+        <div className="flex gap-8">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="h-3 w-20 animate-pulse rounded bg-gray-200" />
+          ))}
+        </div>
+      </div>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div key={i} className="flex items-center gap-8 border-b border-gray-50 px-5 py-4">
+          <div className="h-4 w-28 animate-pulse rounded bg-gray-200" />
+          <div className="h-3 w-24 animate-pulse rounded bg-gray-100" />
+          <div className="h-3 w-20 animate-pulse rounded bg-gray-100" />
+          <div className="h-3 w-32 animate-pulse rounded bg-gray-100" />
+          <div className="h-3 w-20 animate-pulse rounded bg-gray-100" />
+          <div className="h-5 w-24 animate-pulse rounded-full bg-gray-200" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function AdminBookings() {
   const [data, setData] = useState<BookingsResponse | null>(null);
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const loadRef = useRef<() => void>(() => {});
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    gsap.from(".page-title", { y: -20, opacity: 0, duration: 0.5, ease: "power2.out" });
-    gsap.from(".filter-btn", { y: 15, opacity: 0, scale: 0.9, duration: 0.4, stagger: 0.05, delay: 0.1, ease: "back.out(1.4)" });
-    gsap.from(".page-content", { y: 30, opacity: 0, duration: 0.6, delay: 0.3, ease: "power3.out" });
-  }, { scope: containerRef });
+  const tableRef = useRef<HTMLDivElement>(null);
 
   const load = useCallback(() => {
+    setLoading(true);
+    const params = new URLSearchParams();
+    params.set("page", String(page));
+    params.set("limit", "15");
+    if (filter) params.set("status", filter);
+    if (search) params.set("search", search);
+    api.get<BookingsResponse>(`/bookings?${params}`).then((d) => {
+      setData(d);
+      setLoading(false);
+      requestAnimationFrame(() => {
+        if (tableRef.current) {
+          gsap.fromTo(
+            tableRef.current.querySelectorAll(".booking-row"),
+            { x: -15, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.6, stagger: 0.06, ease: "power3.out" }
+          );
+        }
+      });
+    }).catch(console.error);
+  }, [filter, search, page]);
+
+  // SSE обновления — без скелетона, просто обновляем данные
+  const silentLoad = useCallback(() => {
     const params = new URLSearchParams();
     params.set("page", String(page));
     params.set("limit", "15");
@@ -65,7 +104,7 @@ export default function AdminBookings() {
     api.get<BookingsResponse>(`/bookings?${params}`).then(setData).catch(console.error);
   }, [filter, search, page]);
 
-  loadRef.current = load;
+  loadRef.current = silentLoad;
 
   useEffect(() => { load(); }, [load]);
 
@@ -84,10 +123,10 @@ export default function AdminBookings() {
   };
 
   return (
-    <div ref={containerRef}>
-      <h1 className="page-title text-2xl font-bold text-[#2a3250]">Записи</h1>
+    <div>
+      <h1 className="text-2xl font-bold text-[#2a3250]">Записи</h1>
 
-      <div className="page-controls mt-4 flex flex-wrap items-center gap-3">
+      <div className="mt-4 flex flex-wrap items-center gap-3">
         <input
           type="text"
           placeholder="Поиск по имени / телефону"
@@ -99,8 +138,8 @@ export default function AdminBookings() {
           <button
             key={s}
             onClick={() => { setFilter(s); setPage(1); }}
-            className={`filter-btn rounded-xl px-4 py-2 text-sm font-medium transition ${
-              filter === s ? "bg-[#2a3250] text-white" : "bg-white text-gray-600 hover:bg-gray-50"
+            className={`rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 ${
+              filter === s ? "bg-[#2a3250] text-white shadow-md" : "bg-white text-gray-600 hover:bg-gray-50"
             }`}
           >
             {s ? STATUS_LABELS[s] : "Все"}
@@ -108,55 +147,59 @@ export default function AdminBookings() {
         ))}
       </div>
 
-      <div className="page-content mt-6 overflow-hidden rounded-2xl bg-white shadow-sm">
-        <table className="w-full text-left text-sm">
-          <thead>
-            <tr className="border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500">
-              <th className="px-5 py-3">Пациент</th>
-              <th className="px-5 py-3">Телефон</th>
-              <th className="px-5 py-3">Врач</th>
-              <th className="px-5 py-3">Услуга</th>
-              <th className="px-5 py-3">Дата</th>
-              <th className="px-5 py-3">Статус</th>
-              <th className="px-5 py-3">Действия</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data?.bookings.map((b) => (
-              <tr key={b.id} className="booking-row border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                <td className="px-5 py-3 font-medium text-gray-900">{b.patientName}</td>
-                <td className="px-5 py-3 text-gray-600">{b.phone}</td>
-                <td className="px-5 py-3 text-gray-600">{b.doctor.name.split(" ").slice(0, 2).join(" ")}</td>
-                <td className="px-5 py-3 text-gray-600">{b.service.name}</td>
-                <td className="px-5 py-3 text-gray-600">
-                  {new Date(b.date).toLocaleDateString("ru-RU")} {b.time}
-                </td>
-                <td className="px-5 py-3">
-                  <span className={`inline-block rounded-full px-2.5 py-1 text-xs font-semibold ${STATUS_COLORS[b.status]}`}>
-                    {STATUS_LABELS[b.status] || b.status}
-                  </span>
-                </td>
-                <td className="px-5 py-3">
-                  <div className="flex gap-1">
-                    {b.status === "new" && (
-                      <button onClick={() => changeStatus(b.id, "confirmed")} className="rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100">Подтвердить</button>
-                    )}
-                    {(b.status === "new" || b.status === "confirmed") && (
-                      <button onClick={() => changeStatus(b.id, "completed")} className="rounded-lg bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700 hover:bg-green-100">Завершить</button>
-                    )}
-                    {b.status !== "cancelled" && (
-                      <button onClick={() => changeStatus(b.id, "cancelled")} className="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 hover:bg-red-100">Отменить</button>
-                    )}
-                    <button onClick={() => deleteBooking(b.id)} className="rounded-lg bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100">Удалить</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {data?.bookings.length === 0 && (
-              <tr><td colSpan={7} className="px-5 py-8 text-center text-gray-400">Записей нет</td></tr>
-            )}
-          </tbody>
-        </table>
+      <div className="mt-6">
+        {loading ? <Skeleton /> : (
+          <div ref={tableRef} className="overflow-hidden rounded-2xl bg-white shadow-sm">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500">
+                  <th className="px-5 py-3">Пациент</th>
+                  <th className="px-5 py-3">Телефон</th>
+                  <th className="px-5 py-3">Врач</th>
+                  <th className="px-5 py-3">Услуга</th>
+                  <th className="px-5 py-3">Дата</th>
+                  <th className="px-5 py-3">Статус</th>
+                  <th className="px-5 py-3">Действия</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.bookings.map((b) => (
+                  <tr key={b.id} className="booking-row border-b border-gray-50 hover:bg-gray-50/50 transition-colors" style={{ opacity: 0 }}>
+                    <td className="px-5 py-3 font-medium text-gray-900">{b.patientName}</td>
+                    <td className="px-5 py-3 text-gray-600">{b.phone}</td>
+                    <td className="px-5 py-3 text-gray-600">{b.doctor.name.split(" ").slice(0, 2).join(" ")}</td>
+                    <td className="px-5 py-3 text-gray-600">{b.service.name}</td>
+                    <td className="px-5 py-3 text-gray-600">
+                      {new Date(b.date).toLocaleDateString("ru-RU")} {b.time}
+                    </td>
+                    <td className="px-5 py-3">
+                      <span className={`inline-block rounded-full px-2.5 py-1 text-xs font-semibold ${STATUS_COLORS[b.status]}`}>
+                        {STATUS_LABELS[b.status] || b.status}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3">
+                      <div className="flex gap-1">
+                        {b.status === "new" && (
+                          <button onClick={() => changeStatus(b.id, "confirmed")} className="rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100 transition-colors">Подтвердить</button>
+                        )}
+                        {(b.status === "new" || b.status === "confirmed") && (
+                          <button onClick={() => changeStatus(b.id, "completed")} className="rounded-lg bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700 hover:bg-green-100 transition-colors">Завершить</button>
+                        )}
+                        {b.status !== "cancelled" && (
+                          <button onClick={() => changeStatus(b.id, "cancelled")} className="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 hover:bg-red-100 transition-colors">Отменить</button>
+                        )}
+                        <button onClick={() => deleteBooking(b.id)} className="rounded-lg bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 transition-colors">Удалить</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {data?.bookings.length === 0 && (
+                  <tr><td colSpan={7} className="px-5 py-8 text-center text-gray-400">Записей нет</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {data && data.totalPages > 1 && (
