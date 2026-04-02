@@ -41,7 +41,7 @@ export default function SSEToast() {
     const id = ++toastId;
     setToasts((prev) => [...prev, { id, title: config.title, subtitle, color: config.color, leaving: false }]);
 
-    // Убираем через 4 сек
+    // Убираем через 6 сек
     setTimeout(() => {
       setToasts((prev) => prev.map((t) => t.id === id ? { ...t, leaving: true } : t));
       setTimeout(() => {
