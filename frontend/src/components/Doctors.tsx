@@ -50,8 +50,7 @@ const doctors = [
     name: "Ногманов Фарид Флюрович",
     specialty: "Хирург-имплантолог",
     experience: 11,
-    photo:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=500&fit=crop&crop=face",
+    photo: "/doctors/nogmanov.png",
     description:
       "Квалифицированный хирург-имплантолог, специализирующийся на установке дентальных имплантатов.",
     schedule: "Пн–Пт: 9:00–18:00",
