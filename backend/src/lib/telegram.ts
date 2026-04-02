@@ -43,7 +43,9 @@ export function initTelegramBot(): void {
       const booking = await prisma.booking.update({
         where: { id: bookingId },
         data: { status: "cancelled" },
+        include: { doctor: true, service: true },
       });
+      broadcast("booking_updated", booking);
       await ctx.editMessageReplyMarkup(undefined);
       await ctx.reply(`❌ Запись #${bookingId} отклонена (${booking.patientName})`);
     } catch (error) {
