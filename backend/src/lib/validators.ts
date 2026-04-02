@@ -71,7 +71,7 @@ export const moderateReviewSchema = z.object({
 export const createPromotionSchema = z.object({
   title: z.string().min(2).max(200),
   description: z.string().max(2000).optional(),
-  image: z.string().url().optional(),
+  image: z.string().optional().nullable(),
   isActive: z.boolean().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
