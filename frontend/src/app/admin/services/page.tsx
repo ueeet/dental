@@ -83,8 +83,8 @@ export default function AdminServices() {
       </div>
 
       {editing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setEditing(null)}>
-          <div className="w-full max-w-md rounded-2xl bg-white p-6" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditing(null); }}>
+          <div className="w-full max-w-md rounded-2xl bg-white p-6">
             <h2 className="text-lg font-bold text-[#2a3250]">{editing.id ? "Редактирование" : "Новая услуга"}</h2>
             <div className="mt-4 space-y-3">
               <input value={editing.name || ""} onChange={(e) => setEditing({ ...editing, name: e.target.value })} placeholder="Название" className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[#2a3250]" />
