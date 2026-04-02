@@ -93,10 +93,25 @@ function TestimonialsColumn({ testimonials, className, duration = 10 }: { testim
 
 export default function Reviews() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [reviews, setReviews] = useState<Review[]>(FALLBACK_REVIEWS);
   const [formName, setFormName] = useState("");
   const [formRating, setFormRating] = useState(0);
   const [formText, setFormText] = useState("");
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    api.get<ReviewsResponse>("/reviews?limit=50").then((data) => {
+      if (data.reviews.length > 0) {
+        setReviews(data.reviews.map((r) => ({
+          id: r.id, name: r.authorName, rating: r.rating, text: r.text, source: r.source,
+        })));
+      }
+    }).catch(console.error);
+  }, []);
+
+  const firstColumn = reviews.slice(0, Math.ceil(reviews.length / 3));
+  const secondColumn = reviews.slice(Math.ceil(reviews.length / 3), Math.ceil(reviews.length * 2 / 3));
+  const thirdColumn = reviews.slice(Math.ceil(reviews.length * 2 / 3));
 
   useGSAP(() => {
     gsap.from(".reviews-heading > *", {
