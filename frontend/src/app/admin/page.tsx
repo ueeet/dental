@@ -149,7 +149,7 @@ export default function AdminDashboard() {
           <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">Статусы записей</p>
           {statusData.length > 0 ? (
             <div className="flex items-center gap-4">
-              <div className="h-40 w-40 shrink-0" style={{ transform: pieHovered ? "scale(1.15)" : "scale(1)", transition: "transform 1.2s cubic-bezier(0.22, 1, 0.36, 1)", transformOrigin: "center center", willChange: "transform" }} onMouseEnter={() => setPieHovered(true)} onMouseLeave={() => { setPieHovered(false); setActivePieIndex(-1); }}>
+              <div className="dash-pie h-40 w-40 shrink-0" style={{ transform: pieHovered ? "scale(1.15)" : "scale(1)", transition: "transform 1.2s cubic-bezier(0.22, 1, 0.36, 1)", transformOrigin: "center center", willChange: "transform" }} onMouseEnter={() => setPieHovered(true)} onMouseLeave={() => { setPieHovered(false); setActivePieIndex(-1); }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie data={statusData} cx="50%" cy="50%" innerRadius={40} outerRadius={65} paddingAngle={3} dataKey="value" stroke="none" activeIndex={activePieIndex >= 0 ? activePieIndex : undefined} activeShape={renderActiveShape} onMouseEnter={(_, i) => setActivePieIndex(i)} onMouseLeave={() => setActivePieIndex(-1)}>
