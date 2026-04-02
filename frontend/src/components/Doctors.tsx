@@ -23,8 +23,7 @@ const doctors = [
     name: "Шайхелисламов Раушан Рафисович",
     specialty: "Хирург-имплантолог",
     experience: 15,
-    photo:
-      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=500&fit=crop&crop=face",
+    photo: "/doctors/shaikhelislamov.png",
     description:
       "Опытный хирург-имплантолог, владеющий современными методиками имплантации и костной пластики.",
     schedule: "Пн–Пт: 9:00–18:00",
