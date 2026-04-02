@@ -75,7 +75,7 @@ export default function AdminReviews() {
         ))}
       </div>
 
-      <div className="mt-6 space-y-4">
+      <div className="page-content mt-6 space-y-4">
         {data?.reviews.map((r) => (
           <div key={r.id} className="rounded-2xl bg-white p-5 shadow-sm">
             <div className="flex items-start justify-between">
