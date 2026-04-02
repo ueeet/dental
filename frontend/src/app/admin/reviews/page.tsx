@@ -103,7 +103,7 @@ export default function AdminReviews() {
         {loading ? <Skeleton /> : (
           <div ref={listRef} className="space-y-4">
             {data?.reviews.map((r) => (
-              <div key={r.id} className="review-card rounded-2xl bg-white p-5 shadow-sm" style={{ opacity: 0 }}>
+              <div key={r.id} className="review-card rounded-2xl bg-white p-5 shadow-sm">
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2">
