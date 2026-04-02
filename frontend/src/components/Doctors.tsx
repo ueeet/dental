@@ -59,8 +59,7 @@ const doctors = [
     name: "Гараев Альберт Радикович",
     specialty: "Хирург-имплантолог",
     experience: 9,
-    photo:
-      "https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=400&h=500&fit=crop&crop=face",
+    photo: "/doctors/garaev.png",
     description:
       "Молодой и перспективный хирург-имплантолог, применяющий передовые технологии в имплантации зубов.",
     schedule: "Пн–Пт: 9:00–18:00",
