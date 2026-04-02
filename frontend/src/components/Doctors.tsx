@@ -1,72 +1,24 @@
 "use client";
 
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
+import { api } from "@/lib/api";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const doctors = [
-  {
-    name: "Нигматуллин Марат Хамзаевич",
-    specialty: "Стоматолог-ортопед, директор",
-    experience: 12,
-    photo: "/doctors/nigmatullin.png",
-    description:
-      "Специалист в области ортопедической стоматологии. Руководит клиникой IQ Dental, обеспечивая высочайшие стандарты качества лечения.",
-    schedule: "Пн–Пт: 9:00–18:00",
-  },
-  {
-    name: "Шайхелисламов Раушан Рафисович",
-    specialty: "Хирург-имплантолог",
-    experience: 15,
-    photo: "/doctors/shaikhelislamov.png",
-    description:
-      "Опытный хирург-имплантолог, владеющий современными методиками имплантации и костной пластики.",
-    schedule: "Пн–Пт: 9:00–18:00",
-  },
-  {
-    name: "Гумеров Артур Рафаэлевич",
-    specialty: "Стоматолог-ортопед",
-    experience: 19,
-    photo: "/doctors/gumerov.png",
-    description:
-      "Один из самых опытных специалистов клиники. Мастер эстетического протезирования и сложных ортопедических конструкций.",
-    schedule: "Пн–Пт: 9:00–18:00",
-  },
-  {
-    name: "Нигматуллина Лилия Марселевна",
-    specialty: "Стоматолог-терапевт",
-    experience: 12,
-    photo: "/doctors/nigmatullina.png",
-    description:
-      "Специализируется на терапевтическом лечении зубов, эндодонтии и эстетической реставрации.",
-    schedule: "Пн–Пт: 9:00–18:00",
-  },
-  {
-    name: "Ногманов Фарид Флюрович",
-    specialty: "Хирург-имплантолог",
-    experience: 11,
-    photo: "/doctors/nogmanov.png",
-    description:
-      "Квалифицированный хирург-имплантолог, специализирующийся на установке дентальных имплантатов.",
-    schedule: "Пн–Пт: 9:00–18:00",
-  },
-  {
-    name: "Гараев Альберт Радикович",
-    specialty: "Хирург-имплантолог",
-    experience: 9,
-    photo: "/doctors/garaev.png",
-    description:
-      "Молодой и перспективный хирург-имплантолог, применяющий передовые технологии в имплантации зубов.",
-    schedule: "Пн–Пт: 9:00–18:00",
-  },
-];
-
-type Doctor = (typeof doctors)[number];
+interface Doctor {
+  id: number;
+  name: string;
+  specialty: string;
+  experience: number;
+  photo: string | null;
+  description: string | null;
+  schedule: Record<string, { start: string; end: string }> | null;
+}
 
 function DoctorCard({
   doctor,
