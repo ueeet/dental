@@ -30,6 +30,13 @@ const SOURCE_LABELS: Record<string, string> = { site: "Сайт", "2gis": "2GIS"
 export default function AdminReviews() {
   const [data, setData] = useState<ReviewsResponse | null>(null);
   const [filter, setFilter] = useState<string>("");
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    gsap.from(".page-title", { y: -20, opacity: 0, duration: 0.5, ease: "power2.out" });
+    gsap.from(".page-controls", { y: 20, opacity: 0, duration: 0.5, delay: 0.1, ease: "power2.out" });
+    gsap.from(".page-content", { y: 30, opacity: 0, duration: 0.6, delay: 0.2, ease: "power3.out" });
+  }, { scope: containerRef });
 
   const load = useCallback(() => {
     const params = new URLSearchParams();
