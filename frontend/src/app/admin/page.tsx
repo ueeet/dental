@@ -168,13 +168,36 @@ export default function AdminDashboard() {
           <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">Статусы записей</p>
           {statusData.length > 0 ? (
             <div className="flex items-center gap-4">
-              <div className="h-40 w-40 shrink-0">
+              <div
+                className="h-40 w-40 shrink-0 transition-transform duration-500 ease-out"
+                style={{ transform: pieHovered ? "scale(1.08)" : "scale(1)" }}
+                onMouseEnter={() => setPieHovered(true)}
+                onMouseLeave={() => { setPieHovered(false); setActivePieIndex(-1); }}
+              >
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={statusData} cx="50%" cy="50%" innerRadius={40} outerRadius={65} paddingAngle={3} dataKey="value" stroke="none">
-                      {statusData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+                    <Pie
+                      data={statusData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={40}
+                      outerRadius={65}
+                      paddingAngle={3}
+                      dataKey="value"
+                      stroke="none"
+                      activeIndex={activePieIndex >= 0 ? activePieIndex : undefined}
+                      activeShape={renderActiveShape}
+                      onMouseEnter={(_, i) => setActivePieIndex(i)}
+                      onMouseLeave={() => setActivePieIndex(-1)}
+                    >
+                      {statusData.map((_, i) => (
+                        <Cell
+                          key={i}
+                          fill={PIE_COLORS[i % PIE_COLORS.length]}
+                          style={{ transition: "all 0.3s ease", cursor: "pointer" }}
+                        />
+                      ))}
                     </Pie>
-                    <Tooltip contentStyle={{ borderRadius: 10, border: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", fontSize: 12 }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
