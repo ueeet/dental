@@ -279,7 +279,12 @@ function DoctorModal({
 
 export default function Doctors() {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    api.get<Doctor[]>("/doctors").then(setDoctors).catch(console.error);
+  }, []);
 
   useGSAP(
     () => {
