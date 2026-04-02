@@ -123,7 +123,7 @@ function DoctorCard({
             style={{ aspectRatio: "3/4" }}
           >
             <img
-              src={doctor.photo || "/doctors/default.png"}
+              src={doctor.photo || "/doctors/default.webp"}
               alt={doctor.name}
               loading="lazy"
               className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110"
@@ -220,7 +220,7 @@ function DoctorModal({
                 style={{ aspectRatio: "3/4" }}
               >
                 <img
-                  src={doctor.photo || "/doctors/default.png"}
+                  src={doctor.photo || "/doctors/default.webp"}
                   alt={doctor.name}
                   className="h-full w-full object-cover"
                 />
