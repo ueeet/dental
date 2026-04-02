@@ -41,8 +41,7 @@ const doctors = [
     name: "Нигматуллина Лилия Марселевна",
     specialty: "Стоматолог-терапевт",
     experience: 12,
-    photo:
-      "https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=400&h=500&fit=crop&crop=face",
+    photo: "/doctors/nigmatullina.png",
     description:
       "Специализируется на терапевтическом лечении зубов, эндодонтии и эстетической реставрации.",
     schedule: "Пн–Пт: 9:00–18:00",
