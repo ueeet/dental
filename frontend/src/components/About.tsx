@@ -1,6 +1,12 @@
 "use client";
 
-// Fewer photos per row, more breathing room
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
+
 const row1 = [
   "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=500&h=350&fit=crop",
   "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&h=350&fit=crop",
@@ -29,10 +35,16 @@ const row3 = [
   "https://images.unsplash.com/photo-1571772996211-2f02c9727629?w=500&h=350&fit=crop",
 ];
 
-function ImageRow({ images, direction, duration = 40 }: { images: string[]; direction: "left" | "right"; duration?: number }) {
-  // Double the images for seamless infinite loop
+function ImageRow({
+  images,
+  direction,
+  duration = 40,
+}: {
+  images: string[];
+  direction: "left" | "right";
+  duration?: number;
+}) {
   const doubled = [...images, ...images];
-
   return (
     <div className="overflow-hidden">
       <div
@@ -43,7 +55,10 @@ function ImageRow({ images, direction, duration = 40 }: { images: string[]; dire
         }}
       >
         {doubled.map((src, i) => (
-          <div key={i} className="h-[180px] w-[270px] flex-shrink-0 overflow-hidden rounded-xl sm:h-[200px] sm:w-[300px]">
+          <div
+            key={i}
+            className="h-[180px] w-[270px] flex-shrink-0 overflow-hidden rounded-xl sm:h-[200px] sm:w-[300px]"
+          >
             <img
               src={src}
               alt=""
@@ -58,51 +73,106 @@ function ImageRow({ images, direction, duration = 40 }: { images: string[]; dire
 }
 
 export default function About() {
-  return (
-    <section id="about" className="relative overflow-hidden bg-[#1c1f26] py-52 sm:py-60 md:py-72">
+  const sectionRef = useRef<HTMLElement>(null);
 
-      {/* Background image rows */}
-      <div className="absolute inset-0 flex flex-col justify-center gap-3 opacity-50">
+  useGSAP(
+    () => {
+      // Glass text box reveal
+      gsap.from(".about-glass", {
+        scale: 0.92,
+        opacity: 0,
+        y: 40,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".about-glass",
+          start: "top 80%",
+          once: true,
+        },
+      });
+
+      // Badge + heading + paragraph stagger
+      gsap.from(".about-text-item", {
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".about-glass",
+          start: "top 80%",
+          once: true,
+        },
+      });
+
+      // Parallax on the image rows background
+      gsap.to(".about-images", {
+        y: -60,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+      });
+    },
+    { scope: sectionRef }
+  );
+
+  return (
+    <section
+      ref={sectionRef}
+      id="about"
+      className="relative overflow-hidden bg-[#1c1f26] pt-8 pb-28 sm:py-28 md:pb-36"
+    >
+      {/* Scrolling clinic images in the background */}
+      <div className="about-images absolute inset-0 flex flex-col justify-center gap-3 opacity-40">
         <ImageRow images={row1} direction="left" duration={45} />
         <ImageRow images={row2} direction="right" duration={50} />
         <ImageRow images={row3} direction="left" duration={42} />
       </div>
 
-      {/* Subtle dark overlay */}
-      <div className="absolute inset-0 bg-[#1c1f26]/40" />
+      {/* Dark gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#1c1f26]/60 via-[#1c1f26]/30 to-[#1c1f26]/70" />
 
-      {/* Centered text */}
+      {/* Centered glass text card */}
       <div className="relative z-10 flex items-center justify-center px-4 sm:px-6">
-        <div className="relative mx-auto max-w-2xl text-center">
-          {/* Soft radial glow behind text */}
-          <div className="absolute -inset-x-24 -inset-y-16 rounded-full bg-[#1c1f26]/70 blur-3xl" />
-          <div className="relative px-8 py-12 sm:px-14 sm:py-16">
-            <p className="font-[var(--font-mono)] text-xs font-semibold uppercase tracking-widest text-gray-400">
-              О клинике
-            </p>
-            <h2 className="mt-4 text-fluid-h1 font-[var(--font-heading)] font-bold leading-[1.1] tracking-tight text-white">
-              Современная стоматология
-              <br className="hidden sm:block" />
-              {" "}в&nbsp;центре города
-            </h2>
-            <p className="mt-6 text-base leading-relaxed text-gray-300 sm:text-lg">
-              Клиника{" "}
-              <span className="font-semibold text-white">IQ&nbsp;Dental</span>{" "}
-              переехала по новому адресу —{" "}
-              <span className="font-medium text-white">просп.&nbsp;Мира,&nbsp;34</span>.
-              Мы создали пространство, где передовые технологии сочетаются
-              с&nbsp;комфортной атмосферой.
-            </p>
+        <div
+          className="about-glass liquid-glass-dark relative mx-auto max-w-2xl overflow-hidden rounded-3xl px-8 py-12 text-center sm:px-14 sm:py-16"
+        >
+          {/* Inner accent glow */}
+          <div className="pointer-events-none absolute -left-20 -top-20 h-48 w-48 rounded-full bg-white/5 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-12 -right-12 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
 
-            <a
-              href="#services"
-              className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-[var(--primary)] px-8 text-sm font-semibold text-white transition-all duration-300 hover:bg-[var(--primary)] hover:scale-[1.03] active:scale-[0.98]"
-            >
-              Наши услуги
-            </a>
-          </div>
+          <p className="about-text-item font-[var(--font-mono)] text-xs font-semibold uppercase tracking-widest text-gray-400">
+            О клинике
+          </p>
+
+          <h2 className="about-text-item mt-4 text-fluid-h1 font-[var(--font-heading)] font-bold leading-[1.1] tracking-tight text-white">
+            Современная стоматология
+            <br className="hidden sm:block" /> в&nbsp;центре города
+          </h2>
+
+          <p className="about-text-item mt-6 text-base leading-relaxed text-gray-300 sm:text-lg">
+            Клиника{" "}
+            <span className="font-semibold text-white">IQ&nbsp;Dental</span>{" "}
+            переехала по новому адресу —{" "}
+            <span className="font-medium text-white">просп.&nbsp;Мира,&nbsp;34</span>.
+            Мы создали пространство, где передовые технологии сочетаются
+            с&nbsp;комфортной атмосферой.
+          </p>
+
+          <a
+            href="#services"
+            className="about-text-item mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-primary px-8 text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.03] hover:bg-[#353d5c] active:scale-[0.98]"
+          >
+            Наши услуги
+          </a>
         </div>
       </div>
+
+      {/* Wave → Services (muted light bg) */}
     </section>
   );
 }
