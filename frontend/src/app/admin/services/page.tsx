@@ -88,7 +88,7 @@ export default function AdminServices() {
         </button>
       </div>
 
-      <div className="mt-6 space-y-14">
+      <div className="mt-6 space-y-8">
         {loading ? (
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
