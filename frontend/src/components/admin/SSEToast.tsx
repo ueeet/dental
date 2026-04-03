@@ -14,7 +14,6 @@ interface Toast {
 const EVENT_CONFIG: Record<string, { title: string; color: string }> = {
   new_booking: { title: "Новая запись", color: "#22c55e" },
   booking_updated: { title: "Запись обновлена", color: "#3b82f6" },
-  booking_deleted: { title: "Запись удалена", color: "#ef4444" },
 };
 
 let toastId = 0;
