@@ -88,7 +88,25 @@ export default function AdminServices() {
         </button>
       </div>
 
-      <div className="page-content mt-6 space-y-6">
+      <div className="mt-6 space-y-6">
+        {loading ? (
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i}>
+                <div className="mb-3 h-3 w-20 animate-pulse rounded bg-gray-200" />
+                <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+                  {[1, 2, 3].map((j) => (
+                    <div key={j} className="flex items-center justify-between border-t border-gray-50 first:border-0 px-5 py-4">
+                      <div className="h-4 w-40 animate-pulse rounded bg-gray-200" />
+                      <div className="h-4 w-20 animate-pulse rounded bg-gray-100" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+        <div ref={listRef}>
         {Object.entries(grouped).map(([cat, items]) => (
           <div key={cat} className="service-category">
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-400">{cat}</h2>
