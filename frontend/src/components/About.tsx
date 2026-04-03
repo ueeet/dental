@@ -49,16 +49,16 @@ export default function About() {
         cards.forEach((card) => {
           card.addEventListener("mouseenter", () => {
             // Horizontal: grow hovered card, shrink siblings
-            gsap.to(card, { flexGrow: 2.2, duration: 0.5, ease: "power2.out" });
+            gsap.to(card, { flexGrow: 1.4, duration: 0.5, ease: "power2.out" });
             cards.forEach((sibling) => {
               if (sibling !== card) {
-                gsap.to(sibling, { flexGrow: 0.5, duration: 0.5, ease: "power2.out" });
+                gsap.to(sibling, { flexGrow: 0.8, duration: 0.5, ease: "power2.out" });
               }
             });
             // Vertical: grow this row, shrink other rows
-            gsap.to(row, { flexGrow: 1.8, duration: 0.5, ease: "power2.out" });
+            gsap.to(row, { flexGrow: 1.3, duration: 0.5, ease: "power2.out" });
             otherRows.forEach((r) => {
-              gsap.to(r, { flexGrow: 0.5, duration: 0.5, ease: "power2.out" });
+              gsap.to(r, { flexGrow: 0.8, duration: 0.5, ease: "power2.out" });
             });
           });
 
