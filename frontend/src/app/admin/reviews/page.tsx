@@ -72,8 +72,8 @@ export default function AdminReviews() {
         <span className="ml-auto self-center text-sm text-gray-400">{data.total} отзывов</span>
       </div>
 
-      <div ref={listRef} className="mt-6 space-y-3">
-        {data.reviews.map((r) => (
+      <div className="mt-6 space-y-3">
+        {data.reviews.slice(0, visible).map((r) => (
           <div key={r.id} className="review-card flex items-start justify-between rounded-2xl bg-white p-5 shadow-sm">
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
