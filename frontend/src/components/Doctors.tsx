@@ -86,7 +86,7 @@ function DoctorCard({
 
   return (
     <div
-      className="doctor-card group relative h-full cursor-pointer"
+      className="doctor-card group relative z-[1] h-full cursor-pointer hover:z-[10]"
       style={{ perspective: "800px" }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -94,7 +94,7 @@ function DoctorCard({
     >
       <div
         ref={borderRef}
-        className="h-full rounded-2xl p-[1.5px] will-change-transform"
+        className="relative h-full rounded-2xl p-[1.5px] will-change-transform"
         style={{
           background: "rgba(42,50,80,0.12)",
           transformStyle: "preserve-3d",

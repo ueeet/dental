@@ -4,117 +4,75 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { MapPin, Clock, Shield, Sparkles } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
-
-const row1 = [
-  "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=500&h=350&fit=crop",
-];
-const row2 = [
-  "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1606265752439-1f18756aa5fc?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1629909615850-0a8a2a026e39?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&h=350&fit=crop",
-];
-const row3 = [
-  "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1571772996211-2f02c9727629?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&h=350&fit=crop",
-  "https://images.unsplash.com/photo-1571772996211-2f02c9727629?w=500&h=350&fit=crop",
-];
-
-function ImageRow({
-  images,
-  direction,
-  duration = 40,
-}: {
-  images: string[];
-  direction: "left" | "right";
-  duration?: number;
-}) {
-  const doubled = [...images, ...images];
-  return (
-    <div className="overflow-hidden">
-      <div
-        className="flex gap-3 will-change-transform"
-        style={{
-          width: "max-content",
-          animation: `${direction === "left" ? "marquee-left" : "marquee-right"} ${duration}s linear infinite`,
-        }}
-      >
-        {doubled.map((src, i) => (
-          <div
-            key={i}
-            className="h-[180px] w-[270px] flex-shrink-0 overflow-hidden rounded-xl sm:h-[200px] sm:w-[300px]"
-          >
-            <img
-              src={src}
-              alt=""
-              loading="lazy"
-              className="h-full w-full object-cover"
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
-      // Glass text box reveal
-      gsap.from(".about-glass", {
-        scale: 0.92,
-        opacity: 0,
-        y: 40,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".about-glass",
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      // Badge + heading + paragraph stagger
-      gsap.from(".about-text-item", {
-        y: 30,
-        opacity: 0,
+      // Using `to` + inline opacity:0 for reliability (same pattern as Hero)
+      gsap.to(".about-text-item", {
+        y: 0,
+        opacity: 1,
         duration: 0.8,
-        stagger: 0.15,
+        stagger: 0.12,
         ease: "power2.out",
         scrollTrigger: {
-          trigger: ".about-glass",
+          trigger: ".about-left",
           start: "top 80%",
           once: true,
         },
       });
 
-      // Parallax on the image rows background
-      gsap.to(".about-images", {
-        y: -60,
-        ease: "none",
+      gsap.to(".about-photo", {
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power2.out",
         scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1.5,
+          trigger: ".about-grid",
+          start: "top 80%",
+          once: true,
         },
+      });
+
+      // Hover — push siblings horizontally (flex-grow) AND vertically (row flex-grow)
+      const allRows = gsap.utils.toArray<HTMLElement>(".about-photo-grid");
+      allRows.forEach((row) => {
+        const cards = gsap.utils.toArray<HTMLElement>(".about-photo", row);
+        const otherRows = allRows.filter((r) => r !== row);
+
+        cards.forEach((card) => {
+          card.addEventListener("mouseenter", () => {
+            // Horizontal: grow hovered card, shrink siblings
+            gsap.to(card, { flexGrow: 2.2, duration: 0.5, ease: "power2.out" });
+            cards.forEach((sibling) => {
+              if (sibling !== card) {
+                gsap.to(sibling, { flexGrow: 0.5, duration: 0.5, ease: "power2.out" });
+              }
+            });
+            // Vertical: grow this row, shrink other rows
+            gsap.to(row, { flexGrow: 1.8, duration: 0.5, ease: "power2.out" });
+            otherRows.forEach((r) => {
+              gsap.to(r, { flexGrow: 0.5, duration: 0.5, ease: "power2.out" });
+            });
+          });
+
+          card.addEventListener("mouseleave", () => {
+            // Reset all cards in this row
+            cards.forEach((c) => {
+              gsap.to(c, { flexGrow: 1, duration: 0.5, ease: "power2.out" });
+            });
+            // Reset all rows
+            allRows.forEach((r) => {
+              gsap.to(r, { flexGrow: 1, duration: 0.5, ease: "power2.out" });
+            });
+          });
+        });
       });
     },
     { scope: sectionRef }
@@ -124,55 +82,129 @@ export default function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative overflow-hidden bg-[#1c1f26] pt-8 pb-28 sm:py-28 md:pb-36"
+      className="relative overflow-hidden pt-0 min-h-screen"
+      style={{ background: "linear-gradient(to bottom, #2a3040 0%, #272d3b 8%, #242a37 16%, #222833 25%, #1f2430 40%, #1d2129 55%, #1a1f2e 70%, #1a1f2e 100%)" }}
     >
-      {/* Scrolling clinic images in the background */}
-      <div className="about-images absolute inset-0 flex flex-col justify-center gap-3 opacity-40">
-        <ImageRow images={row1} direction="left" duration={45} />
-        <ImageRow images={row2} direction="right" duration={50} />
-        <ImageRow images={row3} direction="left" duration={42} />
-      </div>
+      <div className="relative z-10 mx-auto max-w-[1600px] px-6 pt-40 sm:px-10 sm:pt-52 lg:px-12 lg:pt-48">
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-stretch lg:gap-10">
+          {/* ── Left — Info ── */}
+          <div className="about-left lg:w-[28%] shrink-0">
+            <p
+              className="about-text-item font-[var(--font-mono)] text-xs font-semibold uppercase tracking-widest text-white/60"
+              style={{ opacity: 0, transform: "translateY(30px)" }}
+            >
+              О клинике
+            </p>
 
-      {/* Dark gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#1c1f26]/60 via-[#1c1f26]/30 to-[#1c1f26]/70" />
+            <h2
+              className="about-text-item mt-4 font-[var(--font-heading)] text-fluid-h1 font-bold leading-[1.1] text-white"
+              style={{ opacity: 0, transform: "translateY(30px)", letterSpacing: "-0.03em" }}
+            >
+              Современная стоматология
+              <br className="hidden sm:block" /> в&nbsp;центре города
+            </h2>
 
-      {/* Centered glass text card */}
-      <div className="relative z-10 flex items-center justify-center px-4 sm:px-6">
-        <div
-          className="about-glass liquid-glass-dark relative mx-auto max-w-2xl overflow-hidden rounded-3xl px-8 py-12 text-center sm:px-14 sm:py-16"
-        >
-          {/* Inner accent glow */}
-          <div className="pointer-events-none absolute -left-20 -top-20 h-48 w-48 rounded-full bg-white/5 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-12 -right-12 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
+            <p
+              className="about-text-item mt-6 max-w-lg text-lg leading-relaxed text-white/80"
+              style={{ opacity: 0, transform: "translateY(30px)" }}
+            >
+              Клиника{" "}
+              <span className="font-semibold text-white">IQ&nbsp;Dental</span>{" "}
+              переехала по новому адресу —{" "}
+              <span className="font-medium text-white">просп.&nbsp;Мира,&nbsp;34</span>.
+              Мы создали пространство, где передовые технологии сочетаются
+              с&nbsp;комфортной атмосферой.
+            </p>
 
-          <p className="about-text-item font-[var(--font-mono)] text-xs font-semibold uppercase tracking-widest text-gray-400">
-            О клинике
-          </p>
+            {/* Features */}
+            <div
+              className="about-text-item mt-8 grid grid-cols-2 gap-4"
+              style={{ opacity: 0, transform: "translateY(30px)" }}
+            >
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                  <MapPin className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Новый адрес</p>
+                  <p className="text-sm text-white/60">просп. Мира, 34</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                  <Clock className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Работаем</p>
+                  <p className="text-sm text-white/60">Пн-Пт 8:00–20:00</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                  <Shield className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Гарантия</p>
+                  <p className="text-sm text-white/60">5 лет на работы</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                  <Sparkles className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Технологии</p>
+                  <p className="text-sm text-white/60">3D-диагностика</p>
+                </div>
+              </div>
+            </div>
 
-          <h2 className="about-text-item mt-4 text-fluid-h1 font-[var(--font-heading)] font-bold leading-[1.1] tracking-tight text-white">
-            Современная стоматология
-            <br className="hidden sm:block" /> в&nbsp;центре города
-          </h2>
+            <a
+              href="#services"
+              className="about-text-item mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-white px-8 text-sm font-semibold tracking-[0.02em] text-[#1a1f2e] transition-all duration-300 hover:scale-[1.03] hover:bg-white/90 active:scale-[0.98]"
+              style={{ opacity: 0, transform: "translateY(30px)" }}
+            >
+              Узнать об услугах
+            </a>
+          </div>
 
-          <p className="about-text-item mt-6 text-base leading-relaxed text-gray-300 sm:text-lg">
-            Клиника{" "}
-            <span className="font-semibold text-white">IQ&nbsp;Dental</span>{" "}
-            переехала по новому адресу —{" "}
-            <span className="font-medium text-white">просп.&nbsp;Мира,&nbsp;34</span>.
-            Мы создали пространство, где передовые технологии сочетаются
-            с&nbsp;комфортной атмосферой.
-          </p>
-
-          <a
-            href="#services"
-            className="about-text-item mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-primary px-8 text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.03] hover:bg-[#353d5c] active:scale-[0.98]"
-          >
-            Наши услуги
-          </a>
+          {/* ── Right — 6 Photo cards ── */}
+          <div className="about-grid flex-1 lg:translate-x-4 flex flex-col gap-5">
+            {/* Row 1 */}
+            <div className="about-photo-grid flex flex-1 gap-5">
+              {[1, 2, 3].map((n) => (
+                <div
+                  key={n}
+                  className="about-photo cursor-pointer overflow-hidden rounded-2xl bg-white/10"
+                  style={{ opacity: 0, transform: "translateY(40px)", flexGrow: 1, flexBasis: 0 }}
+                >
+                  <img
+                    src={`/about/${n}.png`}
+                    alt={`Фото клиники ${n}`}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+            {/* Row 2 */}
+            <div className="about-photo-grid flex flex-1 gap-5">
+              {[4, 5, 6].map((n) => (
+                <div
+                  key={n}
+                  className="about-photo cursor-pointer overflow-hidden rounded-2xl bg-white/10"
+                  style={{ opacity: 0, transform: "translateY(40px)", flexGrow: 1, flexBasis: 0 }}
+                >
+                  <img
+                    src={`/about/${n}.png`}
+                    alt={`Фото клиники ${n}`}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-
-      {/* Wave → Services (muted light bg) */}
     </section>
   );
 }

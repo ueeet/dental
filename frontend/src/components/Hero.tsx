@@ -4,7 +4,9 @@ import { useRef } from "react";
 import dynamic from "next/dynamic";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { Calendar } from "lucide-react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ToothScene = dynamic(() => import("./ToothScene"), { ssr: false });
 
@@ -29,75 +31,80 @@ export default function Hero() {
       tl.to(".hero-cta", {
         y: 0, opacity: 1, stagger: 0.08, duration: 0.5,
       }, "-=1.0");
+
+      gsap.to(".hero-tooth-scroll", {
+        y: "-55%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom+=50% top",
+          scrub: 1.5,
+        },
+      });
     },
     { scope: sectionRef }
   );
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative min-h-screen overflow-hidden"
-      style={{
-        background:
-          "linear-gradient(to top, #1c1f26 0%, #2a3040 12%, #4a5268 28%, #8b93a8 45%, #c8d0e0 60%, #e4e8f0 75%, #f5f6f9 90%, #ffffff 100%)",
-      }}
-    >
-      {/* Gradient orbs */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        aria-hidden="true"
+    <>
+      <section
+        ref={sectionRef}
+        className="relative min-h-screen"
+        style={{
+          backgroundColor: "#2a3040",
+          backgroundImage:
+            "linear-gradient(to bottom, #ffffff 0%, #e4e8f0 25%, #b0b8c8 50%, #4a5268 80%, #2a3040 100%)",
+        }}
       >
-        <div className="absolute -left-[15%] -top-[10%] h-[800px] w-[800px] rounded-full bg-[#b8c5db] opacity-35 blur-[140px]" />
-        <div className="absolute -bottom-[15%] -right-[10%] h-[700px] w-[700px] rounded-full bg-[#a8b8d4] opacity-30 blur-[130px]" />
-        <div className="absolute left-[60%] top-[20%] h-[500px] w-[500px] rounded-full bg-[#c0cce0] opacity-25 blur-[110px]" />
-        <div className="absolute left-[20%] top-[60%] h-[400px] w-[400px] rounded-full bg-[#b0bfd8] opacity-20 blur-[100px]" />
-      </div>
-
-      {/* ── "Стоматология нового поколения" + IQ DENTAL ── */}
-      <div
-        className="hero-bg-text pointer-events-none absolute inset-x-0 top-[22%] z-[1] flex flex-col items-center select-none"
-        style={{ opacity: 0, transform: "translateY(60px)" }}
-      >
-        <span className="mb-4 font-[var(--font-mono)] text-sm uppercase tracking-[0.2em] text-[#2a3250]/35">
-          Стоматология нового поколения
-        </span>
-        <h1
-          className="whitespace-nowrap font-[var(--font-heading)] font-bold uppercase leading-none tracking-tight"
-          style={{
-            fontSize: "clamp(6rem, 18vw, 20rem)",
-            color: "rgba(42, 50, 80, 0.35)",
-          }}
+        {/* ── "Стоматология нового поколения" + АЙКЬЮ ДЕНТАЛ ── */}
+        <div
+          className="hero-bg-text pointer-events-none absolute inset-x-0 top-[22%] z-[1] flex flex-col items-center select-none"
+          style={{ opacity: 0, transform: "translateY(60px)" }}
         >
-          IQ DENTAL
-        </h1>
-      </div>
+          <span className="mb-4 font-[var(--font-mono)] text-sm tracking-[0.15em] text-[#2a3250]/50">
+            Стоматология нового поколения
+          </span>
+          <h1
+            className="whitespace-nowrap font-[var(--font-heading)] font-bold uppercase leading-none"
+            style={{
+              fontSize: "clamp(4rem, 12vw, 14rem)",
+              letterSpacing: "-0.04em",
+              color: "rgba(42, 50, 80, 0.55)",
+            }}
+          >
+            Айкью Дентал
+          </h1>
+        </div>
 
-      {/* ── 3D Tooth ── */}
-      <div
-        className="hero-tooth-wrapper absolute inset-x-0 z-[2]"
-        style={{ top: "25%", bottom: "-55%", opacity: 0, transform: "translateY(15%)" }}
-      >
-        <ToothScene />
-      </div>
+        {/* ── 3D Tooth ── */}
+        <div
+          className="hero-tooth-wrapper pointer-events-none absolute inset-x-0 z-[2]"
+          style={{ top: "30%", bottom: "-45%", opacity: 0, transform: "translateY(15%)" }}
+        >
+          <div className="hero-tooth-scroll pointer-events-auto h-full w-full">
+            <ToothScene />
+          </div>
+        </div>
 
-      {/* ── Buttons — left & right of the tooth ── */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-[28%] z-[3] flex items-center justify-between px-10 sm:px-16 lg:px-24 xl:px-32 [&_a]:pointer-events-auto">
-        <a
-          href="#booking"
-          className="hero-cta inline-flex h-12 items-center gap-2 rounded-full bg-[#2a3250] px-7 text-sm font-semibold text-white transition-all hover:bg-[#1d2440] active:scale-[0.97]"
-          style={{ opacity: 0, transform: "translateY(20px)" }}
-        >
-          <Calendar className="h-4 w-4" />
-          Записаться
-        </a>
-        <a
-          href="#about"
-          className="hero-cta inline-flex h-12 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20 active:scale-[0.97]"
-          style={{ opacity: 0, transform: "translateY(20px)" }}
-        >
-          Подробнее
-        </a>
-      </div>
-    </section>
+        {/* ── Buttons ── */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-[24%] z-[3] flex items-center justify-between px-[12%] sm:px-[15%] lg:px-[18%] [&_a]:pointer-events-auto">
+          <a
+            href="#booking"
+            className="hero-cta inline-flex h-16 w-64 items-center justify-center gap-3 rounded-full bg-[#2a3250] text-lg font-semibold tracking-[0.02em] text-white transition-all hover:bg-[#1d2440] active:scale-[0.97]"
+            style={{ opacity: 0, transform: "translateY(20px)" }}
+          >
+            Записаться на приём
+          </a>
+          <a
+            href="#about"
+            className="hero-cta inline-flex h-16 w-64 items-center justify-center gap-3 rounded-full bg-white/90 text-lg font-semibold tracking-[0.02em] text-[#2a3250] transition-all hover:bg-white active:scale-[0.97]"
+            style={{ opacity: 0, transform: "translateY(20px)" }}
+          >
+            Подробнее
+          </a>
+        </div>
+      </section>
+    </>
   );
 }

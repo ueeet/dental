@@ -149,14 +149,14 @@ export default function Booking() {
     <section
       ref={sectionRef}
       id="booking"
-      className="relative overflow-hidden bg-gradient-to-br from-[#1a1f2e] via-[#2a3250] to-[#1e2540] pb-28 pt-20"
+      className="relative overflow-hidden min-h-screen bg-[#0a0f1a] flex items-center"
     >
       {/* Decorative orbs */}
       <div className="orb-1 pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-white/4 blur-3xl" aria-hidden="true" />
       <div className="orb-2 pointer-events-none absolute -bottom-40 -right-40 h-[400px] w-[400px] rounded-full bg-white/3 blur-3xl" aria-hidden="true" />
       <div className="pointer-events-none absolute left-1/2 top-0 h-px w-3/4 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         {/* Heading */}
         <div className="booking-heading mx-auto mb-16 max-w-2xl text-center">
           <span className="font-[var(--font-mono)] text-fluid-small uppercase tracking-[0.15em] text-gray-400">

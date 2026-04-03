@@ -30,15 +30,20 @@ function ToothIcon({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
+      viewBox="0 0 100 110"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={7}
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
     >
-      <path d="M12 2C9.5 2 7 3 7 6c0 2-2 4-2 7 0 3.5 1.5 6 3 8 .5.7 1.2 1 2 1s1.3-.5 2-1.5c.7 1 1.2 1.5 2 1.5s1.5-.3 2-1c1.5-2 3-4.5 3-8 0-3-2-5-2-7 0-3-2.5-4-5-4z" />
+      {/* Tooth outline */}
+      <path d="M50 8C35 8 25 15 20 25c-5 10-6 22-4 35 2 12 6 22 10 30 2 4 5 6 9 6s6-3 8-7c2 4 5 7 8 7s7-2 9-6c4-8 8-18 10-30 2-13 1-25-4-35C61 15 65 8 50 8z" />
+      {/* Inner curve (gum line) */}
+      <path d="M35 45c4 12 12 18 15 18s11-6 15-18" />
+      {/* Smile below */}
+      <path d="M30 98c8 5 24 5 40 0" />
     </svg>
   );
 }
