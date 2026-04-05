@@ -40,11 +40,23 @@ app.use(compression({
 app.use(express.json({ limit: "1mb" }));
 
 // Rate limiting
-const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, max: 5,
+  message: { error: "Слишком много попыток входа. Подождите 15 минут" },
+});
 app.use("/api/auth/login", loginLimiter);
 
-const bookingLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 10 });
-app.post("/api/bookings", bookingLimiter);
+// Записи: 2 заявки за 30 минут с одного IP
+const bookingLimiter = rateLimit({
+  windowMs: 30 * 60 * 1000, max: 2,
+  message: { error: "Вы уже отправили заявку. Подождите 30 минут" },
+});
+
+// Отзывы: 1 отзыв за 10 минут с одного IP
+const reviewLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, max: 1,
+  message: { error: "Вы уже оставили отзыв. Подождите 10 минут" },
+});
 
 const generalLimiter = rateLimit({ windowMs: 60 * 1000, max: 100 });
 app.use("/api", generalLimiter);
