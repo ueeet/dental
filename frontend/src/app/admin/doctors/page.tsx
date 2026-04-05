@@ -179,7 +179,7 @@ export default function AdminDoctors() {
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-gray-700">Специальность</label>
-                <input value={editing.specialty || ""} onChange={(e) => setEditing({ ...editing, specialty: e.target.value })} placeholder="Стоматолог-терапевт" className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[#2a3250]" />
+                <input value={editing.specialty || ""} onChange={(e) => setEditing({ ...editing, specialty: e.target.value })} placeholder="Стоматолог-терапевт" className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2a3250]" />
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-gray-700">Опыт работы (лет)</label>
