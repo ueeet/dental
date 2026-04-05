@@ -116,8 +116,8 @@ export default function AdminDashboard() {
         </p>
       </div>
 
-      <div className="grid grid-cols-12 gap-5">
-        <div className="dash-card col-span-3 rounded-2xl bg-card p-6 shadow-sm">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:gap-5">
+        <div className="dash-card rounded-2xl bg-card p-5 shadow-sm sm:p-6 lg:col-span-3">
           <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Всего записей</p>
           <p className="mt-3 text-5xl font-bold text-foreground">{stats.totalBookings}</p>
           <div className="mt-4 space-y-1.5">
