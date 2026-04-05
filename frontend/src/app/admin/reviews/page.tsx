@@ -55,50 +55,50 @@ export default function AdminReviews() {
     load();
   };
 
-  if (!data) return <div className="flex h-64 items-center justify-center text-gray-400">Загрузка...</div>;
+  if (!data) return <div className="flex h-64 items-center justify-center text-muted-foreground">Загрузка...</div>;
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-[#2a3250]">Отзывы</h1>
+      <h1 className="text-2xl font-bold text-foreground">Отзывы</h1>
 
       <div className="mt-4 flex gap-2">
         {[{ v: "", l: "Все" }, { v: "false", l: "На модерации" }, { v: "true", l: "Одобренные" }].map((f) => (
           <button key={f.v} onClick={() => setFilter(f.v)}
-            className={`rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 ${filter === f.v ? "bg-[#2a3250] text-white shadow-md" : "bg-white text-gray-600 hover:bg-gray-50"}`}>
+            className={`rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 ${filter === f.v ? "bg-primary text-primary-foreground shadow-md" : "bg-card text-muted-foreground hover:bg-accent"}`}>
             {f.l}
           </button>
         ))}
-        <span className="ml-auto self-center text-sm text-gray-400">{data.total} отзывов</span>
+        <span className="ml-auto self-center text-sm text-muted-foreground">{data.total} отзывов</span>
       </div>
 
       <div className="mt-6 space-y-3">
         {data.reviews.slice(0, visible).map((r) => (
-          <div key={r.id} className="review-card flex items-start justify-between rounded-2xl bg-white p-5 shadow-sm">
+          <div key={r.id} className="review-card flex items-start justify-between rounded-2xl bg-card p-5 shadow-sm">
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-gray-900">{r.authorName}</span>
-                <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500">{SOURCE_LABELS[r.source] || r.source}</span>
+                <span className="font-semibold text-foreground">{r.authorName}</span>
+                <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">{SOURCE_LABELS[r.source] || r.source}</span>
                 <span className="text-sm text-yellow-500">{"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}</span>
               </div>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">{r.text}</p>
-              <p className="mt-2 text-xs text-gray-400">{new Date(r.createdAt).toLocaleDateString("ru-RU")}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{r.text}</p>
+              <p className="mt-2 text-xs text-muted-foreground/60">{new Date(r.createdAt).toLocaleDateString("ru-RU")}</p>
             </div>
             <div className="ml-4 flex shrink-0 items-center gap-1">
               {!r.isApproved ? (
-                <button onClick={() => moderate(r.id, true)} className="rounded-lg bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700 hover:bg-green-100 transition-colors">Одобрить</button>
+                <button onClick={() => moderate(r.id, true)} className="rounded-lg bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700 hover:bg-green-100 dark:bg-green-950 dark:text-green-400 dark:hover:bg-green-900 transition-colors">Одобрить</button>
               ) : (
-                <button onClick={() => moderate(r.id, false)} className="rounded-lg bg-amber-50 px-3 py-1.5 text-xs font-medium text-amber-700 hover:bg-amber-100 transition-colors">Снять</button>
+                <button onClick={() => moderate(r.id, false)} className="rounded-lg bg-amber-50 px-3 py-1.5 text-xs font-medium text-amber-700 hover:bg-amber-100 dark:bg-amber-950 dark:text-amber-400 dark:hover:bg-amber-900 transition-colors">Снять</button>
               )}
-              <button onClick={() => toggleVisibility(r.id, !r.isVisible)} className="rounded-lg bg-gray-50 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 transition-colors">
+              <button onClick={() => toggleVisibility(r.id, !r.isVisible)} className="rounded-lg bg-accent px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent/80 transition-colors">
                 {r.isVisible ? "Скрыть" : "Показать"}
               </button>
-              <button onClick={() => remove(r.id)} className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 transition-colors">Удалить</button>
+              <button onClick={() => remove(r.id)} className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 dark:bg-red-950 dark:text-red-400 dark:hover:bg-red-900 transition-colors">Удалить</button>
             </div>
           </div>
         ))}
-        {data.reviews.length === 0 && <p className="py-8 text-center text-gray-400">Отзывов нет</p>}
+        {data.reviews.length === 0 && <p className="py-8 text-center text-muted-foreground">Отзывов нет</p>}
         {visible < data.reviews.length && (
-          <button onClick={() => setVisible((v) => v + 10)} className="w-full rounded-xl bg-gray-50 py-3 text-sm font-medium text-gray-500 hover:bg-gray-100 transition-colors">
+          <button onClick={() => setVisible((v) => v + 10)} className="w-full rounded-xl bg-accent py-3 text-sm font-medium text-muted-foreground hover:bg-accent/80 transition-colors">
             Показать ещё ({data.reviews.length - visible})
           </button>
         )}
