@@ -142,8 +142,11 @@ router.put("/:id", requireAdmin, validate(updateBookingSchema), asyncHandler(asy
   const oldBooking = await prisma.booking.findUnique({ where: { id: Number(req.params.id) } });
   if (!oldBooking) { res.status(404).json({ error: "Запись не найдена" }); return; }
 
+  const updateData = { ...req.body };
+  if (updateData.date) updateData.date = new Date(updateData.date);
+
   const booking = await prisma.booking.update({
-    where: { id: Number(req.params.id) }, data: req.body, include: { doctor: true, service: true },
+    where: { id: Number(req.params.id) }, data: updateData, include: { doctor: true, service: true },
   });
 
   if (req.body.status && req.body.status !== oldBooking.status) {
