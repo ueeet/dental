@@ -21,6 +21,12 @@ export default function Hero() {
     setSceneReady(true);
   }, []);
 
+  // On mobile (no 3D tooth), start animations immediately
+  useEffect(() => {
+    const isMobile = window.innerWidth < 640;
+    if (isMobile && !sceneReady) setSceneReady(true);
+  }, [sceneReady]);
+
   useEffect(() => {
     if (!sceneReady || animStarted.current) return;
     animStarted.current = true;
