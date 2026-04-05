@@ -246,19 +246,19 @@ export default function AdminBookings() {
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-gray-700">Пациент</label>
                   <input value={editForm.patientName} onChange={(e) => setEditForm({ ...editForm, patientName: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[#2a3250]" />
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2a3250]" />
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-gray-700">Телефон</label>
                   <input value={editForm.phone} onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[#2a3250]" />
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2a3250]" />
                 </div>
               </div>
 
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-gray-700">Врач</label>
                 <select value={editForm.doctorId} onChange={(e) => setEditForm({ ...editForm, doctorId: Number(e.target.value) })}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[#2a3250]">
+                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2a3250]">
                   {doctors.map((d) => <option key={d.id} value={d.id}>{d.name} — {d.specialty}</option>)}
                 </select>
               </div>
@@ -266,7 +266,7 @@ export default function AdminBookings() {
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-gray-700">Услуга</label>
                 <select value={editForm.serviceId} onChange={(e) => setEditForm({ ...editForm, serviceId: Number(e.target.value) })}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[#2a3250]">
+                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2a3250]">
                   {services.map((s) => <option key={s.id} value={s.id}>{s.name} — {s.price.toLocaleString("ru-RU")} ₽</option>)}
                 </select>
               </div>
@@ -275,12 +275,12 @@ export default function AdminBookings() {
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-gray-700">Дата</label>
                   <input type="date" value={editForm.date} onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[#2a3250]" />
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2a3250]" />
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-gray-700">Время</label>
                   <select value={editForm.time} onChange={(e) => setEditForm({ ...editForm, time: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[#2a3250]">
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2a3250]">
                     {TIMES.map((t) => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
@@ -289,7 +289,7 @@ export default function AdminBookings() {
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-gray-700">Комментарий</label>
                 <textarea value={editForm.comment} onChange={(e) => setEditForm({ ...editForm, comment: e.target.value })}
-                  rows={2} className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[#2a3250]" />
+                  rows={2} className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2a3250]" />
               </div>
             </div>
 
