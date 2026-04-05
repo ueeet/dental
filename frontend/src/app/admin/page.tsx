@@ -150,7 +150,7 @@ export default function AdminDashboard() {
           <div className="mt-1 flex justify-between text-[10px] text-muted-foreground/50">{weekDays.map((d) => <span key={d}>{d}</span>)}</div>
         </div>
 
-        <div className="dash-card col-span-4 rounded-2xl bg-card p-6 shadow-sm">
+        <div className="dash-card rounded-2xl bg-card p-5 shadow-sm sm:col-span-2 sm:p-6 lg:col-span-4">
           <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Статусы записей</p>
           {statusData.length > 0 ? (
             <div className="flex items-center gap-4">
