@@ -108,12 +108,7 @@ export default function Header() {
           <img
             src="/logo_iq.png"
             alt="IQ Dental"
-            className="h-11 w-auto transition-[filter] duration-300"
-            style={{
-              filter: resolvedTheme === "dark"
-                ? "brightness(0) invert(1)"
-                : "brightness(0) saturate(100%) invert(17%) sepia(14%) saturate(1500%) hue-rotate(190deg) brightness(92%) contrast(92%)"
-            }}
+            className="logo-themed h-11 w-auto transition-[filter] duration-300"
           />
         </a>
 
