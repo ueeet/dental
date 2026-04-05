@@ -56,9 +56,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="flex min-h-screen bg-[#f8f9fb]">
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 z-30 flex h-full w-60 flex-col border-r border-gray-100 bg-white">
-        <div className="flex h-16 items-center px-6">
+        <div className="flex h-20 items-center justify-center">
           <Link href="/admin" className="flex items-center">
-            <img src="/logo_iq.png" alt="IQ Dental" className="h-10 w-auto" style={{ filter: "brightness(0) saturate(100%) invert(17%) sepia(14%) saturate(1500%) hue-rotate(190deg) brightness(92%) contrast(92%)" }} />
+            <img src="/logo_iq.png" alt="IQ Dental" className="h-14 w-auto" style={{ filter: "brightness(0) saturate(100%) invert(17%) sepia(14%) saturate(1500%) hue-rotate(190deg) brightness(92%) contrast(92%)" }} />
           </Link>
         </div>
 
