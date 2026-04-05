@@ -180,7 +180,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Последние записи */}
-      <div className="dash-table mt-6 rounded-2xl bg-card shadow-sm">
+      <div className="dash-table mt-6 overflow-x-auto rounded-2xl bg-card shadow-sm">
         <div className="px-6 py-5"><p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Последние записи</p></div>
         {recentBookings.length > 0 ? (
           <table className="w-full text-left text-sm">
