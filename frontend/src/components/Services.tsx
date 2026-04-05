@@ -379,7 +379,7 @@ export default function Services() {
                   className="overflow-hidden"
                   style={{ height: 0, visibility: "hidden", display: "none" }}
                 >
-                  <div className="px-8 pb-7 pt-2">
+                  <div className="px-4 pb-5 pt-2 sm:px-8 sm:pb-7">
                     <p className="text-base leading-relaxed text-muted-foreground">
                       {service.description}
                     </p>
