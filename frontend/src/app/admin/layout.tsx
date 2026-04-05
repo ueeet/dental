@@ -68,7 +68,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="fixed left-0 top-0 z-30 flex h-full w-60 flex-col border-r border-border bg-card">
         <div className="flex h-20 items-center justify-center">
           <Link href="/admin" className="flex items-center">
-            <img src="/logo_iq.png" alt="IQ Dental" className="admin-logo h-14 w-auto" />
+            <img src="/logo_iq.png" alt="IQ Dental" className="logo-themed h-14 w-auto" />
           </Link>
         </div>
 
