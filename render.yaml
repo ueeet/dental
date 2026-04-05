@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: iq-dental-api
+    runtime: node
+    region: frankfurt
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate
+    startCommand: npx tsx src/index.ts
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: PORT
+        value: "4000"
+      - key: FRONTEND_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: SMS_API_KEY
+        sync: false
+      - key: SMS_SENDER
+        value: "IQ Dental"
+      - key: CLINIC_PHONE
+        sync: false
+      - key: CLINIC_ADDRESS
+        sync: false
+      - key: DGIS_API_KEY
+        sync: false
+      - key: DGIS_FIRM_ID
+        sync: false
+      - key: YANDEX_ORG_ID
+        sync: false
