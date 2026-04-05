@@ -96,7 +96,7 @@ export default function AdminSchedule() {
 
       <div className="mt-6 grid grid-cols-3 gap-6">
         {/* Список врачей */}
-        <div className="col-span-1 space-y-2">
+        <div className="col-span-1 flex flex-col gap-3">
           {doctors.map((doc) => (
             <button
               key={doc.id}
