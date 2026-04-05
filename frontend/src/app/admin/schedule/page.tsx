@@ -79,7 +79,6 @@ export default function AdminSchedule() {
       await api.put(`/doctors/${selectedId}`, { schedule: scheduleData });
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
-      // Обновим локально
       setDoctors((prev) => prev.map((doc) => doc.id === selectedId ? { ...doc, schedule: scheduleData } : doc));
     } catch (err) {
       alert(err instanceof Error ? err.message : "Ошибка сохранения");
@@ -91,11 +90,10 @@ export default function AdminSchedule() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-[#2a3250]">График работы</h1>
-      <p className="mt-1 text-sm text-gray-400">Настройте расписание для каждого врача</p>
+      <h1 className="text-2xl font-bold text-foreground">График работы</h1>
+      <p className="mt-1 text-sm text-muted-foreground">Настройте расписание для каждого врача</p>
 
       <div className="mt-6 grid grid-cols-3 items-stretch gap-6">
-        {/* Список врачей */}
         <div className="col-span-1 flex flex-col justify-between gap-2">
           {doctors.map((doc) => (
             <button
@@ -103,52 +101,51 @@ export default function AdminSchedule() {
               onClick={() => selectDoctor(doc)}
               className={`w-full rounded-xl px-5 py-5 text-left transition-all duration-200 ${
                 selectedId === doc.id
-                  ? "bg-[#2a3250] text-white shadow-md"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "bg-card text-foreground hover:bg-accent"
               }`}
             >
               <p className="text-lg font-semibold">{doc.name.split(" ").slice(0, 2).join(" ")}</p>
-              <p className={`mt-1 text-sm ${selectedId === doc.id ? "text-white/60" : "text-gray-400"}`}>{doc.specialty}</p>
+              <p className={`mt-1 text-sm ${selectedId === doc.id ? "text-primary-foreground/60" : "text-muted-foreground"}`}>{doc.specialty}</p>
             </button>
           ))}
         </div>
 
-        {/* Расписание */}
         {selected && (
           <div className="col-span-2">
-            <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-[#2a3250]">{selected.name}</h2>
-              <p className="text-sm text-gray-400">{selected.specialty}</p>
+            <div className="rounded-2xl bg-card p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-foreground">{selected.name}</h2>
+              <p className="text-sm text-muted-foreground">{selected.specialty}</p>
 
               <div className="mt-6 space-y-3">
                 {DAYS.map((day) => {
                   const s = schedule[day.key];
                   if (!s) return null;
                   return (
-                    <div key={day.key} className={`flex items-center gap-4 rounded-xl px-4 py-4 transition-colors ${s.enabled ? "bg-green-50" : "bg-gray-50"}`}>
+                    <div key={day.key} className={`flex items-center gap-4 rounded-xl px-4 py-4 transition-colors ${s.enabled ? "bg-green-50 dark:bg-green-950/30" : "bg-muted"}`}>
                       <button
                         onClick={() => toggleDay(day.key)}
-                        className={`h-5 w-5 shrink-0 rounded border-2 transition-colors ${s.enabled ? "border-green-500 bg-green-500" : "border-gray-300 bg-white"}`}
+                        className={`h-5 w-5 shrink-0 rounded border-2 transition-colors ${s.enabled ? "border-green-500 bg-green-500" : "border-muted-foreground/30 bg-card"}`}
                       >
                         {s.enabled && <svg className="h-full w-full text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
                       </button>
 
-                      <span className={`w-28 text-sm font-medium ${s.enabled ? "text-gray-900" : "text-gray-400"}`}>{day.label}</span>
+                      <span className={`w-28 text-sm font-medium ${s.enabled ? "text-foreground" : "text-muted-foreground"}`}>{day.label}</span>
 
                       {s.enabled ? (
                         <div className="flex items-center gap-2">
                           <select value={s.start} onChange={(e) => updateTime(day.key, "start", e.target.value)}
-                            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm outline-none focus:border-[#2a3250]">
+                            className="rounded-lg border border-border bg-background px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary">
                             {HOURS.map((h) => <option key={h} value={h}>{h}</option>)}
                           </select>
-                          <span className="text-gray-400">—</span>
+                          <span className="text-muted-foreground">—</span>
                           <select value={s.end} onChange={(e) => updateTime(day.key, "end", e.target.value)}
-                            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm outline-none focus:border-[#2a3250]">
+                            className="rounded-lg border border-border bg-background px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary">
                             {HOURS.map((h) => <option key={h} value={h}>{h}</option>)}
                           </select>
                         </div>
                       ) : (
-                        <span className="text-sm text-gray-400">Выходной</span>
+                        <span className="text-sm text-muted-foreground">Выходной</span>
                       )}
                     </div>
                   );
@@ -157,7 +154,7 @@ export default function AdminSchedule() {
 
               <div className="mt-6">
                 <button onClick={save} disabled={saving}
-                  className="rounded-xl bg-[#2a3250] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#353d5c] disabled:opacity-50">
+                  className="rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-50">
                   {saving ? "Сохранение..." : saved ? "Сохранено!" : "Сохранить график"}
                 </button>
               </div>
