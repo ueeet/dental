@@ -99,6 +99,7 @@ function validatePhone(phone: string): boolean {
 }
 
 export default function Booking() {
+  const [allDoctors, setAllDoctors] = useState<ApiDoctor[]>([]);
   const [doctors, setDoctors] = useState<{ id: string; name: string }[]>([]);
   const [serviceCategories, setServiceCategories] = useState<{ id: string; name: string }[]>([]);
   const [patientName, setPatientName] = useState("");
@@ -115,17 +116,53 @@ export default function Booking() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [apiError, setApiError] = useState("");
+  const [occupiedSlots, setOccupiedSlots] = useState<OccupiedSlot[]>([]);
+  const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>(ALL_TIME_SLOTS);
+
+  const selectedDoctor = allDoctors.find((d) => String(d.id) === doctorId);
 
   useEffect(() => {
     api.get<ApiDoctor[]>("/doctors").then((data) => {
+      setAllDoctors(data);
       setDoctors(data.map((d) => ({ id: String(d.id), name: `${d.name} — ${d.specialty}` })));
     }).catch(console.error);
-    // Только консультация (бесплатно)
     api.get<ApiService[]>("/services").then((data) => {
       const allowed = data.filter((s) => /консультация/i.test(s.name));
       setServiceCategories(allowed.map((s) => ({ id: String(s.id), name: "Консультация (бесплатно)" })));
     }).catch(console.error);
   }, []);
+
+  // При смене врача — сбросить дату и время
+  const handleDoctorChange = (newDoctorId: string) => {
+    setDoctorId(newDoctorId);
+    setDate("");
+    setTime("");
+    setOccupiedSlots([]);
+    setAvailableTimeSlots(ALL_TIME_SLOTS);
+  };
+
+  // При смене даты — загрузить занятые слоты и отфильтровать доступные
+  useEffect(() => {
+    if (!doctorId || !date) return;
+    const doc = allDoctors.find((d) => String(d.id) === doctorId);
+    if (doc && !isDayAvailable(doc.schedule, date)) {
+      setTime("");
+      setAvailableTimeSlots([]);
+      return;
+    }
+    api.get<{ occupied: OccupiedSlot[] }>(`/bookings/slots?doctorId=${doctorId}&date=${date}`).then(({ occupied }) => {
+      setOccupiedSlots(occupied);
+      const slots = getAvailableSlots(doc?.schedule || null, date, occupied, 30);
+      setAvailableTimeSlots(slots);
+      if (time && !slots.includes(time)) setTime("");
+    }).catch(console.error);
+  }, [doctorId, date, allDoctors]);
+
+  // Проверка доступности даты в календаре
+  const isDateDisabled = (dateStr: string): boolean => {
+    if (!selectedDoctor?.schedule) return false;
+    return !isDayAvailable(selectedDoctor.schedule, dateStr);
+  };
 
   const successRef = useRef<HTMLDivElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
