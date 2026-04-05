@@ -23,6 +23,7 @@ const navLinks = [
   { label: "Услуги", href: "#services" },
   { label: "Специалисты", href: "#doctors" },
   { label: "Отзывы", href: "#reviews" },
+  { label: "Акции", href: "#promotions" },
   { label: "Контакты", href: "#contacts" },
 ];
 
