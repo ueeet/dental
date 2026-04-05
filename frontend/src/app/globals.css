@@ -248,6 +248,14 @@ body {
   overflow-x: hidden;
 }
 
+/* Admin logo — CSS-only theme switch, no flash */
+.admin-logo {
+  filter: brightness(0) saturate(100%) invert(17%) sepia(14%) saturate(1500%) hue-rotate(190deg) brightness(92%) contrast(92%);
+}
+.dark .admin-logo {
+  filter: brightness(0) invert(1);
+}
+
 /* ═══════════════════════════════════════════
    SIBLING DIM — augen/superpower technique
    Hover one card, dim the rest
