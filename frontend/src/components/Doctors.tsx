@@ -256,7 +256,7 @@ function DoctorModal({
                     График
                   </p>
                   <p className="font-[var(--font-heading)] text-sm font-bold text-foreground">
-                    {Object.keys(doctor.schedule).map(d => ({monday:"Пн",tuesday:"Вт",wednesday:"Ср",thursday:"Чт",friday:"Пт",saturday:"Сб",sunday:"Вс"})[d] || d).join(", ")}
+                    {["monday","tuesday","wednesday","thursday","friday","saturday","sunday"].filter(d => d in (doctor.schedule as Record<string,unknown>)).map(d => ({monday:"Пн",tuesday:"Вт",wednesday:"Ср",thursday:"Чт",friday:"Пт",saturday:"Сб",sunday:"Вс"})[d]).join(", ")}
                   </p>
                 </div>
                 )}
