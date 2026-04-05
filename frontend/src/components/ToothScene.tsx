@@ -26,7 +26,7 @@ function Tooth({ onReady }: { onReady?: () => void }) {
     const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
-    const s = maxDim > 0 ? 2.8 / maxDim : 1;
+    const s = maxDim > 0 ? 3.08 / maxDim : 1;
     clone.scale.setScalar(s);
     clone.position.set(-center.x * s, -center.y * s, -center.z * s);
 
