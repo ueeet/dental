@@ -99,7 +99,7 @@ export default function AdminSchedule() {
             <button
               key={doc.id}
               onClick={() => selectDoctor(doc)}
-              className={`w-full rounded-xl px-5 py-5 text-left transition-all duration-200 ${
+              className={`w-full shrink-0 rounded-xl px-4 py-3 text-left transition-all duration-200 lg:px-5 lg:py-5 ${
                 selectedId === doc.id
                   ? "bg-primary text-primary-foreground shadow-md"
                   : "bg-card text-foreground hover:bg-accent"
