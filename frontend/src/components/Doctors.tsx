@@ -335,7 +335,7 @@ export default function Doctors() {
       <section
         ref={sectionRef}
         id="doctors"
-        className="relative bg-background pb-28 pt-16 sm:pt-20"
+        className="relative bg-background dark:bg-transparent pb-28 pt-16 sm:pt-20"
       >
         {/* Subtle orb */}
         <div
