@@ -105,7 +105,7 @@ export default function Hero() {
     <>
       <section
         ref={sectionRef}
-        className="relative z-10 min-h-screen overflow-hidden"
+        className="relative z-10 min-h-screen"
         style={{ backgroundColor: "transparent" }}
       >
         {/* ── Ambient light overlays ── */}
@@ -119,8 +119,6 @@ export default function Hero() {
             `,
           }}
         />
-
-
 
         {/* ── Glow behind tooth ── */}
         <div
@@ -187,16 +185,6 @@ export default function Hero() {
           </h1>
         </div>
 
-        {/* ── 3D Tooth ── */}
-        <div
-          className="hero-tooth-wrapper pointer-events-none absolute inset-x-0 z-[3] hidden sm:block"
-          style={{ top: "25%", bottom: "-45%", opacity: 0, transform: "translateY(5%)", willChange: "transform, opacity" }}
-        >
-          <div className="hero-tooth-scroll pointer-events-auto h-full w-full">
-            <ToothScene onReady={handleSceneReady} />
-          </div>
-        </div>
-
         {/* ── Buttons ── */}
         <div className="hero-cta-row pointer-events-none absolute inset-x-0 bottom-[22%] sm:bottom-[30%] z-[4] flex flex-col sm:flex-row items-center justify-center gap-4 sm:justify-between px-4 sm:px-[10%] lg:px-[13%] [&_a]:pointer-events-auto">
           <a
@@ -217,6 +205,16 @@ export default function Hero() {
           </a>
         </div>
       </section>
+
+      {/* ── 3D Tooth — positioned over both Hero and About ── */}
+      <div
+        className="hero-tooth-wrapper pointer-events-none absolute inset-x-0 top-0 z-[3] hidden sm:block"
+        style={{ top: "25vh", height: "130vh", opacity: 0, transform: "translateY(5%)", willChange: "transform, opacity" }}
+      >
+        <div className="hero-tooth-scroll h-full w-full">
+          <ToothScene onReady={handleSceneReady} />
+        </div>
+      </div>
     </>
   );
 }
