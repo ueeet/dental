@@ -31,24 +31,6 @@ export default function Hero() {
         0.5,
       );
 
-      // Glow fades in, then pulses
-      gsap.to(".hero-glow", {
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.inOut",
-        delay: 0.2,
-        onComplete: () => {
-          gsap.to(".hero-glow", {
-            scale: 1.2,
-            opacity: 0.7,
-            duration: 3.5,
-            ease: "sine.inOut",
-            repeat: -1,
-            yoyo: true,
-          });
-        },
-      });
-
       /* ── Parallax on scroll ── */
       const trigger = {
         trigger: sectionRef.current,
