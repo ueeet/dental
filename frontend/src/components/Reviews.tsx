@@ -190,7 +190,7 @@ export default function Reviews() {
           </p>
         </div>
 
-        <div className="flex justify-center gap-6 max-h-[740px] overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]">
+        <div className="flex justify-center gap-4 sm:gap-6 max-h-[500px] sm:max-h-[740px] overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]">
           <TestimonialsColumn testimonials={firstColumn} speed={30} />
           <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" speed={25} />
           <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" speed={35} />
