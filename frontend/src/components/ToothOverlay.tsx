@@ -57,7 +57,7 @@ export default function ToothOverlay() {
     <div
       ref={ref}
       className="pointer-events-none absolute inset-x-0 z-[3] hidden sm:block"
-      style={{ top: "15vh", bottom: "-45vh", opacity: 0, transform: "translateY(5%)", willChange: "transform, opacity" }}
+      style={{ top: "25vh", height: "100vh", opacity: 0, transform: "translateY(5%)", willChange: "transform, opacity" }}
     >
       {/* ── Glow behind tooth (z-index lower than canvas) ── */}
       <div className="absolute inset-0 z-[1]">
