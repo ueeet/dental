@@ -183,7 +183,7 @@ export default function Hero() {
 
         {/* ── 3D Tooth ── */}
         <div
-          className="hero-tooth-wrapper pointer-events-none absolute inset-x-0 z-[3]"
+          className="hero-tooth-wrapper pointer-events-none absolute inset-x-0 z-[3] hidden sm:block"
           style={{ top: "25%", bottom: "-45%", opacity: 0, transform: "translateY(5%)", willChange: "transform, opacity" }}
         >
           <div className="hero-tooth-scroll pointer-events-auto h-full w-full">
