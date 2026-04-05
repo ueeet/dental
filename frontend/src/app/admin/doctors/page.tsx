@@ -18,13 +18,13 @@ function Skeleton() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {[1, 2, 3, 4, 5, 6].map((i) => (
-        <div key={i} className="animate-pulse rounded-2xl bg-white p-5 shadow-sm">
+        <div key={i} className="animate-pulse rounded-2xl bg-card p-5 shadow-sm">
           <div className="flex items-start gap-4">
-            <div className="h-16 w-16 shrink-0 rounded-xl bg-gray-200" />
+            <div className="h-16 w-16 shrink-0 rounded-xl bg-muted" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 w-3/4 rounded bg-gray-200" />
-              <div className="h-3 w-1/2 rounded bg-gray-100" />
-              <div className="h-3 w-1/3 rounded bg-gray-100" />
+              <div className="h-4 w-3/4 rounded bg-muted" />
+              <div className="h-3 w-1/2 rounded bg-muted/60" />
+              <div className="h-3 w-1/3 rounded bg-muted/60" />
             </div>
           </div>
         </div>
@@ -104,8 +104,8 @@ export default function AdminDoctors() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#2a3250]">Врачи</h1>
-        <button onClick={() => setEditing({ name: "", specialty: "", experience: 0, isActive: true })} className="rounded-xl bg-[#2a3250] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#353d5c]">
+        <h1 className="text-2xl font-bold text-foreground">Врачи</h1>
+        <button onClick={() => setEditing({ name: "", specialty: "", experience: 0, isActive: true })} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90">
           Добавить
         </button>
       </div>
@@ -114,31 +114,31 @@ export default function AdminDoctors() {
         {loading ? <Skeleton /> : (
           <div ref={gridRef} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {doctors.map((d) => (
-              <div key={d.id} className="doctor-card rounded-2xl bg-white p-5 shadow-sm">
+              <div key={d.id} className="doctor-card rounded-2xl bg-card p-5 shadow-sm">
                 <div className="flex items-start gap-4">
-                  <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-gray-100">
+                  <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-muted">
                     {d.photo ? (
                       <img src={d.photo} alt={d.name} className="h-full w-full object-cover object-top" />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-2xl text-gray-300">👨‍⚕️</div>
+                      <div className="flex h-full w-full items-center justify-center text-2xl text-muted-foreground/40">👨‍⚕️</div>
                     )}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="font-semibold text-gray-900">{d.name}</h3>
-                        <p className="mt-0.5 text-sm text-[#2a3250]">{d.specialty}</p>
-                        <p className="mt-0.5 text-xs text-gray-500">Опыт: {d.experience} лет</p>
+                        <h3 className="font-semibold text-foreground">{d.name}</h3>
+                        <p className="mt-0.5 text-sm text-primary">{d.specialty}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">Опыт: {d.experience} лет</p>
                       </div>
-                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${d.isActive ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${d.isActive ? "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>
                         {d.isActive ? "Активен" : "Неактивен"}
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className="mt-4 flex gap-2">
-                  <button onClick={() => setEditing(d)} className="rounded-lg bg-gray-50 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 transition-colors">Редактировать</button>
-                  <button onClick={() => remove(d.id)} className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 transition-colors">Удалить</button>
+                  <button onClick={() => setEditing(d)} className="rounded-lg bg-accent px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent/80 transition-colors">Редактировать</button>
+                  <button onClick={() => remove(d.id)} className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 dark:bg-red-950 dark:text-red-400 dark:hover:bg-red-900 transition-colors">Удалить</button>
                 </div>
               </div>
             ))}
@@ -148,21 +148,21 @@ export default function AdminDoctors() {
 
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditing(null); }}>
-          <div className="w-full max-w-md rounded-2xl bg-white p-6">
-            <h2 className="text-lg font-bold text-[#2a3250]">{editing.id ? "Редактирование" : "Новый врач"}</h2>
+          <div className="w-full max-w-md rounded-2xl bg-card p-6">
+            <h2 className="text-lg font-bold text-foreground">{editing.id ? "Редактирование" : "Новый врач"}</h2>
             <div className="mt-4 space-y-3">
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-700">Фото</label>
+                <label className="mb-1.5 block text-sm font-medium text-foreground">Фото</label>
                 <div className="flex items-center gap-4">
-                  <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gray-100">
+                  <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted">
                     {editing.photo ? (
                       <img src={editing.photo} alt="Фото" className="h-full w-full object-cover object-top" />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-3xl text-gray-300">👨‍⚕️</div>
+                      <div className="flex h-full w-full items-center justify-center text-3xl text-muted-foreground/40">👨‍⚕️</div>
                     )}
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="cursor-pointer rounded-xl bg-gray-50 px-4 py-2 text-center text-sm font-medium text-gray-700 transition hover:bg-gray-100">
+                    <label className="cursor-pointer rounded-xl bg-accent px-4 py-2 text-center text-sm font-medium text-foreground transition hover:bg-accent/80">
                       {uploading ? "Загрузка..." : "Загрузить фото"}
                       <input ref={fileRef} type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" disabled={uploading} />
                     </label>
@@ -174,15 +174,15 @@ export default function AdminDoctors() {
                 </div>
               </div>
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-700">ФИО</label>
-                <input value={editing.name || ""} onChange={(e) => setEditing({ ...editing, name: e.target.value })} placeholder="Иванов Иван Иванович" className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2a3250]" />
+                <label className="mb-1.5 block text-sm font-medium text-foreground">ФИО</label>
+                <input value={editing.name || ""} onChange={(e) => setEditing({ ...editing, name: e.target.value })} placeholder="Иванов Иван Иванович" className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary" />
               </div>
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-700">Специальность</label>
-                <input value={editing.specialty || ""} onChange={(e) => setEditing({ ...editing, specialty: e.target.value })} placeholder="Стоматолог-терапевт" className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2a3250]" />
+                <label className="mb-1.5 block text-sm font-medium text-foreground">Специальность</label>
+                <input value={editing.specialty || ""} onChange={(e) => setEditing({ ...editing, specialty: e.target.value })} placeholder="Стоматолог-терапевт" className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary" />
               </div>
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-700">Опыт работы (лет)</label>
+                <label className="mb-1.5 block text-sm font-medium text-foreground">Опыт работы (лет)</label>
                 <div className="flex items-center gap-4">
                   <input
                     type="range"
@@ -190,20 +190,20 @@ export default function AdminDoctors() {
                     max={40}
                     value={editing.experience || 0}
                     onChange={(e) => setEditing({ ...editing, experience: Number(e.target.value) })}
-                    className="flex-1 accent-[#2a3250]"
+                    className="flex-1 accent-primary"
                   />
-                  <span className="w-12 text-center text-lg font-bold text-[#2a3250]">{editing.experience || 0}</span>
+                  <span className="w-12 text-center text-lg font-bold text-foreground">{editing.experience || 0}</span>
                 </div>
               </div>
-              <textarea value={editing.description || ""} onChange={(e) => setEditing({ ...editing, description: e.target.value })} placeholder="Описание" rows={3} className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2a3250]" />
-              <label className="flex items-center gap-2 text-sm">
+              <textarea value={editing.description || ""} onChange={(e) => setEditing({ ...editing, description: e.target.value })} placeholder="Описание" rows={3} className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary" />
+              <label className="flex items-center gap-2 text-sm text-foreground">
                 <input type="checkbox" checked={editing.isActive ?? true} onChange={(e) => setEditing({ ...editing, isActive: e.target.checked })} className="rounded" />
                 Активен
               </label>
             </div>
             <div className="mt-5 flex gap-3">
-              <button onClick={save} className="rounded-xl bg-[#2a3250] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#353d5c]">Сохранить</button>
-              <button onClick={() => setEditing(null)} className="rounded-xl bg-gray-100 px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-200">Отмена</button>
+              <button onClick={save} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90">Сохранить</button>
+              <button onClick={() => setEditing(null)} className="rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-foreground hover:bg-accent/80">Отмена</button>
             </div>
           </div>
         </div>
