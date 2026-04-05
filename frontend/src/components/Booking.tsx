@@ -291,7 +291,7 @@ export default function Booking() {
 
                   <div>
                     <label className="mb-2 block text-sm font-medium text-foreground">Выбор врача <span className="text-red-500">*</span></label>
-                    <CustomSelect value={doctorId} onChange={setDoctorId} placeholder="Выберите врача" options={doctors.map((d) => ({ value: d.id, label: d.name }))} className={cn(errors.doctorId ? "ring-2 ring-red-400" : "")} />
+                    <CustomSelect value={doctorId} onChange={handleDoctorChange} placeholder="Выберите врача" options={doctors.map((d) => ({ value: d.id, label: d.name }))} className={cn(errors.doctorId ? "ring-2 ring-red-400" : "")} />
                     {errors.doctorId && <p className="mt-1.5 text-xs text-red-500">{errors.doctorId}</p>}
                   </div>
 
