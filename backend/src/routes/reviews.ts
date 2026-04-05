@@ -3,6 +3,7 @@ import prisma from "../prismaClient";
 import { requireAdmin } from "../middleware/auth";
 import { validate } from "../middleware/validate";
 import { asyncHandler } from "../middleware/asyncHandler";
+import { reviewLimiter } from "../lib/rateLimiters";
 import { createReviewSchema, moderateReviewSchema } from "../lib/validators";
 import { sanitizeObject } from "../lib/sanitize";
 
