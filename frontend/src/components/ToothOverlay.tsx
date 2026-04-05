@@ -59,49 +59,51 @@ export default function ToothOverlay() {
       className="pointer-events-none absolute inset-x-0 z-[3] hidden sm:block"
       style={{ top: "25vh", height: "120vh", opacity: 0, transform: "translateY(5%)", willChange: "transform, opacity" }}
     >
-      {/* ── Glow behind tooth (z-index lower than canvas) ── */}
-      <div className="absolute inset-0 z-[1]">
-        <div
-          className="hero-glow absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2"
-          style={{
-            width: "clamp(280px, 50vw, 630px)",
-            height: "clamp(160px, 28vw, 360px)",
-            borderRadius: "50%",
-            background: "radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.54) 40%, transparent 70%)",
-            filter: "blur(35px)",
-            opacity: 0,
-            willChange: "transform, opacity",
-          }}
-        />
-        <div
-          className="hero-glow absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2"
-          style={{
-            width: "clamp(400px, 75vw, 990px)",
-            height: "clamp(230px, 45vw, 585px)",
-            borderRadius: "50%",
-            background: "radial-gradient(ellipse, rgba(220,235,255,0.68) 0%, rgba(180,210,250,0.32) 45%, transparent 70%)",
-            filter: "blur(55px)",
-            opacity: 0,
-            willChange: "transform, opacity",
-          }}
-        />
-        <div
-          className="hero-glow absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2"
-          style={{
-            width: "clamp(500px, 100vw, 1620px)",
-            height: "clamp(280px, 60vw, 900px)",
-            borderRadius: "50%",
-            background: "radial-gradient(ellipse, rgba(160,190,240,0.36) 0%, rgba(130,165,220,0.16) 40%, transparent 65%)",
-            filter: "blur(80px)",
-            opacity: 0,
-            willChange: "transform, opacity",
-          }}
-        />
-      </div>
-
-      {/* ── 3D Tooth (z-index higher, on top of glow) ── */}
-      <div className="hero-tooth-scroll relative z-[2] h-full w-full">
-        <ToothScene onReady={handleReady} />
+      {/* ── Tooth + Glow move together ── */}
+      <div className="hero-tooth-scroll relative h-full w-full">
+        {/* Glow behind tooth */}
+        <div className="absolute inset-0 z-[1]">
+          <div
+            className="hero-glow absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2"
+            style={{
+              width: "clamp(280px, 50vw, 630px)",
+              height: "clamp(160px, 28vw, 360px)",
+              borderRadius: "50%",
+              background: "radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.54) 40%, transparent 70%)",
+              filter: "blur(35px)",
+              opacity: 0,
+              willChange: "transform, opacity",
+            }}
+          />
+          <div
+            className="hero-glow absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2"
+            style={{
+              width: "clamp(400px, 75vw, 990px)",
+              height: "clamp(230px, 45vw, 585px)",
+              borderRadius: "50%",
+              background: "radial-gradient(ellipse, rgba(220,235,255,0.68) 0%, rgba(180,210,250,0.32) 45%, transparent 70%)",
+              filter: "blur(55px)",
+              opacity: 0,
+              willChange: "transform, opacity",
+            }}
+          />
+          <div
+            className="hero-glow absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2"
+            style={{
+              width: "clamp(500px, 100vw, 1620px)",
+              height: "clamp(280px, 60vw, 900px)",
+              borderRadius: "50%",
+              background: "radial-gradient(ellipse, rgba(160,190,240,0.36) 0%, rgba(130,165,220,0.16) 40%, transparent 65%)",
+              filter: "blur(80px)",
+              opacity: 0,
+              willChange: "transform, opacity",
+            }}
+          />
+        </div>
+        {/* 3D Canvas on top of glow */}
+        <div className="relative z-[2] h-full w-full">
+          <ToothScene onReady={handleReady} />
+        </div>
       </div>
     </div>
   );
