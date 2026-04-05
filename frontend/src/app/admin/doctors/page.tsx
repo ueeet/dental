@@ -147,8 +147,8 @@ export default function AdminDoctors() {
       </div>
 
       {editing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditing(null); }}>
-          <div className="w-full max-w-md rounded-2xl bg-card p-6">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 overflow-y-auto" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditing(null); }}>
+          <div className="w-full max-w-md rounded-t-2xl sm:rounded-2xl bg-card p-5 sm:p-6 max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-bold text-foreground">{editing.id ? "Редактирование" : "Новый врач"}</h2>
             <div className="mt-4 space-y-3">
               <div>
