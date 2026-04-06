@@ -450,7 +450,7 @@ export default function Booking() {
                   type="submit"
                   disabled={isSubmitting}
                   className={cn(
-                    "mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 text-sm font-semibold text-[#0a0f1a] shadow-lg shadow-white/10 transition-all duration-200 hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-2 focus:ring-offset-[#0a0f1a]",
+                    "mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-200 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2",
                     isSubmitting && "cursor-not-allowed opacity-60"
                   )}
                 >
