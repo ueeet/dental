@@ -58,7 +58,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-10 min-h-screen"
+      className="relative z-[2] min-h-screen"
       style={{ backgroundColor: "transparent" }}
     >
       {/* ── Ambient light overlays ── */}
