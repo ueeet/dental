@@ -215,7 +215,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </nav>
 
       {/* Main content */}
-      <main ref={mainRef} className="flex-1 pt-14 pb-16 px-4 lg:ml-60 lg:p-10">
+      <main ref={mainRef} className="flex-1 pt-16 pb-20 px-4 lg:ml-60 lg:px-8 lg:py-8 xl:px-10 xl:py-10">
         {children}
       </main>
       <SSEToast />

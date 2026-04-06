@@ -266,9 +266,9 @@ export default function AdminBookings() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground">Записи</h1>
-        <button onClick={openCreate} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90">
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold text-foreground shrink-0">Записи</h1>
+        <button onClick={openCreate} className="shrink-0 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
           + Новая запись
         </button>
       </div>
@@ -316,32 +316,32 @@ export default function AdminBookings() {
       <div className="mt-6">
         {loading ? <Skeleton /> : (
           <div ref={tableRef} className="overflow-x-auto rounded-2xl bg-card shadow-sm">
-            <table className="w-full text-left text-sm">
+            <table className="min-w-[800px] w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-border text-xs uppercase tracking-wider text-muted-foreground">
-                  <th className="px-5 py-3">Пациент</th>
-                  <th className="px-5 py-3">Телефон</th>
-                  <th className="px-5 py-3">Врач</th>
-                  <th className="px-5 py-3">Услуга</th>
-                  <th className="px-5 py-3">Дата</th>
-                  <th className="px-5 py-3">Статус</th>
-                  <th className="px-5 py-3">Действия</th>
+                  <th className="px-4 py-3">Пациент</th>
+                  <th className="px-4 py-3">Телефон</th>
+                  <th className="px-4 py-3">Врач</th>
+                  <th className="px-4 py-3">Услуга</th>
+                  <th className="px-4 py-3">Дата</th>
+                  <th className="px-4 py-3">Статус</th>
+                  <th className="px-4 py-3">Действия</th>
                 </tr>
               </thead>
               <tbody>
                 {data?.bookings.map((b) => (
                   <tr key={b.id} className="booking-row border-b border-border/50 hover:bg-accent/50 transition-colors">
-                    <td className="px-5 py-3 font-medium text-foreground">{b.patientName}</td>
-                    <td className="px-5 py-3 text-muted-foreground">{b.phone}</td>
-                    <td className="px-5 py-3 text-muted-foreground">{b.doctor.name.split(" ").slice(0, 2).join(" ")}</td>
-                    <td className="px-5 py-3 text-muted-foreground">{b.service.name}</td>
-                    <td className="px-5 py-3 text-muted-foreground">{new Date(b.date).toLocaleDateString("ru-RU")} {b.time}</td>
-                    <td className="px-5 py-3">
+                    <td className="px-4 py-3 font-medium text-foreground whitespace-nowrap">{b.patientName}</td>
+                    <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{b.phone}</td>
+                    <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{b.doctor.name.split(" ").slice(0, 2).join(" ")}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{b.service.name}</td>
+                    <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{new Date(b.date).toLocaleDateString("ru-RU")} {b.time}</td>
+                    <td className="px-4 py-3">
                       <span className={`inline-block rounded-full px-2.5 py-1 text-xs font-semibold ${STATUS_COLORS[b.status]}`}>
                         {STATUS_LABELS[b.status] || b.status}
                       </span>
                     </td>
-                    <td className="px-5 py-3">
+                    <td className="px-4 py-3">
                       <div className="flex gap-1">
                         {(b.status === "new" || b.status === "confirmed") && (
                           <>
