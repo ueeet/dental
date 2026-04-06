@@ -1,5 +1,5 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
-const SSE_URL = API_URL.replace(/\/api\/?$/, "") + "/api/events";
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api").trim();
+const SSE_URL = API_URL.replace(/\/+$/, "").replace(/\/api$/, "") + "/api/events";
 
 export type SSEEvent = { type: string; data?: Record<string, unknown> };
 
