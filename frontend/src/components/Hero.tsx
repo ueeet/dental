@@ -75,7 +75,7 @@ export default function Hero() {
 
       {/* ── Content: centered on mobile, absolute on desktop ── */}
       <div
-        className="hero-title relative z-[1] flex min-h-screen flex-col items-center justify-center px-6 sm:pointer-events-none sm:absolute sm:inset-x-0 sm:top-[14%] sm:min-h-0 sm:px-4"
+        className="hero-title relative z-[1] flex min-h-screen flex-col items-center justify-center px-6 sm:pointer-events-none sm:absolute sm:inset-x-0 sm:top-[10%] md:top-[12%] lg:top-[14%] sm:min-h-0 sm:px-4"
         style={{ opacity: 0, transform: "translateY(30px)", willChange: "transform, opacity" }}
       >
         <span
@@ -121,22 +121,22 @@ export default function Hero() {
       </div>
 
       {/* ── Desktop buttons (absolute) ── */}
-      <div className="hero-cta-row pointer-events-none absolute inset-x-0 bottom-[30%] z-[4] hidden sm:flex items-center justify-between px-[10%] lg:px-[13%] [&_a]:pointer-events-auto">
+      <div className="hero-cta-row pointer-events-none absolute inset-x-0 bottom-[22%] sm:bottom-[20%] md:bottom-[25%] lg:bottom-[30%] z-[4] hidden sm:flex items-center justify-between px-[8%] md:px-[10%] lg:px-[13%] [&_a]:pointer-events-auto">
         <a
           href="#booking"
-          className="hero-cta inline-flex h-20 w-[320px] items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 text-xl font-medium tracking-[0.08em] text-white/90 hover:border-white/40 hover:bg-white/10 active:scale-[0.97]"
+          className="hero-cta inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 font-medium tracking-[0.08em] text-white/90 hover:border-white/40 hover:bg-white/10 active:scale-[0.97] h-14 w-[240px] text-base md:h-16 md:w-[280px] md:text-lg lg:h-20 lg:w-[320px] lg:text-xl"
           style={{ visibility: "hidden" }}
         >
           Записаться на приём
-          <ArrowRight className="h-6 w-6 text-white/70" />
+          <ArrowRight className="h-5 w-5 lg:h-6 lg:w-6 text-white/70" />
         </a>
         <a
           href="#promotions"
-          className="hero-cta inline-flex h-20 w-[320px] items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 text-xl font-medium tracking-[0.08em] text-white/90 hover:border-white/40 hover:bg-white/10 active:scale-[0.97]"
+          className="hero-cta inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 font-medium tracking-[0.08em] text-white/90 hover:border-white/40 hover:bg-white/10 active:scale-[0.97] h-14 w-[240px] text-base md:h-16 md:w-[280px] md:text-lg lg:h-20 lg:w-[320px] lg:text-xl"
           style={{ visibility: "hidden" }}
         >
           К акциям
-          <ArrowRight className="h-6 w-6 text-white/70" />
+          <ArrowRight className="h-5 w-5 lg:h-6 lg:w-6 text-white/70" />
         </a>
       </div>
     </section>
