@@ -137,10 +137,21 @@ export default function AdminServices() {
             <h2 className="text-lg font-bold text-foreground">{editing.id ? "Редактирование" : "Новая услуга"}</h2>
             <div className="mt-4 space-y-3">
               <input value={editing.name || ""} onChange={(e) => setEditing({ ...editing, name: e.target.value })} placeholder="Название" className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary" />
-              <input value={editing.category || ""} onChange={(e) => setEditing({ ...editing, category: e.target.value })} placeholder="Категория" className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary" />
+              <select value={editing.category || ""} onChange={(e) => setEditing({ ...editing, category: e.target.value })} className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none focus:border-primary">
+                <option value="" disabled>Выберите категорию</option>
+                {["Терапия", "Хирургия", "Ортопедия", "Гигиена", "Эстетика", "Ортодонтия", "Диагностика"].map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
               <div className="flex gap-3">
-                <input type="number" value={editing.price || 0} onChange={(e) => setEditing({ ...editing, price: Number(e.target.value) })} placeholder="Цена" className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary" />
-                <input type="number" value={editing.duration || 30} onChange={(e) => setEditing({ ...editing, duration: Number(e.target.value) })} placeholder="Минут" className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary" />
+                <div className="w-full">
+                  <label className="mb-1 block text-xs font-medium text-muted-foreground">Цена от, ₽</label>
+                  <input type="number" min={0} value={editing.price || ""} onChange={(e) => setEditing({ ...editing, price: Number(e.target.value) })} placeholder="0" className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary" />
+                </div>
+                <div className="w-full">
+                  <label className="mb-1 block text-xs font-medium text-muted-foreground">Длительность, мин</label>
+                  <input type="number" min={0} value={editing.duration || 30} onChange={(e) => setEditing({ ...editing, duration: Number(e.target.value) })} placeholder="30" className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary" />
+                </div>
               </div>
               <textarea value={editing.description || ""} onChange={(e) => setEditing({ ...editing, description: e.target.value })} placeholder="Описание" rows={2} className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary" />
             </div>
