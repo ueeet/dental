@@ -156,7 +156,6 @@ export default function Services() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<string[]>([]);
-  const detailsRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -207,18 +206,6 @@ export default function Services() {
     gsap.to(row, { backgroundColor: "transparent", x: 0, duration: 0.3, ease: "power2.out" });
     if (chevron) gsap.to(chevron, { y: 0, duration: 0.3, ease: "power2.out" });
   }, []);
-
-  useEffect(() => {
-    detailsRefs.current.forEach((el, id) => {
-      if (!el) return;
-      if (expandedId === id) {
-        gsap.set(el, { display: "block" });
-        gsap.to(el, { height: "auto", autoAlpha: 1, duration: 0.4, ease: "power2.inOut" });
-      } else if (el.offsetHeight > 0) {
-        gsap.to(el, { height: 0, opacity: 0, duration: 0.35, ease: "power2.inOut", onComplete: () => { gsap.set(el, { display: "none" }); } });
-      }
-    });
-  }, [expandedId]);
 
   useGSAP(
     () => {
@@ -360,21 +347,23 @@ export default function Services() {
                 </button>
 
                 <div
-                  ref={(el) => {
-                    if (el) detailsRefs.current.set(service.id, el);
+                  className="grid transition-[grid-template-rows,opacity] duration-300 ease-in-out"
+                  style={{
+                    gridTemplateRows: isExpanded ? "1fr" : "0fr",
+                    opacity: isExpanded ? 1 : 0,
                   }}
-                  className="overflow-hidden"
-                  style={{ height: 0, visibility: "hidden", display: "none" }}
                 >
-                  <div className="px-4 pb-5 pt-2 sm:px-8 sm:pb-7">
-                    <p className="text-base leading-relaxed text-muted-foreground">
-                      {service.description}
-                    </p>
-                    {service.details && service.details !== service.description && (
-                      <p className="mt-3 text-base leading-relaxed text-muted-foreground">
-                        {service.details}
+                  <div className="overflow-hidden">
+                    <div className="px-4 pb-5 pt-2 sm:px-8 sm:pb-7">
+                      <p className="text-base leading-relaxed text-muted-foreground">
+                        {service.description}
                       </p>
-                    )}
+                      {service.details && service.details !== service.description && (
+                        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+                          {service.details}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
 
